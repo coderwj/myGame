@@ -77,6 +77,31 @@ void EulerAngles::fromObjectToWorldMatrix(const Matrix4x3 &m){
 	}
 }
 
+void EulerAngles::fromWorldToObjectMatrix(const Matrix4x3 &m){
+	float sp = -m.m23;
+	if(fabs(sp) > 9.99999f){
+		pitch = kPiOver2 * sp;
+		heading = atan2(-m.m31, m.m11);
+		bank = 0.0f;
+	}
+	else{
+		heading = atan2(m.m13, m.m33);
+		pitch = asin(sp);
+		bank = atan2(m.m21, m.m22);
+	}
+}
 
-
+void EulerAngles::fromRotationMatrix(const RotationMatrix &m){
+	float sp = -m.m23;
+	if(fabs(sp) > 9.99999f){
+		pitch = kPiOver2 * sp;
+		heading = atan2(-m.m31, m.m11);
+		bank = 0.0f;
+	}
+	else{
+		heading = atan2(m.m13, m.m33);
+		pitch = asin(sp);
+		bank = atan2(m.m21, m.m22);
+	}
+}
 
