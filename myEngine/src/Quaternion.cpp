@@ -43,3 +43,47 @@ void Quaternion::SetToRotateAboutAxis(const Vector3 &axis, float theta){
 	z = axis.z * sinThetaOver2;
 }
 
+void Quaternion::SetToRotateObjectToInertial(const EulerAngles &orientation){
+	float sp, sb, sh;
+	float cp, cb, ch;
+
+	sinCos(&sp, &cp, orientation.pitch * 0.5f);
+	sinCos(&sh, &ch, orientation.heading * 0.5f);
+	sinCos(&sb, &cb, orientation.bank * 0.5f);
+
+	w = ch * cp * cb + sh * sp * sb;
+	x = ch * sp * cb + sh * cp * sb;
+	y = -ch * sp * sb + sh * cp * cb;
+	z = -sh * sp * cb + ch * cp * sb;
+}
+
+void Quaternion::SetToRotateInertialToObject(const EulerAngles &orientation){
+	float sp, sb, sh;
+	float cp, cb, ch;
+
+	sinCos(&sp, &cp, orientation.pitch * 0.5f);
+	sinCos(&sh, &ch, orientation.heading * 0.5f);
+	sinCos(&sb, &cb, orientation.bank * 0.5f);
+
+	w = ch * cp * cb + sh * sp * sb;
+	x = -ch * sp * cb - sh * cp * sb;
+	y = ch * sp * sb - sh * cp * cb;
+	z = sh * sp * cb - ch * cp * sb;
+}
+
+Quaternion Quaternion::operator *(const Quaternion &a) const{
+	Quaternion res;
+
+	res.w = w * a.w - x * a.x - y * a.y - z * a.z;
+	res.x = w * a.x + x * a.w + z * a.y - y * a.z;
+	res.y = w * a.y + y * a.w + x * a.z - z * a.x;
+	res.z = w * a.z + z * a.w + y * a.x - x * a.y;
+
+	return res;
+}
+
+Quaternion Quaternion::operator *=(const Quaternion &a){
+	*this = *this * a;
+
+	return *this;
+}
