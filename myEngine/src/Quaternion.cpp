@@ -124,5 +124,18 @@ Vector3 Quaternion::getRotationAxis() const{
 		);
 }
 
+<<<<<<< 8d7a31d626d020f3b3acc6df61cd6662d8eac670
 
+=======
+float dotProduct(const Quaternion &a, const Quaternion &b){
+	return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+Quaternion slerp(const Quaternion &q0, const Quaternion &q1, float t){
+	if(t < 0.0f) return q0;
+	if(t > 1.0f) return q1;
+	float cosOmega = dotProduct(q0, q1);
+
+}
+>>>>>>> add to Quaternion.cpp
 
