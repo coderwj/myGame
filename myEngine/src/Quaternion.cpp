@@ -87,3 +87,21 @@ Quaternion Quaternion::operator *=(const Quaternion &a){
 
 	return *this;
 }
+
+void Quaternion::normalize(){
+	float mag = (float)sqrt(w * w + x * x + y * y + z * z);
+	if(mag > 0.0f)
+	{
+		float oneOverMag = 1.0f / mag;
+		w *= oneOverMag;
+		x *= oneOverMag;
+		y *= oneOverMag;
+		z *= oneOverMag;
+	}
+	else
+	{
+		assert(false);
+		identity();
+	}
+}
+
