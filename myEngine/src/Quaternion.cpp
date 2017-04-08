@@ -105,3 +105,24 @@ void Quaternion::normalize(){
 	}
 }
 
+void Quaternion::getRotationAngle() const{
+	float thetaOver2 = safeAcos(w);
+	return thetaOver2 * 2.0f;
+}
+
+Vector3 Quaternion::getRotationAxis() const{
+	float sinThetaOver2Sq = 1.0f - w * w;
+	if(sinThetaOver2Sq <= 0.0f){
+		return Vector3(1.0f, 0.0f, 0.0f);
+	}
+	float oneOverSinThetaOver2 = 1.0f / sqrt(sinThetaOver2Sq);
+
+	return Vector3(
+		x * oneOverSinThetaOver2,
+		y * oneOverSinThetaOver2,
+		z * oneOverSinThetaOver2
+		);
+}
+
+
+
