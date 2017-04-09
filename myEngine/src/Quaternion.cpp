@@ -112,7 +112,8 @@ void Quaternion::getRotationAngle() const{
 
 Vector3 Quaternion::getRotationAxis() const{
 	float sinThetaOver2Sq = 1.0f - w * w;
-	if(sinThetaOver2Sq <= 0.0f){
+	if(sinThetaOver2Sq <= 0.0f)
+	{
 		return Vector3(1.0f, 0.0f, 0.0f);
 	}
 	float oneOverSinThetaOver2 = 1.0f / sqrt(sinThetaOver2Sq);
@@ -124,9 +125,6 @@ Vector3 Quaternion::getRotationAxis() const{
 		);
 }
 
-<<<<<<< 8d7a31d626d020f3b3acc6df61cd6662d8eac670
-
-=======
 float dotProduct(const Quaternion &a, const Quaternion &b){
 	return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
 }
@@ -136,6 +134,68 @@ Quaternion slerp(const Quaternion &q0, const Quaternion &q1, float t){
 	if(t > 1.0f) return q1;
 	float cosOmega = dotProduct(q0, q1);
 
-}
->>>>>>> add to Quaternion.cpp
+	float q1w = q1.w;
+	float q1x = q1.x;
+	float q1y = q1.y;
+	float q1z = q1.z;
+	if(cosOmega < 0.0f)
+	{
+		q1w = - q1w;
+		q1x = - q1x;
+		q1y = - q1y;
+		q1z = - q1z;
+		cosOmega = - cosOmega;
+	}
+	assert(cosOmega < 1.1f);
+	float k0, k1;
+	if(cosOmega > 0.9999f)
+	{
+		k0 = 1.0f - t;
+		k1 = t;
+	}
+	else
+	{
+		float sinOmega = sqrt(1.0f - cosOmega * cosOmega);
+		float omega = atan2(sinOmega, cosOmega);
+		float oneOverSinOmega = 1.0f / sinOmega;
 
+		k0 = sin((1.0f - t) * omega) * oneOverSinOmega;
+		k1 = sin(t * omega);
+	}
+	Quaternion res;
+	res.x = k0 * q0.x + k1 * q1x;
+	res.y = k0 * q0.y + k1 * q1y;
+	res.z = k0 * q0.z + k1 * q1z;
+	res.w = k0 * q0.w + k1 * q1w;
+
+	return res;
+
+}
+
+Quaternion conjugate(const Quaternion &q){
+	Quaternion res;
+	res.w = q.w;
+	res.x = - q.x;
+	res.y = - q.y;
+	res.z = - q.z;
+	return res;
+}
+
+Quaternion pow(const Quaternion &q, float exponent){
+	if(fabs(q.w) > 0.9999f)
+	{
+		return q;
+	}
+	float alpha = acos(q.w);
+	float newAlpha = alpha * exponent;
+	Quaternion res;
+	res.w = cos(newAlpha);
+
+	float k = sin(newAlpha) / sin(alpha);
+
+	res.x = k * q.x;
+	res.y = k * q.y;
+	res.z = k * q.z;
+
+	return res;
+}
