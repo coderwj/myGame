@@ -10,6 +10,49 @@ void RotationMatrix::identity(){
 	m31 = 0.0f; m32 = 0.0f; m33 = 1.0f;
 }
 
-void RotationMatrix::setup(){
+void RotationMatrix::setup(const EulerAngles &orientation){
+	float sh,ch, sp,cp, 1.0fsb,cb;
+	sinCos(&sh, &ch, orientation.heading);
+	sinCos(&sp, &cp, orientation.ptich);
+	sinCos(&sb, &cb, orientation.bank);
 
+	m11 = ch * cb + sh * sp * sb;
+	m12 = -ch * sb + sh * sp * cb;
+	m13 = sh * cp;
+
+	m21 = sb * cp;
+	m22 = cb * cp;
+	m23 = -sp;
+
+	m31 = -sh * cb + ch * sp * sb;
+	m32 = sb * sh + ch * sp * cb;
+	m33 = ch * cp;
+}
+
+void RotationMatrix::fromInertialToObjectQuaternion(const Quaternion &q){
+	m11 = 1.0f - 2.0f * (q.y * q.y + q.z * q.z);
+	m12 = 2.0f * (q.x * q.y + q.w * q.z);
+	m13 = 2.0f * (q.x * q.z - q.w * q.y);
+
+	m21 = 2.0f * (q.x * q.y - q.w * q.z);
+	m22 = 1.0f - 2.0f * (q.x * q.x + q.z * q.z);
+	m23 = 2.0f * (q.y * q.z + q.w * q.x);
+
+	m31 = 2.0f * (q.x * q.z + q.w * q.y);
+	m32 = 2.0f * (q.y * q.z - q.w * q.x);
+	m33 = 1.0f - 2.0f * (q.x * q.x + q.y * q.y);
+}
+
+void RotationMatrix::fromObjectToInertialQuaternion(const Quaternion &q){
+	m11 = 1.0f - 2.0f * (q.y * q.y + q.z * q.z);
+	m12 = 2.0f * (q.x * q.y - q.w * q.z);
+	m13 = 2.0f * (q.x * q.z + q.w * q.y);
+
+	m21 = 2.0f * (q.x * q.y + q.w * q.z);
+	m22 = 1.0f - 2.0f * (q.x * q.x + q.z * q.z);
+	m23 = 2.0f * (q.y * q.z - q.w * q.x);
+
+	m31 = 2.0f * (q.x * q.z - q.w * q.y);
+	m32 = 2.0f * (q.y * q.z + q.w * q.x);
+	m33 = 1.0f - 2.0f * (q.x * q.x + q.y * q.y);
 }
