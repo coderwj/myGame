@@ -56,3 +56,11 @@ void RotationMatrix::fromObjectToInertialQuaternion(const Quaternion &q){
 	m32 = 2.0f * (q.y * q.z + q.w * q.x);
 	m33 = 1.0f - 2.0f * (q.x * q.x + q.y * q.y);
 }
+
+void RotationMatrix::inertialToObject(const Vector3 &v) const{
+	return Vector3(
+		m11 * v.x + m21 * v.y + m31 * v.z,
+		m12 * v.x + m22 * v.y + m32 * v.z,
+		m13 * v.x + m23 * v.y + m33 * v.z
+		);
+}
