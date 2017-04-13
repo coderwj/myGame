@@ -35,7 +35,7 @@ void EulerAngles::canonize() {
 }
 
 void EulerAngles::fromObjectToInertialQuaternion(const Quaternion &q){
-	float sp = -2.0f * (q.y * p.z - q.w * q.x);
+	float sp = -2.0f * (q.y * q.z - q.w * q.x);
 
 	if(fabs(sp) > 0.9999f){
 		pitch = kPiOver2 * sp;

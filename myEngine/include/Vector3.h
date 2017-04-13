@@ -1,6 +1,8 @@
 #ifndef __VECTOR3_H__
 #define __VECTOR3_H__
 
+#include <math.h>
+
 class Vector3
 {
 public:
@@ -18,7 +20,7 @@ public:
 	}
 
 	bool operator ==(const Vector3 &v) const{
-		return x == v.x && y == v.y && z == v.zz;
+		return x == v.x && y == v.y && z == v.z;
 	}
 
 	bool operator !=(const Vector3 &v) const{
@@ -85,7 +87,7 @@ public:
 	}
 
 	float operator *(const Vector3 &v) const{
-		return a * v.a + b * v.b + c * v.c;
+		return x * v.x + y * v.y + y * v.z;
 	}
 
 };

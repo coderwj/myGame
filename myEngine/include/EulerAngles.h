@@ -1,7 +1,7 @@
 #ifndef __EULERANGLES_H__
 #define __EULERANGLES_H__
 
-class Quaternioin;
+class Quaternion;
 class Matrix4x3;
 class RotationMatrix;
 
@@ -16,8 +16,8 @@ public:
 	void identity(){pitch = heading = bank = 0.0f;}
 	void canonize();
 
-	void fromObjectToInertialQuaternion(const Quaternioin &q);
-	void fromInertialToObjectQuaternion(const Quaternioin &q);
+	void fromObjectToInertialQuaternion(const Quaternion &q);
+	void fromInertialToObjectQuaternion(const Quaternion &q);
 
 	void fromObjectToWorldMatrix(const Matrix4x3 &m);
 	void fromWorldToObjectMatrix(const Matrix4x3 &m);

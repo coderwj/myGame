@@ -1,5 +1,6 @@
 #include "Matrix4x3.h"
 #include "Vector3.h"
+#include "RotationMatrix.h"
 
 void Matrix4x3::identity()
 {
