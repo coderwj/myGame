@@ -64,3 +64,11 @@ void RotationMatrix::inertialToObject(const Vector3 &v) const{
 		m13 * v.x + m23 * v.y + m33 * v.z
 		);
 }
+
+void RotationMatrix::ObjectToInertial(const Vector3 &v) const{
+	return Vector3(
+		m11 * v.x + m12 * v.y + m13 * v.z,
+		m21 * v.x + m22 * v.y + m32 * v.z,
+		m31 * v.x + m32 * v.y + m33 * v.z
+		);
+}
