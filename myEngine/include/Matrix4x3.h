@@ -24,6 +24,8 @@ public:
 	void setupLocalToParent(const Vector3 &pos, const RotationMatrix &orient);
 	void setupParentToLocal(const Vector3 &pos, const EulerAngles &orient);
 	void setupParentToLocal(const Vector3 &pos, const RotationMatrix &orient);
+
+	void setupRotate(int axis, float theta);
 };
 
 #endif // __MATRIX4X3_H__

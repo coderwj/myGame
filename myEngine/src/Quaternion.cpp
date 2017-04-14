@@ -8,7 +8,7 @@
 
 const Quaternion kQuaternionIdentity = {1.0f, 0.0f, 0.0f, 0.0f};
 
-void Quaternion::SetToRotateAboutX(float theta){
+void Quaternion::setToRotateAboutX(float theta){
 	float thetaOver2 = theta * 0.5f;
 	w = cos(thetaOver2);
 	x = sin(thetaOver2);
@@ -16,7 +16,7 @@ void Quaternion::SetToRotateAboutX(float theta){
 	z = 0.0f;
 }
 
-void Quaternion::SetToRotateAboutY(float theta){
+void Quaternion::setToRotateAboutY(float theta){
 	float thetaOver2 = theta * 0.5f;
 	w = cos(thetaOver2);
 	x = 0.0f;
@@ -24,7 +24,7 @@ void Quaternion::SetToRotateAboutY(float theta){
 	z = 0.0f;
 }
 
-void Quaternion::SetToRotateAboutZ(float theta){
+void Quaternion::setToRotateAboutZ(float theta){
 	float thetaOver2 = theta * 0.5f;
 	w = cos(thetaOver2);
 	x = 0.0f;
@@ -32,7 +32,7 @@ void Quaternion::SetToRotateAboutZ(float theta){
 	z = sin(thetaOver2);
 }
 
-void Quaternion::SetToRotateAboutAxis(const Vector3 &axis, float theta){
+void Quaternion::setToRotateAboutAxis(const Vector3 &axis, float theta){
 	assert(fabs(vectorMod(axis) - 1.0f) < 0.01f);
 
 	float thetaOver2 = theta * 0.5f;
@@ -43,7 +43,7 @@ void Quaternion::SetToRotateAboutAxis(const Vector3 &axis, float theta){
 	z = axis.z * sinThetaOver2;
 }
 
-void Quaternion::SetToRotateObjectToInertial(const EulerAngles &orientation){
+void Quaternion::setToRotateObjectToInertial(const EulerAngles &orientation){
 	float sp, sb, sh;
 	float cp, cb, ch;
 
@@ -57,7 +57,7 @@ void Quaternion::SetToRotateObjectToInertial(const EulerAngles &orientation){
 	z = -sh * sp * cb + ch * cp * sb;
 }
 
-void Quaternion::SetToRotateInertialToObject(const EulerAngles &orientation){
+void Quaternion::setToRotateInertialToObject(const EulerAngles &orientation){
 	float sp, sb, sh;
 	float cp, cb, ch;
 
@@ -105,7 +105,7 @@ void Quaternion::normalize(){
 	}
 }
 
-void Quaternion::getRotationAngle() const{
+float Quaternion::getRotationAngle() const{
 	float thetaOver2 = safeAcos(w);
 	return thetaOver2 * 2.0f;
 }

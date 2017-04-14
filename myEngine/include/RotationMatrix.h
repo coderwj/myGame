@@ -2,7 +2,7 @@
 #define __ROTATIONMATRIX_H__
 
 class Vector3;
-class Eulerangles;
+class EulerAngles;
 class Quaternion;
 
 class RotationMatrix{
@@ -13,7 +13,7 @@ public:
 
 	void identity();
 
-	void setup(const Eulerangles &orientation);
+	void setup(const EulerAngles &orientation);
 
 	void fromInertialToObjectQuaternion(const Quaternion &q);
 

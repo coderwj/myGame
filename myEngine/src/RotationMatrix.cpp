@@ -11,9 +11,9 @@ void RotationMatrix::identity(){
 }
 
 void RotationMatrix::setup(const EulerAngles &orientation){
-	float sh,ch, sp,cp, 1.0fsb,cb;
+	float sh,ch, sp,cp, sb,cb;
 	sinCos(&sh, &ch, orientation.heading);
-	sinCos(&sp, &cp, orientation.ptich);
+	sinCos(&sp, &cp, orientation.pitch);
 	sinCos(&sb, &cb, orientation.bank);
 
 	m11 = ch * cb + sh * sp * sb;
@@ -57,7 +57,7 @@ void RotationMatrix::fromObjectToInertialQuaternion(const Quaternion &q){
 	m33 = 1.0f - 2.0f * (q.x * q.x + q.y * q.y);
 }
 
-void RotationMatrix::inertialToObject(const Vector3 &v) const{
+Vector3 RotationMatrix::inertialToObject(const Vector3 &v) const{
 	return Vector3(
 		m11 * v.x + m21 * v.y + m31 * v.z,
 		m12 * v.x + m22 * v.y + m32 * v.z,
@@ -65,7 +65,7 @@ void RotationMatrix::inertialToObject(const Vector3 &v) const{
 		);
 }
 
-void RotationMatrix::ObjectToInertial(const Vector3 &v) const{
+Vector3 RotationMatrix::objectToInertial(const Vector3 &v) const{
 	return Vector3(
 		m11 * v.x + m12 * v.y + m13 * v.z,
 		m21 * v.x + m22 * v.y + m32 * v.z,

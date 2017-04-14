@@ -1,4 +1,4 @@
-#ifdef __Quaternion_h__
+#ifndef __Quaternion_h__
 #define __Quaternion_h__
 
 class Vector3;
@@ -25,7 +25,7 @@ public:
 
 	Quaternion operator *(const Quaternion &a) const;
 
-	Quaternion operator *=(const Quaternion &a) const;
+	Quaternion operator *=(const Quaternion &a);
 
 	void normalize();
 

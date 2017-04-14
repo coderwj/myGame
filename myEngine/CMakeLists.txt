@@ -23,5 +23,5 @@ add_library(myEngine STATIC ${SRC_ENGINE})
 SET_TARGET_PROPERTIES(myEngine PROPERTIES LINKER_LANGUAGE CPP)
 
 if(APPLE)
-	target_link_libraries(myEngine libglfw3.a libGLEW.a)
+	target_link_libraries(myEngine ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/mac/lib/libglfw3.a ${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib/libGLEW.a)
 endif()

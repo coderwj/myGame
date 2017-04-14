@@ -25,3 +25,5 @@ add_library(GameSrc STATIC ${SRC_1})
 SET(LIBRARIES myEngine)
 
 target_link_libraries(GameSrc ${LIBRARIES})
+
+add_dependencies(GameSrc myEngine)
