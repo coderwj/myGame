@@ -1,4 +1,4 @@
-rm ../build
-mkdir ../build
-cd ../build
+rm ../build/mac
+mkdir ../build/mac
+cd ../build/mac
 cmake ../ -G Xcode
