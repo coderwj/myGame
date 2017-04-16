@@ -15,19 +15,28 @@
 
 GameScene * GameScene::gs = 0;
 
+static void error_callback(int error, const char* description)
+{
+    fputs(description, stderr);
+}
+
 bool GameScene::init(){
     int width = 640;
     int height = 480;
+    
     
     if(glfwInit() == GL_FALSE) {
         std::cerr << "failed to init GLFW" << std::endl;
         return false;
     }
     
+    glfwSetErrorCallback(error_callback);
+    
     // select opengl version
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
     // create a window
     GLFWwindow *window;

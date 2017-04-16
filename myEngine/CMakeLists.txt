@@ -25,13 +25,18 @@ SET_TARGET_PROPERTIES(myEngine PROPERTIES LINKER_LANGUAGE CPP)
 if(APPLE)
 	target_link_libraries(myEngine ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/mac/lib/libglfw3.a ${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib/libGLEW.a)
 
-	find_package(OpenGL REQUIRED)
 
-	# find_package(Cocoa REQUIRED)
-	# find_package(IOKit REQUIRED)
-	# find_package(CoreVideo REQUIRED)
+	FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
+	message("--------find OPENGL_LIBRARY--->"${OPENGL_LIBRARY})
 
-	target_include_directories(myEngine PUBLIC ${OPENGL_INCLUDE_DIR})
+	FIND_LIBRARY(COCOA_LIBRARY Cocoa)
+	message("--------find COCOA_LIBRARY--->"${COCOA_LIBRARY})
 
-	target_link_libraries(myEngine ${OPENGL_gl_LIBRARY})
+	FIND_LIBRARY(IOKIT_LIBRARY IOKit)
+	message("--------find IOKIT_LIBRARY--->"${IOKIT_LIBRARY})
+
+	FIND_LIBRARY(COREVIDEO_LIBRARY CoreVideo)
+	message("--------find COREVIDEO_LIBRARY--->"${COREVIDEO_LIBRARY})
+
+	target_link_libraries(myEngine ${OPENGL_LIBRARY} ${COCOA_LIBRARY} ${IOKIT_LIBRARY} ${COREVIDEO_LIBRARY})
 endif()
