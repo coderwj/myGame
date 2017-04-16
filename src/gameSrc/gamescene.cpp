@@ -13,7 +13,7 @@
 
 #include "gamescene.h"
 
-GameScene * gs = 0;
+GameScene * GameScene::gs = 0;
 
 bool GameScene::init(){
     int width = 640;
