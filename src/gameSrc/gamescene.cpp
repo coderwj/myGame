@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <stdio.h>
 
 
 #include "gamescene.h"
@@ -62,13 +63,22 @@ GLuint LoadShaders(GLFWwindow *window, const char * vertex_file_path, const char
 
     // Read the Vertex Shader code from the file
     std::string VertexShaderCode;
-    std::ifstream VertexShaderStream(vertex_file_path, std::ios::in);
-    if(VertexShaderStream.is_open())
+    FILE * fp = fopen(vertex_file_path, "r");
+    if(fp != NULL)
     {
-        std::string Line = "";
-        while(getline(VertexShaderStream, Line))
-            VertexShaderCode += Line + "\n";
-        VertexShaderStream.close();
+        char c = fgetc(fp);
+        while(c != EOF)
+        {
+            if(c == '\n')
+            {
+                VertexShaderCode += "\\n";
+            }
+            else
+            {
+                VertexShaderCode += c;
+            }
+        }
+        fclose(fp);
     }
 
     // Read the Fragment Shader code from the file
