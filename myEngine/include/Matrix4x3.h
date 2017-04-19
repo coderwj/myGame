@@ -26,6 +26,13 @@ public:
 	void setupParentToLocal(const Vector3 &pos, const RotationMatrix &orient);
 
 	void setupRotate(int axis, float theta);
+
+	void setupRotate(const Vector3 &axis, float theta);
+
+	void fromQuaternion(const Quaternion &q);
+
+	void setupScale(const Vector3 &s);
+
 };
 
 #endif // __MATRIX4X3_H__
