@@ -61,3 +61,24 @@ void Matrix4x3::setupParentToLocal(const Vector3 &pos, const RotationMatrix &ori
 	ty = -(pos.x * m12 + pos.y * m22 + pos.z * m32);
 	tz = -(pos.x * m13 + pos.y * m23 + pos.z * m33);
 }
+
+void Matrix4x3::setupRotate(int axis, float theta)
+{
+
+}
+
+void Matrix4x3::setupRotate(const Vector3 &axis, float theta)
+{
+
+}
+
+void Matrix4x3::fromQuaternion(const Quaternion &q)
+{
+
+}
+
+void Matrix4x3::setupScale(const Vector3 &s)
+{
+
+}
+
