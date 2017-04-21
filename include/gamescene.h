@@ -12,14 +12,15 @@ public:
 		return gs;
 	}
 
-	bool init();
-	void DestroyInstance(){
+	void destroyInstance(){
 		if(gs)
 		{
 			delete(gs);
 			gs = NULL;
 		}
 	}
+
+	bool init();
 };
 
 #endif //__GAMESCENE_H__
