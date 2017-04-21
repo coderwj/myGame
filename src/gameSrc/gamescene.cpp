@@ -8,6 +8,7 @@
 
 #include "glew.h"
 #include "glfw3.h"
+#include "tiny_obj_loader.h"
 #include <iostream>
 
 #include <string>
