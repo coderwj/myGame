@@ -408,8 +408,6 @@ int test(int argc, char** argv) {
     }
     assert(true == TestLoadObj(argv[1], basepath));
   } else {
-    // assert(true == TestLoadObj("cornell_box.obj"));
-    // assert(true == TestLoadObj("cube.obj"));
     assert(true == TestStreamLoadObj());
     assert(true ==
            TestLoadObj("models/catmark_torus_creases0.obj", "models/", false));
