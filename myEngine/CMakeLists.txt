@@ -7,6 +7,7 @@ message("--->Cmake myEngine--->")
 project(myEngine)
 
 include_directories(./include)
+include_directories(./lib/glm/glm)
 
 if(APPLE)
 	include_directories(./lib/glew/mac/include)

@@ -8,6 +8,7 @@ project(GameSrc)
 
 include_directories(../../include)
 include_directories(../../myEngine/include)
+include_directories(../../myEngine/lib/glm/glm)
 
 if(APPLE)
 	include_directories(../../myEngine/lib/glew/mac/include)

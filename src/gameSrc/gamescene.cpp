@@ -12,6 +12,11 @@
 #include "tiny_obj_loader.h"
 #include <iostream>
 
+//glm is used to create perspective and transform matrices
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
+
 #include <string>
 #include <vector>
 #include <fstream>
@@ -344,6 +349,23 @@ bool GameScene::init(){
 
     // program and shader handles
     GLuint shader_program = LoadShaders(window, vs_path.c_str(), ps_path.c_str());
+    
+    // obtain location of projection uniform
+    GLint Model_location = glGetUniformLocation(shader_program, "Model");
+    GLint View_location = glGetUniformLocation(shader_program, "View");
+    GLint Projection_location = glGetUniformLocation(shader_program, "Projection");
+    
+    glm::mat4 Model = glm::mat4(1.0);
+
+    // calculate ViewProjection matrix
+    glm::mat4 Projection = glm::perspective(90.0f, 4.0f / 3.0f, 0.1f, 100.f);
+
+    // translate the world/view position
+    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -30.0f));
+
+    // make the camera rotate around the origin
+    View = glm::rotate(View, 30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    View = glm::rotate(View, -22.5f, glm::vec3(0.0f, 1.0f, 0.0f));
 
 
 
@@ -391,7 +413,7 @@ bool GameScene::init(){
 
 
     // fill with data
-    
+
     size_t n = 3;
     GLfloat vertexData[] =
     {
@@ -399,30 +421,14 @@ bool GameScene::init(){
         -0.8, 0.7, 0.0,
         0.6, 0.1, 0.0
     };
-    
-    
+
+
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 3, vertexData, GL_STATIC_DRAW);
 
     // set up generic attrib pointers
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, n * sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
-    
-    GLfloat modelViewMat[] = {
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
-    };
-    
-    GLfloat projectMat[] = {
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
-    };
-    
-    GLint
-    
+
 
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -435,6 +441,11 @@ bool GameScene::init(){
 
         // bind the vao
         glBindVertexArray(vao);
+        
+        // set the uniform
+        glUniformMatrix4fv(Model_location, 1, GL_FALSE, glm::value_ptr(Model));
+        glUniformMatrix4fv(View_location, 1, GL_FALSE, glm::value_ptr(View));
+        glUniformMatrix4fv(Projection_location, 1, GL_FALSE, glm::value_ptr(Projection));
 
         // draw
         glDrawArrays(GL_TRIANGLES, 0, 3);
