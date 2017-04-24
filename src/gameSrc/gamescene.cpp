@@ -358,14 +358,37 @@ bool GameScene::init(){
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    size_t n = attrib.vertices.size();
-
+    size_t n = attrib.vertices.size() / 3;
     // data for a fullscreen quad
+    n = 3000;
     GLfloat vertexData[n * 3];
-    for(size_t i = 0; i < n * 3; i++)
+    for(size_t i = 0; i < n * 3; i = i + 3)
     {
-        vertexData[i] = attrib.vertices[i / 3];
+        vertexData[i] = attrib.vertices[i];
+        vertexData[i + 1] = attrib.vertices[i + 1];
+        vertexData[i + 2] = attrib.vertices[i + 2];
     }
+
+    // for (size_t i = 0; i < shapes.size(); i++)
+    // {
+    //     size_t index_offset = 0;
+    //     for(size_t j = 0; j < shapes[i].mesh.num_face_vertices.size(); j++)
+    //     {
+    //         size_t fnum = shapes[i].mesh.num_face_vertices[j];
+    //         for(size_t k = 0; k < fnum; k++)
+    //         {
+    //             tinyobj::index_t idx = shapes[i].mesh.indices[index_offset + k];
+
+    //         }
+    //     }
+    // }
+
+    // for (size_t v = 0; v < attrib.vertices.size() / 3; v++) {
+    //            static_cast<const double>(attrib.vertices[3 * v + 0]);
+    //            static_cast<const double>(attrib.vertices[3 * v + 1]);
+    //            static_cast<const double>(attrib.vertices[3 * v + 2]);
+    // }
+
 
     // fill with data
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 3, vertexData, GL_STATIC_DRAW);
@@ -387,7 +410,7 @@ bool GameScene::init(){
         glBindVertexArray(vao);
 
         // draw
-        glDrawArrays(GL_TRIANGLES, 0, n);
+        glDrawArrays(GL_TRIANGLES, 2700, n - 2700);
 
         // check for errors
         GLenum error = glGetError();

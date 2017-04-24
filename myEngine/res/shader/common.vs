@@ -1,8 +1,7 @@
 #version 330
 layout(location = 0) in vec4 vposition;
-layout(location = 1) in vec4 vcolor;
 out vec4 fcolor;
 void main() {
-   fcolor = vcolor;
+   fcolor = vec4(0.8,0.0,0.6,1.0);
    gl_Position = vposition;
 }
