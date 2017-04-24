@@ -358,16 +358,16 @@ bool GameScene::init(){
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    size_t n = attrib.vertices.size() / 3;
-    // data for a fullscreen quad
-    n = 3000;
-    GLfloat vertexData[n * 3];
-    for(size_t i = 0; i < n * 3; i = i + 3)
-    {
-        vertexData[i] = attrib.vertices[i];
-        vertexData[i + 1] = attrib.vertices[i + 1];
-        vertexData[i + 2] = attrib.vertices[i + 2];
-    }
+//    size_t n = attrib.vertices.size() / 3;
+//    // data for a fullscreen quad
+//    n = 3000;
+//    GLfloat vertexData[n * 3];
+//    for(size_t i = 0; i < n * 3; i = i + 3)
+//    {
+//        vertexData[i] = attrib.vertices[i];
+//        vertexData[i + 1] = attrib.vertices[i + 1];
+//        vertexData[i + 2] = attrib.vertices[i + 2];
+//    }
 
     // for (size_t i = 0; i < shapes.size(); i++)
     // {
@@ -391,11 +391,38 @@ bool GameScene::init(){
 
 
     // fill with data
+    
+    size_t n = 3;
+    GLfloat vertexData[] =
+    {
+        -0.8, -0.8, 0.0,
+        -0.8, 0.7, 0.0,
+        0.6, 0.1, 0.0
+    };
+    
+    
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 3, vertexData, GL_STATIC_DRAW);
 
     // set up generic attrib pointers
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, n * sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
+    
+    GLfloat modelViewMat[] = {
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    };
+    
+    GLfloat projectMat[] = {
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    };
+    
+    GLint
+    
 
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -410,7 +437,7 @@ bool GameScene::init(){
         glBindVertexArray(vao);
 
         // draw
-        glDrawArrays(GL_TRIANGLES, 2700, n - 2700);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // check for errors
         GLenum error = glGetError();
