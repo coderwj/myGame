@@ -380,54 +380,8 @@ bool GameScene::init(){
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-//    size_t n = attrib.vertices.size() / 3;
-//    // data for a fullscreen quad
-//    n = 3000;
-//    GLfloat vertexData[n * 3];
-//    for(size_t i = 0; i < n * 3; i = i + 3)
-//    {
-//        vertexData[i] = attrib.vertices[i];
-//        vertexData[i + 1] = attrib.vertices[i + 1];
-//        vertexData[i + 2] = attrib.vertices[i + 2];
-//    }
-
-    // for (size_t i = 0; i < shapes.size(); i++)
-    // {
-    //     size_t index_offset = 0;
-    //     for(size_t j = 0; j < shapes[i].mesh.num_face_vertices.size(); j++)
-    //     {
-    //         size_t fnum = shapes[i].mesh.num_face_vertices[j];
-    //         for(size_t k = 0; k < fnum; k++)
-    //         {
-    //             tinyobj::index_t idx = shapes[i].mesh.indices[index_offset + k];
-
-    //         }
-    //     }
-    // }
-
-    // for (size_t v = 0; v < attrib.vertices.size() / 3; v++) {
-    //            static_cast<const double>(attrib.vertices[3 * v + 0]);
-    //            static_cast<const double>(attrib.vertices[3 * v + 1]);
-    //            static_cast<const double>(attrib.vertices[3 * v + 2]);
-    // }
-
-
-    // fill with data
-
-    size_t n = 3;
-    GLfloat vertexData[] =
-    {
-        -0.8, -0.8, 0.0,
-        -0.8, 0.7, 0.0,
-        0.6, 0.1, 0.0
-    };
-
-
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 3, vertexData, GL_STATIC_DRAW);
-
     // set up generic attrib pointers
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, n * sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
 
 
     while(!glfwWindowShouldClose(window)) {
@@ -446,9 +400,28 @@ bool GameScene::init(){
         glUniformMatrix4fv(Model_location, 1, GL_FALSE, glm::value_ptr(Model));
         glUniformMatrix4fv(View_location, 1, GL_FALSE, glm::value_ptr(View));
         glUniformMatrix4fv(Projection_location, 1, GL_FALSE, glm::value_ptr(Projection));
-
-        // draw
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        
+        for (size_t i = 0; i < shapes.size(); i++)
+        {
+            size_t index_offset = 0;
+            for(size_t j = 0; j < shapes[i].mesh.num_face_vertices.size(); j++)
+            {
+                size_t fnum = shapes[i].mesh.num_face_vertices[j];
+                GLfloat vertexData[fnum * 3];
+                size_t k1 = 0;
+                for(size_t k = 0; k < fnum; k++)
+                {
+                    tinyobj::index_t idx = shapes[i].mesh.indices[index_offset + k];
+                    vertexData[k1++] = attrib.vertices[idx.vertex_index + 0];
+                    vertexData[k1++] = attrib.vertices[idx.vertex_index + 1];
+                    vertexData[k1++] = attrib.vertices[idx.vertex_index + 2];
+                    
+                }
+                glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * fnum * 3, vertexData, GL_STATIC_DRAW);
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, fnum * sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, fnum);
+            }
+        }
 
         // check for errors
         GLenum error = glGetError();
