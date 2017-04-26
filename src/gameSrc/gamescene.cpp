@@ -1,18 +1,10 @@
-//
-//  MyTriangle.cpp
-//  Triangle
-//
-//  Created by coderwj on 16/10/15.
-//  Copyright © 2016年 coderwj. All rights reserved.
-//
 
 #include "glew.h"
 #include "glfw3.h"
+
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
-#include <iostream>
 
-//glm is used to create perspective and transform matrices
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
@@ -20,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iostream>
 
 
 #include "gamescene.h"
@@ -361,13 +354,11 @@ bool GameScene::init(){
     glm::mat4 Projection = glm::perspective(90.0f, 4.0f / 3.0f, 0.1f, 100.f);
 
     // translate the world/view position
-    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -30.0f));
+    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -20.0f));
 
     // make the camera rotate around the origin
     View = glm::rotate(View, 30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     View = glm::rotate(View, -22.5f, glm::vec3(0.0f, 1.0f, 0.0f));
-
-
 
     // vao and vbo handle
     GLuint vao, vbo;
@@ -419,7 +410,7 @@ bool GameScene::init(){
                 }
                 glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * fnum * 3, vertexData, GL_STATIC_DRAW);
                 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, fnum * sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
-                glDrawArrays(GL_TRIANGLE_STRIP, 0, fnum);
+                glDrawArrays(GL_TRIANGLES, 0, fnum);
             }
         }
 
