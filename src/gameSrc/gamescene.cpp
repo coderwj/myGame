@@ -334,7 +334,7 @@ bool GameScene::init(){
         return false;
     }
 
-    PrintInfo(attrib, shapes, materials);
+    //PrintInfo(attrib, shapes, materials);
 
 
     std::string vs_path = "../../../../../../myEngine/res/shader/common.vs";
@@ -349,16 +349,19 @@ bool GameScene::init(){
     GLint Projection_location = glGetUniformLocation(shader_program, "Projection");
     
     glm::mat4 Model = glm::mat4(1.0);
+    Model = glm::rotate(Model, 90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    Model = glm::rotate(Model, 50.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    Model = glm::rotate(Model, -150.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 
     // calculate ViewProjection matrix
     glm::mat4 Projection = glm::perspective(90.0f, 4.0f / 3.0f, 0.1f, 100.f);
 
     // translate the world/view position
-    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -20.0f));
+    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, 3.0f, -20.0f));
 
     // make the camera rotate around the origin
-    View = glm::rotate(View, 30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    View = glm::rotate(View, -22.5f, glm::vec3(0.0f, 1.0f, 0.0f));
+    View = glm::rotate(View, 130.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    View = glm::rotate(View, -122.5f, glm::vec3(0.0f, 1.0f, 0.0f));
 
     // vao and vbo handle
     GLuint vao, vbo;
@@ -399,18 +402,19 @@ bool GameScene::init(){
             {
                 size_t fnum = shapes[i].mesh.num_face_vertices[j];
                 GLfloat vertexData[fnum * 3];
-                size_t k1 = 0;
                 for(size_t k = 0; k < fnum; k++)
                 {
                     tinyobj::index_t idx = shapes[i].mesh.indices[index_offset + k];
-                    vertexData[k1++] = attrib.vertices[idx.vertex_index + 0];
-                    vertexData[k1++] = attrib.vertices[idx.vertex_index + 1];
-                    vertexData[k1++] = attrib.vertices[idx.vertex_index + 2];
+                    vertexData[3 * k + 0] = attrib.vertices[idx.vertex_index + 0];
+                    vertexData[3 * k + 1] = attrib.vertices[idx.vertex_index + 1];
+                    vertexData[3 * k + 2] = attrib.vertices[idx.vertex_index + 2];
                     
                 }
                 glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * fnum * 3, vertexData, GL_STATIC_DRAW);
                 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, fnum * sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
                 glDrawArrays(GL_TRIANGLES, 0, fnum);
+                index_offset = index_offset + fnum;
+                
             }
         }
 
