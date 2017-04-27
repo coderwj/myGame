@@ -361,7 +361,7 @@ bool GameScene::init(){
 
     // make the camera rotate around the origin
     View = glm::rotate(View, 130.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    View = glm::rotate(View, -122.5f, glm::vec3(0.0f, 1.0f, 0.0f));
+    View = glm::rotate(View, -33.5f, glm::vec3(0.0f, 1.0f, 0.0f));
 
     // vao and vbo handle
     GLuint vao, vbo;
@@ -405,15 +405,33 @@ bool GameScene::init(){
                 for(size_t k = 0; k < fnum; k++)
                 {
                     tinyobj::index_t idx = shapes[i].mesh.indices[index_offset + k];
-                    vertexData[3 * k + 0] = attrib.vertices[idx.vertex_index + 0];
-                    vertexData[3 * k + 1] = attrib.vertices[idx.vertex_index + 1];
-                    vertexData[3 * k + 2] = attrib.vertices[idx.vertex_index + 2];
+                    vertexData[3 * k + 0] = attrib.vertices[3 * idx.vertex_index + 0];
+                    vertexData[3 * k + 1] = attrib.vertices[3 * idx.vertex_index + 1];
+                    vertexData[3 * k + 2] = attrib.vertices[3 * idx.vertex_index + 2];
                     
                 }
                 glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * fnum * 3, vertexData, GL_STATIC_DRAW);
                 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, fnum * sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
-                glDrawArrays(GL_TRIANGLES, 0, fnum);
+                if(fnum == 3)
+                {
+                    glDrawArrays(GL_TRIANGLES, 0, fnum);
+                }
+                else if(fnum == 4)
+                {
+                    glDrawArrays(GL_TRIANGLE_STRIP, 0, fnum);
+                }
+                else
+                {
+                    glDrawArrays(GL_TRIANGLE_STRIP, 0, fnum);
+                }
                 index_offset = index_offset + fnum;
+                
+                // check for errors
+                GLenum error = glGetError();
+                if(error != GL_NO_ERROR) {
+                    std::cerr << error << std::endl;
+                    break;
+                }
                 
             }
         }
