@@ -9,6 +9,7 @@ project(GameSrc)
 include_directories(../../include)
 include_directories(../../myEngine/include)
 include_directories(../../myEngine/lib/glm/glm)
+include_directories(../../myEngine/lib/tinyobjloader/mac/include)
 
 if(APPLE)
 	include_directories(../../myEngine/lib/glew/mac/include)

@@ -4,6 +4,8 @@
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
@@ -11,6 +13,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <fstream>
 #include <iostream>
 
@@ -19,172 +22,261 @@
 
 GameScene * GameScene::gs = 0;
 
-static void PrintInfo(const tinyobj::attrib_t& attrib,
-                      const std::vector<tinyobj::shape_t>& shapes,
-                      const std::vector<tinyobj::material_t>& materials) {
-    std::cout << "# of vertices  : " << (attrib.vertices.size() / 3) << std::endl;
-    std::cout << "# of normals   : " << (attrib.normals.size() / 3) << std::endl;
-    std::cout << "# of texcoords : " << (attrib.texcoords.size() / 2)
-    << std::endl;
 
-    std::cout << "# of shapes    : " << shapes.size() << std::endl;
-    std::cout << "# of materials : " << materials.size() << std::endl;
+typedef struct {
+    GLuint vb;  // vertex buffer
+    int numTriangles;
+    size_t material_id;
+} DrawObject;
 
-    for (size_t v = 0; v < attrib.vertices.size() / 3; v++) {
-        printf("  v[%ld] = (%f, %f, %f)\n", static_cast<long>(v),
-               static_cast<const double>(attrib.vertices[3 * v + 0]),
-               static_cast<const double>(attrib.vertices[3 * v + 1]),
-               static_cast<const double>(attrib.vertices[3 * v + 2]));
-    }
+std::vector<DrawObject> gDrawObjects;
 
-    for (size_t v = 0; v < attrib.normals.size() / 3; v++) {
-        printf("  n[%ld] = (%f, %f, %f)\n", static_cast<long>(v),
-               static_cast<const double>(attrib.normals[3 * v + 0]),
-               static_cast<const double>(attrib.normals[3 * v + 1]),
-               static_cast<const double>(attrib.normals[3 * v + 2]));
-    }
-
-    for (size_t v = 0; v < attrib.texcoords.size() / 2; v++) {
-        printf("  uv[%ld] = (%f, %f)\n", static_cast<long>(v),
-               static_cast<const double>(attrib.texcoords[2 * v + 0]),
-               static_cast<const double>(attrib.texcoords[2 * v + 1]));
-    }
-
-    // For each shape
-    for (size_t i = 0; i < shapes.size(); i++) {
-        printf("shape[%ld].name = %s\n", static_cast<long>(i),
-               shapes[i].name.c_str());
-        printf("Size of shape[%ld].indices: %lu\n", static_cast<long>(i),
-               static_cast<unsigned long>(shapes[i].mesh.indices.size()));
-
-        size_t index_offset = 0;
-
-        assert(shapes[i].mesh.num_face_vertices.size() ==
-               shapes[i].mesh.material_ids.size());
-
-        printf("shape[%ld].num_faces: %lu\n", static_cast<long>(i),
-               static_cast<unsigned long>(shapes[i].mesh.num_face_vertices.size()));
-
-        // For each face
-        for (size_t f = 0; f < shapes[i].mesh.num_face_vertices.size(); f++) {
-            size_t fnum = shapes[i].mesh.num_face_vertices[f];
-
-            printf("  face[%ld].fnum = %ld\n", static_cast<long>(f),
-                   static_cast<unsigned long>(fnum));
-
-            // For each vertex in the face
-            for (size_t v = 0; v < fnum; v++) {
-                tinyobj::index_t idx = shapes[i].mesh.indices[index_offset + v];
-                printf("    face[%ld].v[%ld].idx = %d/%d/%d\n", static_cast<long>(f),
-                       static_cast<long>(v), idx.vertex_index, idx.normal_index,
-                       idx.texcoord_index);
-            }
-
-            printf("  face[%ld].material_id = %d\n", static_cast<long>(f),
-                   shapes[i].mesh.material_ids[f]);
-
-            index_offset += fnum;
-        }
-
-        printf("shape[%ld].num_tags: %lu\n", static_cast<long>(i),
-               static_cast<unsigned long>(shapes[i].mesh.tags.size()));
-        for (size_t t = 0; t < shapes[i].mesh.tags.size(); t++) {
-            printf("  tag[%ld] = %s ", static_cast<long>(t),
-                   shapes[i].mesh.tags[t].name.c_str());
-            printf(" ints: [");
-            for (size_t j = 0; j < shapes[i].mesh.tags[t].intValues.size(); ++j) {
-                printf("%ld", static_cast<long>(shapes[i].mesh.tags[t].intValues[j]));
-                if (j < (shapes[i].mesh.tags[t].intValues.size() - 1)) {
-                    printf(", ");
-                }
-            }
-            printf("]");
-
-            printf(" floats: [");
-            for (size_t j = 0; j < shapes[i].mesh.tags[t].floatValues.size(); ++j) {
-                printf("%f", static_cast<const double>(
-                                                       shapes[i].mesh.tags[t].floatValues[j]));
-                if (j < (shapes[i].mesh.tags[t].floatValues.size() - 1)) {
-                    printf(", ");
-                }
-            }
-            printf("]");
-
-            printf(" strings: [");
-            for (size_t j = 0; j < shapes[i].mesh.tags[t].stringValues.size(); ++j) {
-                printf("%s", shapes[i].mesh.tags[t].stringValues[j].c_str());
-                if (j < (shapes[i].mesh.tags[t].stringValues.size() - 1)) {
-                    printf(", ");
-                }
-            }
-            printf("]");
-            printf("\n");
-        }
-    }
-
-    for (size_t i = 0; i < materials.size(); i++) {
-        printf("material[%ld].name = %s\n", static_cast<long>(i),
-               materials[i].name.c_str());
-        printf("  material.Ka = (%f, %f ,%f)\n",
-               static_cast<const double>(materials[i].ambient[0]),
-               static_cast<const double>(materials[i].ambient[1]),
-               static_cast<const double>(materials[i].ambient[2]));
-        printf("  material.Kd = (%f, %f ,%f)\n",
-               static_cast<const double>(materials[i].diffuse[0]),
-               static_cast<const double>(materials[i].diffuse[1]),
-               static_cast<const double>(materials[i].diffuse[2]));
-        printf("  material.Ks = (%f, %f ,%f)\n",
-               static_cast<const double>(materials[i].specular[0]),
-               static_cast<const double>(materials[i].specular[1]),
-               static_cast<const double>(materials[i].specular[2]));
-        printf("  material.Tr = (%f, %f ,%f)\n",
-               static_cast<const double>(materials[i].transmittance[0]),
-               static_cast<const double>(materials[i].transmittance[1]),
-               static_cast<const double>(materials[i].transmittance[2]));
-        printf("  material.Ke = (%f, %f ,%f)\n",
-               static_cast<const double>(materials[i].emission[0]),
-               static_cast<const double>(materials[i].emission[1]),
-               static_cast<const double>(materials[i].emission[2]));
-        printf("  material.Ns = %f\n",
-               static_cast<const double>(materials[i].shininess));
-        printf("  material.Ni = %f\n", static_cast<const double>(materials[i].ior));
-        printf("  material.dissolve = %f\n",
-               static_cast<const double>(materials[i].dissolve));
-        printf("  material.illum = %d\n", materials[i].illum);
-        printf("  material.map_Ka = %s\n", materials[i].ambient_texname.c_str());
-        printf("  material.map_Kd = %s\n", materials[i].diffuse_texname.c_str());
-        printf("  material.map_Ks = %s\n", materials[i].specular_texname.c_str());
-        printf("  material.map_Ns = %s\n",
-               materials[i].specular_highlight_texname.c_str());
-        printf("  material.map_bump = %s\n", materials[i].bump_texname.c_str());
-        printf("    bump_multiplier = %f\n", static_cast<const double>(materials[i].bump_texopt.bump_multiplier));
-        printf("  material.map_d = %s\n", materials[i].alpha_texname.c_str());
-        printf("  material.disp = %s\n", materials[i].displacement_texname.c_str());
-        printf("  <<PBR>>\n");
-        printf("  material.Pr     = %f\n", static_cast<const double>(materials[i].roughness));
-        printf("  material.Pm     = %f\n", static_cast<const double>(materials[i].metallic));
-        printf("  material.Ps     = %f\n", static_cast<const double>(materials[i].sheen));
-        printf("  material.Pc     = %f\n", static_cast<const double>(materials[i].clearcoat_thickness));
-        printf("  material.Pcr    = %f\n", static_cast<const double>(materials[i].clearcoat_thickness));
-        printf("  material.aniso  = %f\n", static_cast<const double>(materials[i].anisotropy));
-        printf("  material.anisor = %f\n", static_cast<const double>(materials[i].anisotropy_rotation));
-        printf("  material.map_Ke = %s\n", materials[i].emissive_texname.c_str());
-        printf("  material.map_Pr = %s\n", materials[i].roughness_texname.c_str());
-        printf("  material.map_Pm = %s\n", materials[i].metallic_texname.c_str());
-        printf("  material.map_Ps = %s\n", materials[i].sheen_texname.c_str());
-        printf("  material.norm   = %s\n", materials[i].normal_texname.c_str());
-        std::map<std::string, std::string>::const_iterator it(
-                                                              materials[i].unknown_parameter.begin());
-        std::map<std::string, std::string>::const_iterator itEnd(
-                                                                 materials[i].unknown_parameter.end());
-
-        for (; it != itEnd; it++) {
-            printf("  material.%s = %s\n", it->first.c_str(), it->second.c_str());
-        }
-        printf("\n");
+static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]) {
+    float v10[3];
+    v10[0] = v1[0] - v0[0];
+    v10[1] = v1[1] - v0[1];
+    v10[2] = v1[2] - v0[2];
+    
+    float v20[3];
+    v20[0] = v2[0] - v0[0];
+    v20[1] = v2[1] - v0[1];
+    v20[2] = v2[2] - v0[2];
+    
+    N[0] = v20[1] * v10[2] - v20[2] * v10[1];
+    N[1] = v20[2] * v10[0] - v20[0] * v10[2];
+    N[2] = v20[0] * v10[1] - v20[1] * v10[0];
+    
+    float len2 = N[0] * N[0] + N[1] * N[1] + N[2] * N[2];
+    if (len2 > 0.0f) {
+        float len = sqrtf(len2);
+        
+        N[0] /= len;
+        N[1] /= len;
     }
 }
 
+static bool LoadObjAndConvert(float bmin[3], float bmax[3],
+                              std::vector<DrawObject>* drawObjects,
+                              std::vector<tinyobj::material_t>& materials,
+                              std::map<std::string, GLuint>& textures,
+                              const char* filename,
+                              const char* basepath) {
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    
+    
+    std::string err;
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename, basepath);
+    if (!err.empty()) {
+        std::cerr << err << std::endl;
+    }
+    
+    if (!ret) {
+        std::cerr << "Failed to load " << filename << std::endl;
+        return false;
+    }
+    
+    printf("# of vertices  = %d\n", (int)(attrib.vertices.size()) / 3);
+    printf("# of normals   = %d\n", (int)(attrib.normals.size()) / 3);
+    printf("# of texcoords = %d\n", (int)(attrib.texcoords.size()) / 2);
+    printf("# of materials = %d\n", (int)materials.size());
+    printf("# of shapes    = %d\n", (int)shapes.size());
+    
+    // Append `default` material
+    materials.push_back(tinyobj::material_t());
+    
+    // Load diffuse textures
+    {
+        for (size_t m = 0; m < materials.size(); m++) {
+            tinyobj::material_t* mp = &materials[m];
+            
+            if (mp->diffuse_texname.length() > 0) {
+                // Only load the texture if it is not already loaded
+                if (textures.find(mp->diffuse_texname) == textures.end()) {
+                    GLuint texture_id;
+                    int w, h;
+                    int comp;
+                    
+                    //std::string texture_filename = basepath;
+                    std::string texture_pathname = basepath;
+                    texture_pathname = texture_pathname + "Texturas/";
+                    std::string texture_filename = texture_pathname + mp->diffuse_texname;
+                    
+                    unsigned char* image = stbi_load(texture_filename.c_str(), &w, &h, &comp, STBI_default);
+                    if (!image) {
+                        std::cerr << "Unable to load texture: " << texture_filename << std::endl;
+                        exit(1);
+                    }
+                    glGenTextures(1, &texture_id);
+                    glBindTexture(GL_TEXTURE_2D, texture_id);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                    if (comp == 3) {
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+                    }
+                    else if (comp == 4) {
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+                    }
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                    stbi_image_free(image);
+                    textures.insert(std::make_pair(mp->diffuse_texname, texture_id));
+                }
+            }
+        }
+    }
+    
+    bmin[0] = bmin[1] = bmin[2] = std::numeric_limits<float>::max();
+    bmax[0] = bmax[1] = bmax[2] = -std::numeric_limits<float>::max();
+    
+    {
+        for (size_t s = 0; s < shapes.size(); s++) {
+            DrawObject o;
+            std::vector<float> vb;  // pos(3float), normal(3float), color(3float)
+            for (size_t f = 0; f < shapes[s].mesh.indices.size() / 3; f++) {
+                tinyobj::index_t idx0 = shapes[s].mesh.indices[3 * f + 0];
+                tinyobj::index_t idx1 = shapes[s].mesh.indices[3 * f + 1];
+                tinyobj::index_t idx2 = shapes[s].mesh.indices[3 * f + 2];
+                
+                int current_material_id = shapes[s].mesh.material_ids[f];
+                
+                if ((current_material_id < 0) || (current_material_id >= static_cast<int>(materials.size()))) {
+                    // Invaid material ID. Use default material.
+                    current_material_id = materials.size() - 1; // Default material is added to the last item in `materials`.
+                }
+                //if (current_material_id >= materials.size()) {
+                //    std::cerr << "Invalid material index: " << current_material_id << std::endl;
+                //}
+                //
+                float diffuse[3];
+                for (size_t i = 0; i < 3; i++) {
+                    diffuse[i] = materials[current_material_id].diffuse[i];
+                }
+                float tc[3][2];
+                if (attrib.texcoords.size() > 0 && idx0.texcoord_index != -1) {
+                    assert(attrib.texcoords.size() > 2 * idx0.texcoord_index + 1);
+                    assert(attrib.texcoords.size() > 2 * idx1.texcoord_index + 1);
+                    assert(attrib.texcoords.size() > 2 * idx2.texcoord_index + 1);
+                    tc[0][0] = attrib.texcoords[2 * idx0.texcoord_index];
+                    tc[0][1] = 1.0f - attrib.texcoords[2 * idx0.texcoord_index + 1];
+                    tc[1][0] = attrib.texcoords[2 * idx1.texcoord_index];
+                    tc[1][1] = 1.0f - attrib.texcoords[2 * idx1.texcoord_index + 1];
+                    tc[2][0] = attrib.texcoords[2 * idx2.texcoord_index];
+                    tc[2][1] = 1.0f - attrib.texcoords[2 * idx2.texcoord_index + 1];
+                } else {
+                    tc[0][0] = 0.0f;
+                    tc[0][1] = 0.0f;
+                    tc[1][0] = 0.0f;
+                    tc[1][1] = 0.0f;
+                    tc[2][0] = 0.0f;
+                    tc[2][1] = 0.0f;
+                }
+                
+                float v[3][3];
+                for (int k = 0; k < 3; k++) {
+                    int f0 = idx0.vertex_index;
+                    int f1 = idx1.vertex_index;
+                    int f2 = idx2.vertex_index;
+                    assert(f0 >= 0);
+                    assert(f1 >= 0);
+                    assert(f2 >= 0);
+                    
+                    v[0][k] = attrib.vertices[3 * f0 + k];
+                    v[1][k] = attrib.vertices[3 * f1 + k];
+                    v[2][k] = attrib.vertices[3 * f2 + k];
+                    bmin[k] = std::min(v[0][k], bmin[k]);
+                    bmin[k] = std::min(v[1][k], bmin[k]);
+                    bmin[k] = std::min(v[2][k], bmin[k]);
+                    bmax[k] = std::max(v[0][k], bmax[k]);
+                    bmax[k] = std::max(v[1][k], bmax[k]);
+                    bmax[k] = std::max(v[2][k], bmax[k]);
+                }
+                
+                float n[3][3];
+                if (attrib.normals.size() > 0) {
+                    int f0 = idx0.normal_index;
+                    int f1 = idx1.normal_index;
+                    int f2 = idx2.normal_index;
+                    assert(f0 >= 0);
+                    assert(f1 >= 0);
+                    assert(f2 >= 0);
+                    for (int k = 0; k < 3; k++) {
+                        n[0][k] = attrib.normals[3 * f0 + k];
+                        n[1][k] = attrib.normals[3 * f1 + k];
+                        n[2][k] = attrib.normals[3 * f2 + k];
+                    }
+                } else {
+                    // compute geometric normal
+                    CalcNormal(n[0], v[0], v[1], v[2]);
+                    n[1][0] = n[0][0];
+                    n[1][1] = n[0][1];
+                    n[1][2] = n[0][2];
+                    n[2][0] = n[0][0];
+                    n[2][1] = n[0][1];
+                    n[2][2] = n[0][2];
+                }
+                
+                for (int k = 0; k < 3; k++) {
+                    vb.push_back(v[k][0]);
+                    vb.push_back(v[k][1]);
+                    vb.push_back(v[k][2]);
+                    vb.push_back(n[k][0]);
+                    vb.push_back(n[k][1]);
+                    vb.push_back(n[k][2]);
+                    // Combine normal and diffuse to get color.
+                    float normal_factor = 0.2;
+                    float diffuse_factor = 1 - normal_factor;
+                    float c[3] = {
+                        n[k][0] * normal_factor + diffuse[0] * diffuse_factor,
+                        n[k][1] * normal_factor + diffuse[1] * diffuse_factor,
+                        n[k][2] * normal_factor + diffuse[2] * diffuse_factor
+                    };
+                    float len2 = c[0] * c[0] + c[1] * c[1] + c[2] * c[2];
+                    if (len2 > 0.0f) {
+                        float len = sqrtf(len2);
+                        
+                        c[0] /= len;
+                        c[1] /= len;
+                        c[2] /= len;
+                    }
+                    vb.push_back(c[0] * 0.5 + 0.5);
+                    vb.push_back(c[1] * 0.5 + 0.5);
+                    vb.push_back(c[2] * 0.5 + 0.5);
+                    
+                    vb.push_back(tc[k][0]);
+                    vb.push_back(tc[k][1]);
+                }
+            }
+            
+            o.vb = 0;
+            o.numTriangles = 0;
+            
+            // OpenGL viewer does not support texturing with per-face material.
+            if (shapes[s].mesh.material_ids.size() > 0 && shapes[s].mesh.material_ids.size() > s) {
+                // Base case
+                o.material_id = shapes[s].mesh.material_ids[s];
+            } else {
+                o.material_id = materials.size() - 1; // = ID for default material.
+            }
+            
+            if (vb.size() > 0) {
+                glGenBuffers(1, &o.vb);
+                glBindBuffer(GL_ARRAY_BUFFER, o.vb);
+                glBufferData(GL_ARRAY_BUFFER, vb.size() * sizeof(float), &vb.at(0),
+                             GL_STATIC_DRAW);
+                o.numTriangles = vb.size() / (3 + 3 + 3 + 2) * 3;
+                printf("shape[%d] # of triangles = %d\n", static_cast<int>(s),
+                       o.numTriangles);
+            }
+            
+            drawObjects->push_back(o);
+        }
+    }
+    
+    printf("bmin = %f, %f, %f\n", bmin[0], bmin[1], bmin[2]);
+    printf("bmax = %f, %f, %f\n", bmax[0], bmax[1], bmax[2]);
+    
+    return true;
+}
 static void error_callback(int error, const char* description)
 {
     fputs(description, stderr);
@@ -317,21 +409,16 @@ bool GameScene::init(){
 
     const char* filename = "../../../../../../res/models/character1/Dukemon-Final-2.obj";
     const char* basepath = "../../../../../../res/models/character1/";
-    bool triangulate = false;
+    //bool triangulate = false;
 
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
-    std::string err;
-    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename,
-                              basepath, triangulate);
-    if (!err.empty()) {
-        std::cerr << err << std::endl;
-    }
-
-    if (!ret) {
-        std::cout << "Failed to load .obj." << std::endl;
-        return false;
+    
+    float bmin[3], bmax[3];
+    std::map<std::string, GLuint> textures;
+    if (!LoadObjAndConvert(bmin, bmax, &gDrawObjects, materials, textures, filename, basepath)) {
+        return -1;
     }
 
     //PrintInfo(attrib, shapes, materials);
@@ -349,19 +436,23 @@ bool GameScene::init(){
     GLint Projection_location = glGetUniformLocation(shader_program, "Projection");
     
     glm::mat4 Model = glm::mat4(1.0);
-    Model = glm::rotate(Model, 90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    Model = glm::rotate(Model, 50.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-    Model = glm::rotate(Model, -150.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+    Model = glm::rotate(Model, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+    Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
 
     // calculate ViewProjection matrix
     glm::mat4 Projection = glm::perspective(90.0f, 4.0f / 3.0f, 0.1f, 100.f);
 
     // translate the world/view position
-    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, 3.0f, -20.0f));
+    glm::mat4 View = glm::mat4(1.0f);
 
     // make the camera rotate around the origin
-    View = glm::rotate(View, 130.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    View = glm::rotate(View, -33.5f, glm::vec3(0.0f, 1.0f, 0.0f));
+    View = glm::rotate(View, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+    
+    View = glm::translate(View, glm::vec3(0.0f, -3.0f, -10.0f));
 
     // vao and vbo handle
     GLuint vao, vbo;
@@ -376,13 +467,20 @@ bool GameScene::init(){
 
     // set up generic attrib pointers
     glEnableVertexAttribArray(0);
-
-
+    
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
         // clear first
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        glEnable(GL_DEPTH_TEST);
+        
+        float borderColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         // use the shader program
         glUseProgram(shader_program);
@@ -395,46 +493,70 @@ bool GameScene::init(){
         glUniformMatrix4fv(View_location, 1, GL_FALSE, glm::value_ptr(View));
         glUniformMatrix4fv(Projection_location, 1, GL_FALSE, glm::value_ptr(Projection));
         
-        for (size_t i = 0; i < shapes.size(); i++)
-        {
-            size_t index_offset = 0;
-            for(size_t j = 0; j < shapes[i].mesh.num_face_vertices.size(); j++)
-            {
-                size_t fnum = shapes[i].mesh.num_face_vertices[j];
-                GLfloat vertexData[fnum * 3];
-                for(size_t k = 0; k < fnum; k++)
-                {
-                    tinyobj::index_t idx = shapes[i].mesh.indices[index_offset + k];
-                    vertexData[3 * k + 0] = attrib.vertices[3 * idx.vertex_index + 0];
-                    vertexData[3 * k + 1] = attrib.vertices[3 * idx.vertex_index + 1];
-                    vertexData[3 * k + 2] = attrib.vertices[3 * idx.vertex_index + 2];
-                    
-                }
-                glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * fnum * 3, vertexData, GL_STATIC_DRAW);
-                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, fnum * sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
-                if(fnum == 3)
-                {
-                    glDrawArrays(GL_TRIANGLES, 0, fnum);
-                }
-                else if(fnum == 4)
-                {
-                    glDrawArrays(GL_TRIANGLE_STRIP, 0, fnum);
-                }
-                else
-                {
-                    glDrawArrays(GL_TRIANGLE_STRIP, 0, fnum);
-                }
-                index_offset = index_offset + fnum;
-                
-                // check for errors
-                GLenum error = glGetError();
-                if(error != GL_NO_ERROR) {
-                    std::cerr << error << std::endl;
-                    break;
-                }
-                
+        GLsizei stride = (3 + 3 + 3 + 2) * sizeof(float);
+        for (size_t i = 0; i < gDrawObjects.size(); i++) {
+            DrawObject o = gDrawObjects[i];
+            if (o.vb < 1) {
+                continue;
             }
+            
+            glBindBuffer(GL_ARRAY_BUFFER, o.vb);
+            
+            if ((o.material_id < materials.size())) {
+                std::string diffuse_texname = materials[o.material_id].diffuse_texname;
+                if (textures.find(diffuse_texname) != textures.end()) {
+                    glBindTexture(GL_TEXTURE_2D, textures[diffuse_texname]);
+                }
+            }
+            glVertexPointer(3, GL_FLOAT, stride, (const void*)0);
+            glNormalPointer(GL_FLOAT, stride, (const void*)(sizeof(float) * 3));
+            glColorPointer(3, GL_FLOAT, stride, (const void*)(sizeof(float) * 6));
+            glTexCoordPointer(2, GL_FLOAT, stride, (const void*)(sizeof(float) * 9));
+            
+            glDrawArrays(GL_TRIANGLES, 0, 3 * o.numTriangles);
+            glBindTexture(GL_TEXTURE_2D, 0);
         }
+        
+//        for (size_t i = 0; i < shapes.size(); i++)
+//        {
+//            size_t index_offset = 0;
+//            for(size_t j = 0; j < shapes[i].mesh.num_face_vertices.size(); j++)
+//            {
+//                size_t fnum = shapes[i].mesh.num_face_vertices[j];
+//                GLfloat vertexData[fnum * 3];
+//                for(size_t k = 0; k < fnum; k++)
+//                {
+//                    tinyobj::index_t idx = shapes[i].mesh.indices[index_offset + k];
+//                    vertexData[3 * k + 0] = attrib.vertices[3 * idx.vertex_index + 0];
+//                    vertexData[3 * k + 1] = attrib.vertices[3 * idx.vertex_index + 1];
+//                    vertexData[3 * k + 2] = attrib.vertices[3 * idx.vertex_index + 2];
+//                    
+//                }
+//                glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * fnum * 3, vertexData, GL_STATIC_DRAW);
+//                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, fnum * sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
+//                if(fnum == 3)
+//                {
+//                    glDrawArrays(GL_TRIANGLES, 0, fnum);
+//                }
+//                else if(fnum == 4)
+//                {
+//                    //glDrawArrays(GL_LINE_STRIP, 0, fnum);
+//                }
+//                else
+//                {
+//                    //glDrawArrays(GL_LINE_STRIP, 0, fnum);
+//                }
+//                index_offset = index_offset + fnum;
+//                
+//                // check for errors
+//                GLenum error = glGetError();
+//                if(error != GL_NO_ERROR) {
+//                    std::cerr << error << std::endl;
+//                    break;
+//                }
+//                
+//            }
+//        }
 
         // check for errors
         GLenum error = glGetError();
