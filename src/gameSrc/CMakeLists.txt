@@ -18,6 +18,14 @@ if(APPLE)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../myEngine/lib/glfw/mac/lib)
 endif()
 
+if(WIN32)
+	include_directories(../../myEngine/lib/glew/win32/include)
+	include_directories(../../myEngine/lib/glfw/win32/include)
+
+	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../myEngine/lib/glew/win32/lib)
+	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../myEngine/lib/glfw/win32/lib)
+endif()
+
 
 FILE(GLOB SRC_1 "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 

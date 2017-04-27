@@ -12,11 +12,21 @@ include_directories(./lib/glm/glm)
 if(APPLE)
 	include_directories(./lib/glew/mac/include)
 	include_directories(./lib/glfw/mac/include)
-	include_directories(./lib/tinyobjloader/include)
+	include_directories(./lib/tinyobjloader/mac/include)
 
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/mac/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/mac/lib)
+endif()
+
+if(WIN32)
+	include_directories(./lib/glew/win32/include)
+	include_directories(./lib/glfw/win32/include)
+	include_directories(./lib/tinyobjloader/win32/include)
+
+	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib)
+	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib)
+	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib)
 endif()
 
 
@@ -43,4 +53,9 @@ if(APPLE)
 	message("--------find COREVIDEO_LIBRARY--->" ${COREVIDEO_LIBRARY})
 
 	target_link_libraries(myEngine ${OPENGL_LIBRARY} ${COCOA_LIBRARY} ${IOKIT_LIBRARY} ${COREVIDEO_LIBRARY})
+endif()
+
+if(WIN32)
+	target_link_libraries(myEngine ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib/glfw3.lib ${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/GLEW.lib
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib/tinyobjloader.lib)
 endif()
