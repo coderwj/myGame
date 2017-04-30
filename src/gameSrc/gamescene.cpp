@@ -24,7 +24,7 @@ GameScene * GameScene::gs = 0;
 
 
 typedef struct {
-    GLuint vb;  // vertex buffer
+    std::vector<float> vb;  // vertex buffer
     int numTriangles;
     size_t material_id;
 } DrawObject;
@@ -55,8 +55,7 @@ static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]) {
     }
 }
 
-static bool LoadObjAndConvert(float bmin[3], float bmax[3],
-                              std::vector<DrawObject>* drawObjects,
+static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
                               std::vector<tinyobj::material_t>& materials,
                               std::map<std::string, GLuint>& textures,
                               const char* filename,
@@ -125,9 +124,6 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
         }
     }
     
-    bmin[0] = bmin[1] = bmin[2] = std::numeric_limits<float>::max();
-    bmax[0] = bmax[1] = bmax[2] = -std::numeric_limits<float>::max();
-    
     {
         for (size_t s = 0; s < shapes.size(); s++) {
             DrawObject o;
@@ -143,10 +139,6 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
                     // Invaid material ID. Use default material.
                     current_material_id = materials.size() - 1; // Default material is added to the last item in `materials`.
                 }
-                //if (current_material_id >= materials.size()) {
-                //    std::cerr << "Invalid material index: " << current_material_id << std::endl;
-                //}
-                //
                 float diffuse[3];
                 for (size_t i = 0; i < 3; i++) {
                     diffuse[i] = materials[current_material_id].diffuse[i];
@@ -183,12 +175,6 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
                     v[0][k] = attrib.vertices[3 * f0 + k];
                     v[1][k] = attrib.vertices[3 * f1 + k];
                     v[2][k] = attrib.vertices[3 * f2 + k];
-                    bmin[k] = std::min(v[0][k], bmin[k]);
-                    bmin[k] = std::min(v[1][k], bmin[k]);
-                    bmin[k] = std::min(v[2][k], bmin[k]);
-                    bmax[k] = std::max(v[0][k], bmax[k]);
-                    bmax[k] = std::max(v[1][k], bmax[k]);
-                    bmax[k] = std::max(v[2][k], bmax[k]);
                 }
                 
                 float n[3][3];
@@ -246,8 +232,8 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
                     vb.push_back(tc[k][1]);
                 }
             }
+            o.vb = vb;
             
-            o.vb = 0;
             o.numTriangles = 0;
             
             // OpenGL viewer does not support texturing with per-face material.
@@ -259,10 +245,6 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
             }
             
             if (vb.size() > 0) {
-                glGenBuffers(1, &o.vb);
-                glBindBuffer(GL_ARRAY_BUFFER, o.vb);
-                glBufferData(GL_ARRAY_BUFFER, vb.size() * sizeof(float), &vb.at(0),
-                             GL_STATIC_DRAW);
                 o.numTriangles = vb.size() / (3 + 3 + 3 + 2) * 3;
                 printf("shape[%d] # of triangles = %d\n", static_cast<int>(s),
                        o.numTriangles);
@@ -271,9 +253,6 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
             drawObjects->push_back(o);
         }
     }
-    
-    printf("bmin = %f, %f, %f\n", bmin[0], bmin[1], bmin[2]);
-    printf("bmax = %f, %f, %f\n", bmax[0], bmax[1], bmax[2]);
     
     return true;
 }
@@ -412,12 +391,9 @@ bool GameScene::init(){
     //bool triangulate = false;
 
     tinyobj::attrib_t attrib;
-    std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
-    
-    float bmin[3], bmax[3];
     std::map<std::string, GLuint> textures;
-    if (!LoadObjAndConvert(bmin, bmax, &gDrawObjects, materials, textures, filename, basepath)) {
+    if (!LoadObjAndConvert(&gDrawObjects, materials, textures, filename, basepath)) {
         return -1;
     }
 
@@ -452,7 +428,7 @@ bool GameScene::init(){
     View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
     
-    View = glm::translate(View, glm::vec3(0.0f, -3.0f, -10.0f));
+    View = glm::translate(View, glm::vec3(0.0f, -3.0f, -7.0f));
 
     // vao and vbo handle
     GLuint vao, vbo;
@@ -471,6 +447,7 @@ bool GameScene::init(){
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
+        glClearColor(1.0, 1.0, 1.0, 1.0);
         // clear first
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
@@ -496,11 +473,11 @@ bool GameScene::init(){
         GLsizei stride = (3 + 3 + 3 + 2) * sizeof(float);
         for (size_t i = 0; i < gDrawObjects.size(); i++) {
             DrawObject o = gDrawObjects[i];
-            if (o.vb < 1) {
+            if (o.vb.size() == 0) {
                 continue;
             }
             
-            glBindBuffer(GL_ARRAY_BUFFER, o.vb);
+            //glBindBuffer(GL_ARRAY_BUFFER, o.vb);
             
             if ((o.material_id < materials.size())) {
                 std::string diffuse_texname = materials[o.material_id].diffuse_texname;
@@ -508,55 +485,16 @@ bool GameScene::init(){
                     glBindTexture(GL_TEXTURE_2D, textures[diffuse_texname]);
                 }
             }
-            glVertexPointer(3, GL_FLOAT, stride, (const void*)0);
-            glNormalPointer(GL_FLOAT, stride, (const void*)(sizeof(float) * 3));
-            glColorPointer(3, GL_FLOAT, stride, (const void*)(sizeof(float) * 6));
-            glTexCoordPointer(2, GL_FLOAT, stride, (const void*)(sizeof(float) * 9));
+            glBufferData(GL_ARRAY_BUFFER, o.vb.size(), &o.vb[0], GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (char*)0 + 0*sizeof(GLfloat));
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (char*)3 + 0*sizeof(GLfloat));
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (char*)6 + 0*sizeof(GLfloat));
+            glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, (char*)8 + 0*sizeof(GLfloat));
             
             glDrawArrays(GL_TRIANGLES, 0, 3 * o.numTriangles);
             glBindTexture(GL_TEXTURE_2D, 0);
         }
-        
-//        for (size_t i = 0; i < shapes.size(); i++)
-//        {
-//            size_t index_offset = 0;
-//            for(size_t j = 0; j < shapes[i].mesh.num_face_vertices.size(); j++)
-//            {
-//                size_t fnum = shapes[i].mesh.num_face_vertices[j];
-//                GLfloat vertexData[fnum * 3];
-//                for(size_t k = 0; k < fnum; k++)
-//                {
-//                    tinyobj::index_t idx = shapes[i].mesh.indices[index_offset + k];
-//                    vertexData[3 * k + 0] = attrib.vertices[3 * idx.vertex_index + 0];
-//                    vertexData[3 * k + 1] = attrib.vertices[3 * idx.vertex_index + 1];
-//                    vertexData[3 * k + 2] = attrib.vertices[3 * idx.vertex_index + 2];
-//                    
-//                }
-//                glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * fnum * 3, vertexData, GL_STATIC_DRAW);
-//                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, fnum * sizeof(GLfloat), (char*)0 + 0*sizeof(GLfloat));
-//                if(fnum == 3)
-//                {
-//                    glDrawArrays(GL_TRIANGLES, 0, fnum);
-//                }
-//                else if(fnum == 4)
-//                {
-//                    //glDrawArrays(GL_LINE_STRIP, 0, fnum);
-//                }
-//                else
-//                {
-//                    //glDrawArrays(GL_LINE_STRIP, 0, fnum);
-//                }
-//                index_offset = index_offset + fnum;
-//                
-//                // check for errors
-//                GLenum error = glGetError();
-//                if(error != GL_NO_ERROR) {
-//                    std::cerr << error << std::endl;
-//                    break;
-//                }
-//                
-//            }
-//        }
+
 
         // check for errors
         GLenum error = glGetError();
