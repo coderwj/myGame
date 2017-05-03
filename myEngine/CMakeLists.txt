@@ -6,8 +6,11 @@ message("--->Cmake myEngine--->")
 # Set projectname
 project(myEngine)
 
+add_subdirectory(lib/tinyxml2)
+
 include_directories(./include)
 include_directories(./lib/glm/glm)
+include_directories(./lib/tinyxml2)
 
 if(APPLE)
 	include_directories(./lib/glew/mac/include)

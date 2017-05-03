@@ -36,20 +36,20 @@ static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]) {
     v10[0] = v1[0] - v0[0];
     v10[1] = v1[1] - v0[1];
     v10[2] = v1[2] - v0[2];
-    
+
     float v20[3];
     v20[0] = v2[0] - v0[0];
     v20[1] = v2[1] - v0[1];
     v20[2] = v2[2] - v0[2];
-    
+
     N[0] = v20[1] * v10[2] - v20[2] * v10[1];
     N[1] = v20[2] * v10[0] - v20[0] * v10[2];
     N[2] = v20[0] * v10[1] - v20[1] * v10[0];
-    
+
     float len2 = N[0] * N[0] + N[1] * N[1] + N[2] * N[2];
     if (len2 > 0.0f) {
         float len = sqrtf(len2);
-        
+
         N[0] /= len;
         N[1] /= len;
     }
@@ -62,45 +62,45 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
                               const char* basepath) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
-    
-    
+
+
     std::string err;
     bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename, basepath);
     if (!err.empty()) {
         std::cerr << err << std::endl;
     }
-    
+
     if (!ret) {
         std::cerr << "Failed to load " << filename << std::endl;
         return false;
     }
-    
+
     printf("# of vertices  = %d\n", (int)(attrib.vertices.size()) / 3);
     printf("# of normals   = %d\n", (int)(attrib.normals.size()) / 3);
     printf("# of texcoords = %d\n", (int)(attrib.texcoords.size()) / 2);
     printf("# of materials = %d\n", (int)materials.size());
     printf("# of shapes    = %d\n", (int)shapes.size());
-    
+
     // Append `default` material
     materials.push_back(tinyobj::material_t());
-    
+
     // Load diffuse textures
     {
         for (size_t m = 0; m < materials.size(); m++) {
             tinyobj::material_t* mp = &materials[m];
-            
+
             if (mp->diffuse_texname.length() > 0) {
                 // Only load the texture if it is not already loaded
                 if (textures.find(mp->diffuse_texname) == textures.end()) {
                     GLuint texture_id;
                     int w, h;
                     int comp;
-                    
+
                     //std::string texture_filename = basepath;
                     std::string texture_pathname = basepath;
                     texture_pathname = texture_pathname + "Texturas/";
                     std::string texture_filename = texture_pathname + mp->diffuse_texname;
-                    
+
                     unsigned char* image = stbi_load(texture_filename.c_str(), &w, &h, &comp, STBI_default);
                     if (!image) {
                         std::cerr << "Unable to load texture: " << texture_filename << std::endl;
@@ -123,7 +123,7 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
             }
         }
     }
-    
+
     {
         for (size_t s = 0; s < shapes.size(); s++) {
             DrawObject o;
@@ -132,9 +132,9 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
                 tinyobj::index_t idx0 = shapes[s].mesh.indices[3 * f + 0];
                 tinyobj::index_t idx1 = shapes[s].mesh.indices[3 * f + 1];
                 tinyobj::index_t idx2 = shapes[s].mesh.indices[3 * f + 2];
-                
+
                 int current_material_id = shapes[s].mesh.material_ids[f];
-                
+
                 if ((current_material_id < 0) || (current_material_id >= static_cast<int>(materials.size()))) {
                     // Invaid material ID. Use default material.
                     current_material_id = materials.size() - 1; // Default material is added to the last item in `materials`.
@@ -162,7 +162,7 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
                     tc[2][0] = 0.0f;
                     tc[2][1] = 0.0f;
                 }
-                
+
                 float v[3][3];
                 for (int k = 0; k < 3; k++) {
                     int f0 = idx0.vertex_index;
@@ -171,12 +171,12 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
                     assert(f0 >= 0);
                     assert(f1 >= 0);
                     assert(f2 >= 0);
-                    
+
                     v[0][k] = attrib.vertices[3 * f0 + k];
                     v[1][k] = attrib.vertices[3 * f1 + k];
                     v[2][k] = attrib.vertices[3 * f2 + k];
                 }
-                
+
                 float n[3][3];
                 if (attrib.normals.size() > 0) {
                     int f0 = idx0.normal_index;
@@ -200,7 +200,7 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
                     n[2][1] = n[0][1];
                     n[2][2] = n[0][2];
                 }
-                
+
                 for (int k = 0; k < 3; k++) {
                     vb.push_back(v[k][0]);
                     vb.push_back(v[k][1]);
@@ -219,7 +219,7 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
                     float len2 = c[0] * c[0] + c[1] * c[1] + c[2] * c[2];
                     if (len2 > 0.0f) {
                         float len = sqrtf(len2);
-                        
+
                         c[0] /= len;
                         c[1] /= len;
                         c[2] /= len;
@@ -227,15 +227,15 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
                     vb.push_back(c[0] * 0.5 + 0.5);
                     vb.push_back(c[1] * 0.5 + 0.5);
                     vb.push_back(c[2] * 0.5 + 0.5);
-                    
+
                     vb.push_back(tc[k][0]);
                     vb.push_back(tc[k][1]);
                 }
             }
             o.vb = vb;
-            
+
             o.numTriangles = 0;
-            
+
             // OpenGL viewer does not support texturing with per-face material.
             if (shapes[s].mesh.material_ids.size() > 0 && shapes[s].mesh.material_ids.size() > s) {
                 // Base case
@@ -243,17 +243,17 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
             } else {
                 o.material_id = materials.size() - 1; // = ID for default material.
             }
-            
+
             if (vb.size() > 0) {
                 o.numTriangles = vb.size() / (3 + 3 + 3 + 2) * 3;
                 printf("shape[%d] # of triangles = %d\n", static_cast<int>(s),
                        o.numTriangles);
             }
-            
+
             drawObjects->push_back(o);
         }
     }
-    
+
     return true;
 }
 static void error_callback(int error, const char* description)
@@ -401,16 +401,16 @@ bool GameScene::init(){
 
 
     std::string vs_path = "../../../../../../myEngine/res/shader/common.vs";
-    std::string ps_path = "../../../../../../myEngine/res/shader/common.ps";
+    std::string fs_path = "../../../../../../myEngine/res/shader/common.fs";
 
     // program and shader handles
-    GLuint shader_program = LoadShaders(window, vs_path.c_str(), ps_path.c_str());
-    
+    GLuint shader_program = LoadShaders(window, vs_path.c_str(), fs_path.c_str());
+
     // obtain location of projection uniform
     GLint Model_location = glGetUniformLocation(shader_program, "Model");
     GLint View_location = glGetUniformLocation(shader_program, "View");
     GLint Projection_location = glGetUniformLocation(shader_program, "Projection");
-    
+
     glm::mat4 Model = glm::mat4(1.0);
     Model = glm::rotate(Model, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -427,7 +427,7 @@ bool GameScene::init(){
     View = glm::rotate(View, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    
+
     View = glm::translate(View, glm::vec3(0.0f, -3.0f, -7.0f));
 
     // vao and vbo handle
@@ -443,19 +443,19 @@ bool GameScene::init(){
 
     // set up generic attrib pointers
     glEnableVertexAttribArray(0);
-    
+
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
         glClearColor(1.0, 1.0, 1.0, 1.0);
         // clear first
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+
         glEnable(GL_DEPTH_TEST);
-        
+
         float borderColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };
         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-        
+
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -464,21 +464,21 @@ bool GameScene::init(){
 
         // bind the vao
         glBindVertexArray(vao);
-        
+
         // set the uniform
         glUniformMatrix4fv(Model_location, 1, GL_FALSE, glm::value_ptr(Model));
         glUniformMatrix4fv(View_location, 1, GL_FALSE, glm::value_ptr(View));
         glUniformMatrix4fv(Projection_location, 1, GL_FALSE, glm::value_ptr(Projection));
-        
+
         GLsizei stride = (3 + 3 + 3 + 2) * sizeof(float);
         for (size_t i = 0; i < gDrawObjects.size(); i++) {
             DrawObject o = gDrawObjects[i];
             if (o.vb.size() == 0) {
                 continue;
             }
-            
+
             //glBindBuffer(GL_ARRAY_BUFFER, o.vb);
-            
+
             if ((o.material_id < materials.size())) {
                 std::string diffuse_texname = materials[o.material_id].diffuse_texname;
                 if (textures.find(diffuse_texname) != textures.end()) {
@@ -490,7 +490,7 @@ bool GameScene::init(){
             glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (char*)3 + 0*sizeof(GLfloat));
             glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (char*)6 + 0*sizeof(GLfloat));
             glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, (char*)8 + 0*sizeof(GLfloat));
-            
+
             glDrawArrays(GL_TRIANGLES, 0, 3 * o.numTriangles);
             glBindTexture(GL_TEXTURE_2D, 0);
         }
