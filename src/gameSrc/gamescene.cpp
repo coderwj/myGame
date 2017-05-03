@@ -120,7 +120,9 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
         for (size_t s = 0; s < shapes.size(); s++) {
             DrawObject o;
             std::vector<float> vb;  // pos(3float), normal(3float), color(3float)
-            for (size_t f = 0; f < shapes[s].mesh.indices.size() / 3; f++) {
+            for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
+                if(shapes[s].mesh.num_face_vertices[f] != 3)
+                    continue;
                 tinyobj::index_t idx0 = shapes[s].mesh.indices[3 * f + 0];
                 tinyobj::index_t idx1 = shapes[s].mesh.indices[3 * f + 1];
                 tinyobj::index_t idx2 = shapes[s].mesh.indices[3 * f + 2];
@@ -238,8 +240,6 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
 
             if (vb.size() > 0) {
                 o.numTriangles = vb.size() / (3 + 3 + 3 + 2) * 3;
-                printf("shape[%d] # of triangles = %d\n", static_cast<int>(s),
-                       o.numTriangles);
             }
 
             drawObjects->push_back(o);
@@ -442,7 +442,7 @@ bool GameScene::init(){
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClearColor(0.0, 0.0, 1.0, 1.0);
         // clear first
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -480,11 +480,11 @@ bool GameScene::init(){
                     glBindTexture(GL_TEXTURE_2D, textures[diffuse_texname]);
                 }
             }
-            glBufferData(GL_ARRAY_BUFFER, o.vb.size(), &o.vb[0], GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, o.vb.size() * sizeof(GLfloat), &o.vb[0], GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (char*)0 + 0*sizeof(GLfloat));
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (char*)3 + 0*sizeof(GLfloat));
-            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (char*)6 + 0*sizeof(GLfloat));
-            glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, (char*)8 + 0*sizeof(GLfloat));
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (char*)0 + 3*sizeof(GLfloat));
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (char*)0 + 6*sizeof(GLfloat));
+            glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, (char*)0 + 9*sizeof(GLfloat));
 
             glDrawArrays(GL_TRIANGLES, 0, 3 * o.numTriangles);
             glBindTexture(GL_TEXTURE_2D, 0);
