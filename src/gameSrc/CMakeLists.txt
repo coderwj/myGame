@@ -10,6 +10,7 @@ include_directories(../../include)
 include_directories(../../myEngine/include)
 include_directories(../../myEngine/lib/glm/glm)
 include_directories(../../myEngine/lib/tinyobjloader/mac/include)
+include_directories(../../myEngine/lib/tinyxml2)
 
 if(APPLE)
 	include_directories(../../myEngine/lib/glew/mac/include)
@@ -34,6 +35,6 @@ add_library(GameSrc STATIC ${SRC_1})
 
 SET(LIBRARIES myEngine)
 
-target_link_libraries(GameSrc ${LIBRARIES})
+target_link_libraries(GameSrc ${LIBRARIES} tinyxml2)
 
-add_dependencies(GameSrc myEngine)
+add_dependencies(GameSrc myEngine tinyxml2)

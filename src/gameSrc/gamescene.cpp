@@ -1,15 +1,7 @@
 
 #include "glew.h"
 #include "glfw3.h"
-
-#define TINYOBJLOADER_IMPLEMENTATION
-#include "tiny_obj_loader.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
+#include "myEngineCore.h"
 
 #include <string>
 #include <vector>
@@ -398,6 +390,9 @@ bool GameScene::init(){
     }
 
     //PrintInfo(attrib, shapes, materials);
+    
+    tinyxml2::XMLDocument doc;
+    doc.LoadFile( "../../../../../../myEngine/res/shader/shaderConfig.xml" );
 
 
     std::string vs_path = "../../../../../../myEngine/res/shader/common.vs";
@@ -447,7 +442,7 @@ bool GameScene::init(){
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        glClearColor(1.0, 1.0, 1.0, 1.0);
+        glClearColor(0.0, 0.0, 0.0, 1.0);
         // clear first
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

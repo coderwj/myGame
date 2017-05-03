@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<shaderconfig>
+  <material id="1" value="common">
+      <vertexshader id="1" value="common.vs"></vertexshader>
+      <fragmentshader id="2" value="common.fs"></fragmentshader>
+  </material>
+</shaderconfig>
