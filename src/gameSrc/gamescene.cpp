@@ -23,6 +23,8 @@ typedef struct {
 
 std::vector<DrawObject> gDrawObjects;
 
+float fov = 90.0f;
+
 static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]) {
     float v10[3];
     v10[0] = v1[0] - v0[0];
@@ -345,6 +347,16 @@ GLuint LoadShaders(GLFWwindow *window, const char * vertex_file_path, const char
     return ProgramID;
 }
 
+void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
+{
+    if(fov >= 1.0f && fov <= 90.0f)
+        fov -= yoffset;
+    if(fov <= 1.0f)
+        fov = 1.0f;
+    if(fov >= 90.0f)
+        fov = 90.0f;
+}
+
 bool GameScene::init(){
     int width = 640;
     int height = 480;
@@ -377,9 +389,24 @@ bool GameScene::init(){
         std::cerr << "failed to init GLEW" << std::endl;
         return false;
     }
-
-    const char* filename = "../../../../../../res/models/character1/Dukemon-Final-2.obj";
-    const char* basepath = "../../../../../../res/models/character1/";
+    
+    glfwSetScrollCallback(window, scroll_callback);
+    
+    std::string engine_res_path = "../../../../../../myEngine/res/";
+    std::string game_res_path = "../../../../../../res/";
+    std::string model_path = game_res_path + "models/";
+    std::string scene_path = game_res_path + "scenes/";
+    
+    //const char* filename = "../../../../../../res/models/character1/Dukemon-Final-2.obj";
+    //const char* basepath = "../../../../../../res/models/character1/";
+    
+    std::string obj_file_path = model_path + "character1/Dukemon-Final-2.obj";
+    std::string obj_base_path = model_path + "character1/";
+    
+//    std::string obj_file_path = scene_path + "City Islands/City Islands.obj";
+//    std::string obj_base_path = scene_path + "City Islands/";
+    const char* filename = obj_file_path.c_str();
+    const char* basepath = obj_base_path.c_str();
     //bool triangulate = false;
 
     tinyobj::attrib_t attrib;
@@ -391,14 +418,13 @@ bool GameScene::init(){
 
     //PrintInfo(attrib, shapes, materials);
     std::string material_name = "common";
-    std::string res_path = "../../../../../../myEngine/res/";
-    std::string shader_config_path = res_path + "shader/shaderConfig.xml";
-    tinyxml2::XMLDocument doc;
-    doc.LoadFile(shader_config_path.c_str());
+    std::string shader_config_path = engine_res_path + "shader/shaderConfig.xml";
+    tinyxml2::XMLDocument shader_doc;
+    shader_doc.LoadFile(shader_config_path.c_str());
     
     std::string vs_name = "", fs_name = "";
 
-    tinyxml2::XMLElement* materialElement = doc.FirstChildElement("shaderconfig")->FirstChildElement( "material" );
+    tinyxml2::XMLElement* materialElement = shader_doc.FirstChildElement("shaderconfig")->FirstChildElement( "material" );
     for (;;materialElement = materialElement->NextSiblingElement("material")) {
         if(materialElement == NULL)
         {
@@ -417,8 +443,8 @@ bool GameScene::init(){
     }
 
 
-    std::string vs_path = res_path + "shader/" + vs_name;
-    std::string fs_path = res_path + "shader/" + fs_name;
+    std::string vs_path = engine_res_path + "shader/" + vs_name;
+    std::string fs_path = engine_res_path + "shader/" + fs_name;
 
     // program and shader handles
     GLuint shader_program = LoadShaders(window, vs_path.c_str(), fs_path.c_str());
@@ -428,24 +454,30 @@ bool GameScene::init(){
     GLint View_location = glGetUniformLocation(shader_program, "View");
     GLint Projection_location = glGetUniformLocation(shader_program, "Projection");
 
+    glm::vec3 model_pos = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::mat4 Model = glm::mat4(1.0);
-    Model = glm::rotate(Model, 30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    Model = glm::rotate(Model, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
+    Model = glm::translate(Model, model_pos);
 
     // calculate ViewProjection matrix
     glm::mat4 Projection = glm::perspective(90.0f, 4.0f / 3.0f, 0.1f, 100.f);
 
     // translate the world/view position
     glm::mat4 View = glm::mat4(1.0f);
+    
+    glm::vec3 cameraPos   = glm::vec3(4.0f, 7.0f,  5.0f);
+    glm::vec3 cameraFront = model_pos + glm::vec3(0.0f, 3.5f, 0.0f) - cameraPos;
+    glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+    View = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
     // make the camera rotate around the origin
-    View = glm::rotate(View, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-    View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-
-    View = glm::translate(View, glm::vec3(0.0f, -4.0f, -6.0f));
+//    View = glm::rotate(View, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+//    View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+//    View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+//
+//    View = glm::translate(View, glm::vec3(0.0f, -4.0f, -6.0f));
 
     // vao and vbo handle
     GLuint vao, vbo;
@@ -458,11 +490,13 @@ bool GameScene::init(){
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    // set up generic attrib pointers
-    glEnableVertexAttribArray(0);
-
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
+
 
         glClearColor(0.0, 0.0, 1.0, 1.0);
         // clear first
@@ -481,6 +515,8 @@ bool GameScene::init(){
 
         // bind the vao
         glBindVertexArray(vao);
+        
+        Projection = glm::perspective(fov, 4.0f / 3.0f, 0.1f, 10000.f);
 
         // set the uniform
         glUniformMatrix4fv(Model_location, 1, GL_FALSE, glm::value_ptr(Model));
@@ -501,15 +537,21 @@ bool GameScene::init(){
                 if (textures.find(diffuse_texname) != textures.end()) {
                     glBindTexture(GL_TEXTURE_2D, textures[diffuse_texname]);
                 }
+                else{
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                }
+            }
+            else
+            {
+                continue;
             }
             glBufferData(GL_ARRAY_BUFFER, o.vb.size() * sizeof(GLfloat), &o.vb[0], GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLfloat*)0);
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, stride, (GLfloat*)3);
-            glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, stride, (GLfloat*)6);
-            glVertexAttribPointer(3, 2, GL_FLOAT, GL_TRUE, stride, (GLfloat*)9);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (char*)0);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, stride, (char*)3);
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, stride, (char*)6);
+            glVertexAttribPointer(3, 2, GL_FLOAT, GL_TRUE, stride, (char*)9);
 
-            glDrawArrays(GL_TRIANGLES, 0, o.vb.size());
-            glBindTexture(GL_TEXTURE_2D, 0);
+            glDrawArrays(GL_TRIANGLES, 0, o.numTriangles * 3);
         }
 
 
@@ -519,7 +561,11 @@ bool GameScene::init(){
             std::cerr << error << std::endl;
             break;
         }
-
+        
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+        glDisableVertexAttribArray(3);
         // finally swap buffers
         glfwSwapBuffers(window);
     }
