@@ -390,13 +390,35 @@ bool GameScene::init(){
     }
 
     //PrintInfo(attrib, shapes, materials);
-    
+    std::string material_name = "common";
+    std::string res_path = "../../../../../../myEngine/res/";
+    std::string shader_config_path = res_path + "shader/shaderConfig.xml";
     tinyxml2::XMLDocument doc;
-    doc.LoadFile( "../../../../../../myEngine/res/shader/shaderConfig.xml" );
+    doc.LoadFile(shader_config_path.c_str());
+    
+    std::string vs_name = "", fs_name = "";
+
+    tinyxml2::XMLElement* materialElement = doc.FirstChildElement("shaderconfig")->FirstChildElement( "material" );
+    for (;;materialElement = materialElement->NextSiblingElement("material")) {
+        if(materialElement == NULL)
+        {
+            break;
+        }
+        if(material_name == materialElement->FirstChildElement("name")->GetText())
+        {
+            vs_name = materialElement->FirstChildElement("vertexshader")->GetText();
+            fs_name = materialElement->FirstChildElement("fragmentshader")->GetText();
+            break;
+        }
+    }
+    if(vs_name == "" || fs_name == "")
+    {
+        assert(true);
+    }
 
 
-    std::string vs_path = "../../../../../../myEngine/res/shader/common.vs";
-    std::string fs_path = "../../../../../../myEngine/res/shader/common.fs";
+    std::string vs_path = res_path + "shader/" + vs_name;
+    std::string fs_path = res_path + "shader/" + fs_name;
 
     // program and shader handles
     GLuint shader_program = LoadShaders(window, vs_path.c_str(), fs_path.c_str());
@@ -407,7 +429,7 @@ bool GameScene::init(){
     GLint Projection_location = glGetUniformLocation(shader_program, "Projection");
 
     glm::mat4 Model = glm::mat4(1.0);
-    Model = glm::rotate(Model, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    Model = glm::rotate(Model, 30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
     Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -423,7 +445,7 @@ bool GameScene::init(){
     View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     View = glm::rotate(View, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 
-    View = glm::translate(View, glm::vec3(0.0f, -3.0f, -7.0f));
+    View = glm::translate(View, glm::vec3(0.0f, -4.0f, -6.0f));
 
     // vao and vbo handle
     GLuint vao, vbo;
@@ -481,12 +503,12 @@ bool GameScene::init(){
                 }
             }
             glBufferData(GL_ARRAY_BUFFER, o.vb.size() * sizeof(GLfloat), &o.vb[0], GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (char*)0 + 0*sizeof(GLfloat));
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (char*)0 + 3*sizeof(GLfloat));
-            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (char*)0 + 6*sizeof(GLfloat));
-            glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, stride, (char*)0 + 9*sizeof(GLfloat));
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLfloat*)0);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, stride, (GLfloat*)3);
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, stride, (GLfloat*)6);
+            glVertexAttribPointer(3, 2, GL_FLOAT, GL_TRUE, stride, (GLfloat*)9);
 
-            glDrawArrays(GL_TRIANGLES, 0, 3 * o.numTriangles);
+            glDrawArrays(GL_TRIANGLES, 0, o.vb.size());
             glBindTexture(GL_TEXTURE_2D, 0);
         }
 
