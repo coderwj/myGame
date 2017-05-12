@@ -92,7 +92,6 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
 
                     //std::string texture_filename = basepath;
                     std::string texture_pathname = basepath;
-                    texture_pathname = texture_pathname + "Texturas/";
                     std::string texture_filename = texture_pathname + mp->diffuse_texname;
 
                     unsigned char* image = stbi_load(texture_filename.c_str(), &w, &h, &comp, STBI_default);
@@ -391,14 +390,15 @@ bool GameScene::init(){
     }
     
     glfwSetScrollCallback(window, scroll_callback);
-    
-    std::string engine_res_path = "../../../../../../myEngine/res/";
-    std::string game_res_path = "../../../../../../res/";
+
+	std::string engine_res_path = "../../../../../../myEngine/res/";
+	std::string game_res_path = "../../../../../../res/";
+#ifdef WIN32
+	engine_res_path = "../../../../../myEngine/res/";
+	game_res_path = "../../../../../res/";
+#endif
     std::string model_path = game_res_path + "models/";
     std::string scene_path = game_res_path + "scenes/";
-    
-    //const char* filename = "../../../../../../res/models/character1/Dukemon-Final-2.obj";
-    //const char* basepath = "../../../../../../res/models/character1/";
     
     std::string obj_file_path = model_path + "character1/Dukemon-Final-2.obj";
     std::string obj_base_path = model_path + "character1/";
@@ -411,8 +411,8 @@ bool GameScene::init(){
 	strncpy(basepath, obj_base_path.c_str(), 2048);
 
 #ifdef WIN32
-	HelperFunc::convToWinPath(filename);
-	HelperFunc::convToWinPath(basepath);
+	//HelperFunc::convToWinPath(filename);
+	//HelperFunc::convToWinPath(basepath);
 #endif
     //bool triangulate = false;
 

@@ -12,6 +12,8 @@ bool HelperFunc::convToWinPath(char * path)
 		if (*prepath == '/')
 		{
 			*path = '\\';
+			path++;
+			*path = '\\';
 		}
 		else
 		{
