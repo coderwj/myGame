@@ -405,8 +405,15 @@ bool GameScene::init(){
     
 //    std::string obj_file_path = scene_path + "City Islands/City Islands.obj";
 //    std::string obj_base_path = scene_path + "City Islands/";
-    const char* filename = obj_file_path.c_str();
-    const char* basepath = obj_base_path.c_str();
+	char filename[2048];
+	char basepath[2048];
+	strncpy(filename, obj_file_path.c_str(), 2048);
+	strncpy(basepath, obj_base_path.c_str(), 2048);
+
+#ifdef WIN32
+	HelperFunc::convToWinPath(filename);
+	HelperFunc::convToWinPath(basepath);
+#endif
     //bool triangulate = false;
 
     tinyobj::attrib_t attrib;

@@ -52,7 +52,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Branco-Coxa.png
+map_Kd Branco-Coxa.png
 
 newmtl Branco-corpo
 Ns 749.999996
@@ -74,7 +74,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Simbolo_2.png
+map_Kd Simbolo_2.png
 
 newmtl Branco_Com_amarelo
 Ns 96.078431
@@ -96,7 +96,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Branco-Braco.png
+map_Kd Branco-Braco.png
 
 newmtl Cabeca-Detalhe
 Ns 96.078431
@@ -118,7 +118,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Vermelho-Dukemon.png
+map_Kd Vermelho-Dukemon.png
 
 newmtl Capa
 Ns 496.078431
@@ -129,7 +129,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Vermelho-Dukemon.png
+map_Kd Vermelho-Dukemon.png
 
 newmtl Cinto-fecho
 Ns 96.078431
@@ -161,7 +161,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Corpo.png
+map_Kd Corpo.png
 
 newmtl Detalhe
 Ns 749.999996
@@ -172,7 +172,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Detalhe-Dukemon.png
+map_Kd Detalhe-Dukemon.png
 
 newmtl Detalhe_Detalhe-Dukemon
 Ns 749.999996
@@ -226,7 +226,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Escudo.png
+map_Kd Escudo.png
 
 newmtl Fita
 Ns 96.078431
@@ -258,7 +258,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Lanca.png
+map_Kd Lanca.png
 
 newmtl Mascara
 Ns 96.078431
@@ -298,7 +298,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Olho.png
+map_Kd Olho.png
 
 newmtl Peito
 Ns 96.078431
@@ -320,7 +320,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Vermelho-Dukemon.png
+map_Kd Vermelho-Dukemon.png
 
 newmtl cinto
 Ns 96.078431
@@ -331,4 +331,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd  Texturas\\Vermelho-Dukemon.png
+map_Kd Vermelho-Dukemon.png
