@@ -1,8 +1,7 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
-
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
+#include "glew.h"
+#include "myEngineCore.h"
 
 #include <vector>
 

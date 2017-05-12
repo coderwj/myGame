@@ -205,7 +205,7 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
                     vb.push_back(n[k][1]);
                     vb.push_back(n[k][2]);
                     // Combine normal and diffuse to get color.
-                    float normal_factor = 0.2;
+                    float normal_factor = 0.2f;
                     float diffuse_factor = 1 - normal_factor;
                     float c[3] = {
                         n[k][0] * normal_factor + diffuse[0] * diffuse_factor,
@@ -220,9 +220,9 @@ static bool LoadObjAndConvert(std::vector<DrawObject>* drawObjects,
                         c[1] /= len;
                         c[2] /= len;
                     }
-                    vb.push_back(c[0] * 0.5 + 0.5);
-                    vb.push_back(c[1] * 0.5 + 0.5);
-                    vb.push_back(c[2] * 0.5 + 0.5);
+                    vb.push_back(c[0] * 0.5f + 0.5f);
+                    vb.push_back(c[1] * 0.5f + 0.5f);
+                    vb.push_back(c[2] * 0.5f + 0.5f);
 
                     vb.push_back(tc[k][0]);
                     vb.push_back(tc[k][1]);
@@ -350,7 +350,7 @@ GLuint LoadShaders(GLFWwindow *window, const char * vertex_file_path, const char
 void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
     if(fov >= 1.0f && fov <= 90.0f)
-        fov -= yoffset;
+        fov -= float(yoffset);
     if(fov <= 1.0f)
         fov = 1.0f;
     if(fov >= 90.0f)
@@ -413,7 +413,7 @@ bool GameScene::init(){
     std::vector<tinyobj::material_t> materials;
     std::map<std::string, GLuint> textures;
     if (!LoadObjAndConvert(&gDrawObjects, materials, textures, filename, basepath)) {
-        return -1;
+        return false;
     }
 
     //PrintInfo(attrib, shapes, materials);
