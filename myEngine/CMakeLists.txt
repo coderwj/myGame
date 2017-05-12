@@ -32,6 +32,8 @@ if(WIN32)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib)
 endif()
 
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/common)
+
 
 FILE(GLOB SRC_ENGINE "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
@@ -59,6 +61,15 @@ if(APPLE)
 endif()
 
 if(WIN32)
-	target_link_libraries(myEngine ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib/glfw3.lib ${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/GLEW.lib
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib/tinyobjloader.lib)
+	#FIND_LIBRARY(OPENGL_LIBRARY OpenGL32.Lib)
+	#message("--------find OPENGL_LIBRARY--->" ${OPENGL_LIBRARY})
+
+	target_link_libraries(myEngine 
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/common/OpenGL32.Lib 
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib/glfw3.lib 
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32.lib 
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32s.lib
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib/tinyobjloader.lib)
+
+	#target_link_libraries(myEngine ${OPENGL_LIBRARY})
 endif()
