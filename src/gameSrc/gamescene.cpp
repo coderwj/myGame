@@ -12,6 +12,8 @@
 
 #include "gamescene.h"
 
+#include "Shader.h"
+
 GameScene * GameScene::gs = 0;
 
 
@@ -254,98 +256,6 @@ static void error_callback(int error, const char* description)
     fputs(description, stderr);
 }
 
-// helper to check and display for shader compiler errors
-bool check_shader_compile_status(GLuint obj) {
-    GLint status;
-    glGetShaderiv(obj, GL_COMPILE_STATUS, &status);
-    if(status == GL_FALSE) {
-        GLint length;
-        glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &length);
-        std::vector<char> log(length);
-        glGetShaderInfoLog(obj, length, &length, &log[0]);
-        std::cerr << &log[0];
-        return false;
-    }
-    return true;
-}
-
-// helper to check and display for shader linker error
-bool check_program_link_status(GLuint obj) {
-    GLint status;
-    glGetProgramiv(obj, GL_LINK_STATUS, &status);
-    if(status == GL_FALSE) {
-        GLint length;
-        glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &length);
-        std::vector<char> log(length);
-        glGetProgramInfoLog(obj, length, &length, &log[0]);
-        std::cerr << &log[0];
-        return false;
-    }
-    return true;
-}
-
-GLuint LoadShaders(GLFWwindow *window, const char * vertex_file_path, const char * fragment_file_path){
-
-    // Create the shaders
-    GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-    GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-
-    // Read the Vertex Shader code from the file
-    std::string VertexShaderCode;
-    std::ifstream VertexShaderStream(vertex_file_path, std::ios::in);
-    if(VertexShaderStream.is_open())
-    {
-        std::string Line = "";
-        while(getline(VertexShaderStream, Line))
-            VertexShaderCode += Line + "\n";
-        VertexShaderStream.close();
-    }
-
-    // Read the Fragment Shader code from the file
-    std::string FragmentShaderCode;
-    std::ifstream FragmentShaderStream(fragment_file_path, std::ios::in);
-    if(FragmentShaderStream.is_open()){
-        std::string Line = "";
-        while(getline(FragmentShaderStream, Line))
-            FragmentShaderCode += Line + "\n";
-        FragmentShaderStream.close();
-    }
-
-    // Compile Vertex Shader
-    char const * VertexSourcePointer = VertexShaderCode.c_str();
-    glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
-    glCompileShader(VertexShaderID);
-
-    // Compile Fragment Shader
-    char const * FragmentSourcePointer = FragmentShaderCode.c_str();
-    glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
-    glCompileShader(FragmentShaderID);
-
-    if(!check_shader_compile_status(VertexShaderID) || !check_shader_compile_status(FragmentShaderID)) {
-        glfwDestroyWindow(window);
-        glfwTerminate();
-        return false;
-    }
-
-
-    // Link the program
-    GLuint ProgramID = glCreateProgram();
-    glAttachShader(ProgramID, VertexShaderID);
-    glAttachShader(ProgramID, FragmentShaderID);
-    glLinkProgram(ProgramID);
-
-    if(!check_program_link_status(ProgramID)) {
-        glfwDestroyWindow(window);
-        glfwTerminate();
-        return false;
-    }
-
-    glDeleteShader(VertexShaderID);
-    glDeleteShader(FragmentShaderID);
-
-    return ProgramID;
-}
-
 void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
     if(fov >= 1.0f && fov <= 90.0f)
@@ -376,7 +286,7 @@ bool GameScene::init(){
 
     // create a window
     GLFWwindow *window;
-    if((window = glfwCreateWindow(width, height, "01shader_vbo1", 0, 0)) == 0) {
+    if((window = glfwCreateWindow(width, height, "myGame", 0, 0)) == 0) {
         std::cerr << "failed to open window" << std::endl;
         glfwTerminate();
         return false;
@@ -402,19 +312,11 @@ bool GameScene::init(){
     
     std::string obj_file_path = model_path + "character1/Dukemon-Final-2.obj";
     std::string obj_base_path = model_path + "character1/";
-    
-//    std::string obj_file_path = scene_path + "City Islands/City Islands.obj";
-//    std::string obj_base_path = scene_path + "City Islands/";
+
 	char filename[2048];
 	char basepath[2048];
 	strncpy(filename, obj_file_path.c_str(), 2048);
 	strncpy(basepath, obj_base_path.c_str(), 2048);
-
-#ifdef WIN32
-	//HelperFunc::convToWinPath(filename);
-	//HelperFunc::convToWinPath(basepath);
-#endif
-    //bool triangulate = false;
 
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::material_t> materials;
@@ -423,7 +325,6 @@ bool GameScene::init(){
         return false;
     }
 
-    //PrintInfo(attrib, shapes, materials);
     std::string material_name = "common";
     std::string shader_config_path = engine_res_path + "shader/shaderConfig.xml";
     tinyxml2::XMLDocument shader_doc;
@@ -454,12 +355,12 @@ bool GameScene::init(){
     std::string fs_path = engine_res_path + "shader/" + fs_name;
 
     // program and shader handles
-    GLuint shader_program = LoadShaders(window, vs_path.c_str(), fs_path.c_str());
+    Shader shader = Shader(vs_path.c_str(), fs_path.c_str());
 
     // obtain location of projection uniform
-    GLint Model_location = glGetUniformLocation(shader_program, "Model");
-    GLint View_location = glGetUniformLocation(shader_program, "View");
-    GLint Projection_location = glGetUniformLocation(shader_program, "Projection");
+    GLint Model_location = glGetUniformLocation(shader.ID, "Model");
+    GLint View_location = glGetUniformLocation(shader.ID, "View");
+    GLint Projection_location = glGetUniformLocation(shader.ID, "Projection");
 
     glm::vec3 model_pos = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::mat4 Model = glm::mat4(1.0);
@@ -518,7 +419,7 @@ bool GameScene::init(){
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         // use the shader program
-        glUseProgram(shader_program);
+        shader.use();
 
         // bind the vao
         glBindVertexArray(vao);
@@ -552,11 +453,13 @@ bool GameScene::init(){
             {
                 continue;
             }
+			shader.use();
+
             glBufferData(GL_ARRAY_BUFFER, o.vb.size() * sizeof(GLfloat), &o.vb[0], GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (char*)0);
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, stride, (char*)3);
-            glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, stride, (char*)6);
-            glVertexAttribPointer(3, 2, GL_FLOAT, GL_TRUE, stride, (char*)9);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, stride, (char*)(3 * sizeof(float)));
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, stride, (char*)(6 * sizeof(float)));
+            glVertexAttribPointer(3, 2, GL_FLOAT, GL_TRUE, stride, (char*)(9 * sizeof(float)));
 
             glDrawArrays(GL_TRIANGLES, 0, o.numTriangles * 3);
         }
@@ -582,7 +485,7 @@ bool GameScene::init(){
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
 
-    glDeleteProgram(shader_program);
+    glDeleteProgram(shader.ID);
 
     glfwDestroyWindow(window);
     glfwTerminate();
