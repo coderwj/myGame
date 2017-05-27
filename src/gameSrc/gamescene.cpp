@@ -1,20 +1,69 @@
 
 #include "glew.h"
 #include "glfw3.h"
-#include "myEngineCore.h"
 
 #include <string>
 #include <vector>
 #include <map>
 #include <fstream>
 #include <iostream>
+#include <math.h>
+#define _USE_MATH_DEFINES
+
+#include "myEngineCore.h"
 
 
 #include "gamescene.h"
 
 #include "Shader.h"
 
+
+
+#include <thread>
+#include <sstream>
+
+
+GLFWwindow * window;
+
+glm::mat4 Model;
+glm::mat4 View;
+glm::mat4 Projection;
+
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, -1.0f, 0.0f);
+
+float fov = 90.0f;
+
+
+float speed_r_y = 0.0f;
+float rotateAngle = 0.0f;
+
 GameScene * GameScene::gs = 0;
+
+
+void update_view()
+{
+    if (speed_r_y < 0.000001f && speed_r_y > -0.000001f)
+    {
+        return;
+    }
+    rotateAngle += speed_r_y;
+    while (rotateAngle > 360.0f)
+    {
+        rotateAngle -= 360.0f;
+    }
+    while (rotateAngle < 0.0f)
+    {
+        rotateAngle += 360.0f;
+    }
+    GLfloat camX = sin(rotateAngle / 180.0f * float(M_PI)) * 1.0f;
+    GLfloat camY = 0.0f;
+    GLfloat camZ = cos(rotateAngle / 180.0f * float(M_PI)) * 1.0f;
+    glm::vec3 cameraFront = glm::vec3(camX, camY, camZ);
+    cameraPos = cameraTarget - cameraFront;
+    View = glm::lookAt(cameraPos, cameraTarget, cameraUp);
+}
 
 
 typedef struct {
@@ -24,8 +73,6 @@ typedef struct {
 } DrawObject;
 
 std::vector<DrawObject> gDrawObjects;
-
-float fov = 90.0f;
 
 static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]) {
     float v10[3];
@@ -266,6 +313,25 @@ void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
         fov = 90.0f;
 }
 
+void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+    {
+        if (key == GLFW_KEY_A)
+        {
+            speed_r_y = -1.0f;
+        }
+        if (key == GLFW_KEY_D)
+        {
+            speed_r_y = 1.0f;
+        }
+    }
+    else if(action == GLFW_RELEASE)
+    {
+        speed_r_y = 0.0f;
+    }
+}
+
 bool GameScene::init(){
     int width = 640;
     int height = 480;
@@ -285,7 +351,6 @@ bool GameScene::init(){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // create a window
-    GLFWwindow *window;
     if((window = glfwCreateWindow(width, height, "myGame", 0, 0)) == 0) {
         std::cerr << "failed to open window" << std::endl;
         glfwTerminate();
@@ -300,6 +365,7 @@ bool GameScene::init(){
     }
     
     glfwSetScrollCallback(window, scroll_callback);
+    glfwSetKeyCallback(window, key_callback); 
 
 	std::string engine_res_path = "../../../../../../myEngine/res/";
 	std::string game_res_path = "../../../../../../res/";
@@ -363,22 +429,20 @@ bool GameScene::init(){
     GLint Projection_location = glGetUniformLocation(shader.ID, "Projection");
 
     glm::vec3 model_pos = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::mat4 Model = glm::mat4(1.0);
+    Model = glm::mat4(1.0);
     Model = glm::rotate(Model, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
     Model = glm::translate(Model, model_pos);
 
     // calculate ViewProjection matrix
-    glm::mat4 Projection = glm::perspective(90.0f, 4.0f / 3.0f, 0.1f, 100.f);
+    Projection = glm::perspective(90.0f, 4.0f / 3.0f, 0.1f, 100.f);
 
-    // translate the world/view position
-    glm::mat4 View = glm::mat4(1.0f);
-    
+    // translate the world/view position  
     glm::vec3 cameraPos   = glm::vec3(4.0f, 7.0f,  5.0f);
-    glm::vec3 cameraFront = model_pos + glm::vec3(0.0f, 3.5f, 0.0f) - cameraPos;
+    glm::vec3 cameraTarget = model_pos + glm::vec3(0.0f, 3.5f, 0.0f);
     glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
-    View = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+    View = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 
     // make the camera rotate around the origin
 //    View = glm::rotate(View, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -399,6 +463,7 @@ bool GameScene::init(){
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
     while(!glfwWindowShouldClose(window)) {
+        update_view();
         glfwPollEvents();
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
