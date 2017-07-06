@@ -26,10 +26,12 @@ if(WIN32)
 	include_directories(./lib/glew/win32/include)
 	include_directories(./lib/glfw/win32/include)
 	include_directories(./lib/tinyobjloader/win32/include)
+	include_directories(./lib/assimp/win32/include)
 
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib)
+	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib)
 endif()
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/common)
@@ -70,6 +72,7 @@ if(WIN32)
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32.lib 
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32s.lib
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib/tinyobjloader.lib)
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib)
 
 	#target_link_libraries(myEngine ${OPENGL_LIBRARY})
 endif()

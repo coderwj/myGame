@@ -54,6 +54,50 @@ private:
 
 	Mesh processMesh(aiMesh * mesh, const aiScene * scene)
 	{
+		vector<Vertex> vertices;
+		vector<unsigned int> indices;
+		vector<Texture> textures;
+
+		for(unsigned int i = 0; i < mesh->mNumVertices; i++)
+		{
+			Vertex vertex;
+			glm::vec3 vector;
+
+			vector.x = mesh->mVertices[i].x;
+			vector.y = mesh->mVertices[i].y;
+			vector.z = mesh->mVertices[i].z;
+			vertex.Position = vector;
+
+			vector.x = mesh->mNormals[i].x;
+			vector.y = mesh->mNormals[i].y;
+			vector.z = mesh->mNormals[i].z;
+			vertex.Normal = vector;
+
+			if(mesh->mTextureCoords[0])
+			{
+				glm::vec2 vec;
+				vec.x = mesh.mTextureCoords[0][i].x;
+				vec.y = mesh.mTextureCoords[0][i].y;
+				vertex.TexCoords = vec;
+			}
+			else
+				vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+
+			// tangent
+			vector.x = mesh->mTangents[i].x;
+			vector.y = mesh->mTangents[i].y;
+			vector.z = mesh->mTangents[i].z;
+			vertex.Tangent = vector;
+			// bitangent
+			vector.x = mesh->mBitangents[i].x;
+			vector.y = mesh->mBitangents[i].y;
+			vector.z = mesh->mBitangents[i].z;
+			vertex.Bitangent = vector;
+
+			vertices.push_back(vertex);
+
+		}
+
 		
 	}
 }
