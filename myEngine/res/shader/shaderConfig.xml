@@ -6,9 +6,9 @@
 	<fragmentshader>common.fs</fragmentshader>]
   </material>
   <material id="2">
-  	<name>common</name>
-	<vertexshader>common.vs</vertexshader>
-	<fragmentshader>common.fs</fragmentshader>]
+  	<name>texture</name>
+	<vertexshader>texture.vs</vertexshader>
+	<fragmentshader>texture.fs</fragmentshader>]
   </material>
   <material id="3">
   	<name>common</name>

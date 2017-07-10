@@ -1,10 +1,12 @@
 #ifndef __MODEL_H__
 #define __MODEL_H__
 
-#include "glm/glm.hpp"
-#include "glm/gtc/matix_transform.hpp"
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
 
+#undef STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#define STB_IMAGE_IMPLEMENTATION
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -37,15 +39,15 @@ public:
 
 	void Draw(Shader shader)
 	{
-		for(unsigned int i = 0; i < m_meshs; i++)
-			m_meshs[i].Draw(shader)
+		for (unsigned int i = 0; i < m_meshs.size(); i++)
+			m_meshs[i].Draw(shader);
 	}
 
 private:
 	void loadModel(const string &path)
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace)
+		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 		if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
 			cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
@@ -89,8 +91,8 @@ private:
 			if(mesh->mTextureCoords[0])
 			{
 				glm::vec2 vec;
-				vec.x = mesh.mTextureCoords[0][i].x;
-				vec.y = mesh.mTextureCoords[0][i].y;
+				vec.x = mesh->mTextureCoords[0][i].x;
+				vec.y = mesh->mTextureCoords[0][i].y;
 				vertex.TexCoords = vec;
 			}
 			else
@@ -131,7 +133,7 @@ private:
 		vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
 		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-		vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_ANBIENT, "texture_height");
+		vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 		return Mesh(vertices, indices, textures);

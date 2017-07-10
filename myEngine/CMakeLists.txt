@@ -71,7 +71,7 @@ if(WIN32)
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib/glfw3.lib 
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32.lib 
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32s.lib
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib/tinyobjloader.lib)
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib/tinyobjloader.lib
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib)
 
 	#target_link_libraries(myEngine ${OPENGL_LIBRARY})

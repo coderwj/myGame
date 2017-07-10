@@ -16,7 +16,7 @@
 #include "gamescene.h"
 
 #include "Shader.h"
-
+#include "Model.h"
 
 
 #include <thread>
@@ -25,9 +25,9 @@
 
 GLFWwindow * window;
 
-glm::mat4 Model;
-glm::mat4 View;
-glm::mat4 Projection;
+glm::mat4 model;
+glm::mat4 view;
+glm::mat4 projection;
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -62,7 +62,7 @@ void update_view()
     GLfloat camZ = cos(rotateAngle / 180.0f * float(M_PI)) * 1.0f;
     glm::vec3 cameraFront = glm::vec3(camX, camY, camZ);
     cameraPos = cameraTarget - cameraFront;
-    View = glm::lookAt(cameraPos, cameraTarget, cameraUp);
+    view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 }
 
 
@@ -391,7 +391,9 @@ bool GameScene::init(){
         return false;
     }
 
-    std::string material_name = "common";
+    Model test_model(obj_file_path);
+
+    std::string material_name = "texture";
     std::string shader_config_path = engine_res_path + "shader/shaderConfig.xml";
     tinyxml2::XMLDocument shader_doc;
     shader_doc.LoadFile(shader_config_path.c_str());
@@ -424,25 +426,25 @@ bool GameScene::init(){
     Shader shader = Shader(vs_path.c_str(), fs_path.c_str());
 
     // obtain location of projection uniform
-    GLint Model_location = glGetUniformLocation(shader.ID, "Model");
-    GLint View_location = glGetUniformLocation(shader.ID, "View");
-    GLint Projection_location = glGetUniformLocation(shader.ID, "Projection");
+	//GLint Model_location = glGetUniformLocation(shader.ID, "Model");
+    //GLint View_location = glGetUniformLocation(shader.ID, "View");
+    //GLint Projection_location = glGetUniformLocation(shader.ID, "Projection");
 
     glm::vec3 model_pos = glm::vec3(0.0f, 0.0f, 0.0f);
-    Model = glm::mat4(1.0);
-    Model = glm::rotate(Model, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-    Model = glm::rotate(Model, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    Model = glm::translate(Model, model_pos);
+	model = glm::mat4(1.0);
+	model = glm::rotate(model, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::translate(model, model_pos);
 
     // calculate ViewProjection matrix
-    Projection = glm::perspective(90.0f, 4.0f / 3.0f, 0.1f, 100.f);
+    projection = glm::perspective(90.0f, 4.0f / 3.0f, 0.1f, 100.f);
 
     // translate the world/view position  
     glm::vec3 cameraPos   = glm::vec3(4.0f, 7.0f,  5.0f);
     glm::vec3 cameraTarget = model_pos + glm::vec3(0.0f, 3.5f, 0.0f);
     glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
-    View = glm::lookAt(cameraPos, cameraTarget, cameraUp);
+    view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 
     // make the camera rotate around the origin
 //    View = glm::rotate(View, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -452,82 +454,88 @@ bool GameScene::init(){
 //    View = glm::translate(View, glm::vec3(0.0f, -4.0f, -6.0f));
 
     // vao and vbo handle
-    GLuint vao, vbo;
+    // GLuint vao, vbo;
 
-    // generate and bind the vao
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    // // generate and bind the vao
+    // glGenVertexArrays(1, &vao);
+    // glBindVertexArray(vao);
 
-    // generate and bind the buffer object
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    // // generate and bind the buffer object
+    // glGenBuffers(1, &vbo);
+    // glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    glEnable(GL_DEPTH_TEST);
 
     while(!glfwWindowShouldClose(window)) {
         update_view();
         glfwPollEvents();
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-        glEnableVertexAttribArray(3);
+        // glEnableVertexAttribArray(0);
+        // glEnableVertexAttribArray(1);
+        // glEnableVertexAttribArray(2);
+        // glEnableVertexAttribArray(3);
 
 
         glClearColor(0.0, 0.0, 1.0, 1.0);
         // clear first
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glEnable(GL_DEPTH_TEST);
-
         float borderColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };
         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         // use the shader program
         shader.use();
 
-        // bind the vao
-        glBindVertexArray(vao);
+		shader.setMat4("model", model);
+		shader.setMat4("view", view);
+		shader.setMat4("projection", projection);
+
+		test_model.Draw(shader);
+
+   //      // bind the vao
+   //      glBindVertexArray(vao);
         
-        Projection = glm::perspective(fov, 4.0f / 3.0f, 0.1f, 10000.f);
+   //      Projection = glm::perspective(fov, 4.0f / 3.0f, 0.1f, 10000.f);
 
-        // set the uniform
-        glUniformMatrix4fv(Model_location, 1, GL_FALSE, glm::value_ptr(Model));
-        glUniformMatrix4fv(View_location, 1, GL_FALSE, glm::value_ptr(View));
-        glUniformMatrix4fv(Projection_location, 1, GL_FALSE, glm::value_ptr(Projection));
+   //      // set the uniform
+   //      glUniformMatrix4fv(Model_location, 1, GL_FALSE, glm::value_ptr(Model));
+   //      glUniformMatrix4fv(View_location, 1, GL_FALSE, glm::value_ptr(View));
+   //      glUniformMatrix4fv(Projection_location, 1, GL_FALSE, glm::value_ptr(Projection));
 
-        GLsizei stride = (3 + 3 + 3 + 2) * sizeof(float);
-        for (size_t i = 0; i < gDrawObjects.size(); i++) {
-            DrawObject o = gDrawObjects[i];
-            if (o.vb.size() == 0) {
-                continue;
-            }
+   //      GLsizei stride = (3 + 3 + 3 + 2) * sizeof(float);
+   //      for (size_t i = 0; i < gDrawObjects.size(); i++) {
+   //          DrawObject o = gDrawObjects[i];
+   //          if (o.vb.size() == 0) {
+   //              continue;
+   //          }
 
-            //glBindBuffer(GL_ARRAY_BUFFER, o.vb);
+   //          //glBindBuffer(GL_ARRAY_BUFFER, o.vb);
 
-            if ((o.material_id < materials.size())) {
-                std::string diffuse_texname = materials[o.material_id].diffuse_texname;
-                if (textures.find(diffuse_texname) != textures.end()) {
-                    glBindTexture(GL_TEXTURE_2D, textures[diffuse_texname]);
-                }
-                else{
-                    glBindTexture(GL_TEXTURE_2D, 0);
-                }
-            }
-            else
-            {
-                continue;
-            }
-			shader.use();
+   //          if ((o.material_id < materials.size())) {
+   //              std::string diffuse_texname = materials[o.material_id].diffuse_texname;
+   //              if (textures.find(diffuse_texname) != textures.end()) {
+   //                  glBindTexture(GL_TEXTURE_2D, textures[diffuse_texname]);
+   //              }
+   //              else{
+   //                  glBindTexture(GL_TEXTURE_2D, 0);
+   //              }
+   //          }
+   //          else
+   //          {
+   //              continue;
+   //          }
+			// shader.use();
 
-            glBufferData(GL_ARRAY_BUFFER, o.vb.size() * sizeof(GLfloat), &o.vb[0], GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (char*)0);
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, stride, (char*)(3 * sizeof(float)));
-            glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, stride, (char*)(6 * sizeof(float)));
-            glVertexAttribPointer(3, 2, GL_FLOAT, GL_TRUE, stride, (char*)(9 * sizeof(float)));
+   //          glBufferData(GL_ARRAY_BUFFER, o.vb.size() * sizeof(GLfloat), &o.vb[0], GL_STATIC_DRAW);
+   //          glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (char*)0);
+   //          glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, stride, (char*)(3 * sizeof(float)));
+   //          glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, stride, (char*)(6 * sizeof(float)));
+   //          glVertexAttribPointer(3, 2, GL_FLOAT, GL_TRUE, stride, (char*)(9 * sizeof(float)));
 
-            glDrawArrays(GL_TRIANGLES, 0, o.numTriangles * 3);
-        }
+   //          glDrawArrays(GL_TRIANGLES, 0, o.numTriangles * 3);
+   //      }
 
 
         // check for errors
@@ -537,18 +545,18 @@ bool GameScene::init(){
             break;
         }
         
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
-        glDisableVertexAttribArray(3);
+        // glDisableVertexAttribArray(0);
+        // glDisableVertexAttribArray(1);
+        // glDisableVertexAttribArray(2);
+        // glDisableVertexAttribArray(3);
         // finally swap buffers
         glfwSwapBuffers(window);
     }
 
     // delete the created objects
 
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &vbo);
+    //glDeleteVertexArrays(1, &vao);
+    //glDeleteBuffers(1, &vbo);
 
     glDeleteProgram(shader.ID);
 
