@@ -65,6 +65,11 @@ private:
 			aiMesh * mesh = scene->mMeshes[node->mMeshes[i]];
 			m_meshs.push_back(processMesh(mesh, scene));
 		}
+
+		for (unsigned int i = 0; i < node->mNumChildren; i++)
+		{
+			processNode(node->mChildren[i], scene);
+		}
 	}
 
 	Mesh processMesh(aiMesh * mesh, const aiScene * scene)
@@ -99,15 +104,25 @@ private:
 				vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 
 			// tangent
-			vector.x = mesh->mTangents[i].x;
-			vector.y = mesh->mTangents[i].y;
-			vector.z = mesh->mTangents[i].z;
-			vertex.Tangent = vector;
+			if (mesh->mTangents)
+			{
+				vector.x = mesh->mTangents[i].x;
+				vector.y = mesh->mTangents[i].y;
+				vector.z = mesh->mTangents[i].z;
+				vertex.Tangent = vector;
+			}
+			else
+				vertex.Tangent = glm::vec3(0.0f, 0.0f, 0.0f);
 			// bitangent
-			vector.x = mesh->mBitangents[i].x;
-			vector.y = mesh->mBitangents[i].y;
-			vector.z = mesh->mBitangents[i].z;
-			vertex.Bitangent = vector;
+			if (mesh->mBitangents)
+			{
+				vector.x = mesh->mBitangents[i].x;
+				vector.y = mesh->mBitangents[i].y;
+				vector.z = mesh->mBitangents[i].z;
+				vertex.Bitangent = vector;
+			}
+			else
+				vertex.Bitangent = glm::vec3(0.0f, 0.0f, 0.0f);
 
 			vertices.push_back(vertex);
 
@@ -176,10 +191,9 @@ unsigned int TextureFromFile(const char * path, const string &directory, bool ga
 	filename = directory + filename;
 
 	unsigned int textureID;
-	glGenTextures(1, &textureID);
 
 	int width, height, nrComponents;
-	unsigned char * data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+	unsigned char * data = stbi_load(filename.c_str(), &width, &height, &nrComponents, STBI_default);
 	if(data)
 	{
 		GLenum format;
@@ -190,6 +204,7 @@ unsigned int TextureFromFile(const char * path, const string &directory, bool ga
 		else if(nrComponents == 3)
 			format = GL_RGBA;
 
+		glGenTextures(1, &textureID);
 		glBindTexture(GL_TEXTURE_2D, textureID);
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);

@@ -30,7 +30,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Branco-Braco.png
+map_Kd /Textures/Branco-Braco.png
 
 newmtl Branco-Amarelo
 Ns 96.078431
@@ -41,7 +41,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Branco-Amarelo.png
+map_Kd /Textures/Branco-Amarelo.png
 
 newmtl Branco-Amarelo_NONE
 Ns 96.078431
@@ -52,7 +52,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Branco-Coxa.png
+map_Kd /Textures/Branco-Coxa.png
 
 newmtl Branco-corpo
 Ns 749.999996
@@ -63,7 +63,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Simbolo_2.png
+map_Kd /Textures/Simbolo_2.png
 
 newmtl Branco-corpo_NONE
 Ns 749.999996
@@ -74,7 +74,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Simbolo_2.png
+map_Kd /Textures/Simbolo_2.png
 
 newmtl Branco_Com_amarelo
 Ns 96.078431
@@ -85,7 +85,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/branco-perna.png
+map_Kd /Textures/branco-perna.png
 
 newmtl Branco_NONE
 Ns 96.078431
@@ -96,7 +96,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Branco-Braco.png
+map_Kd /Textures/Branco-Braco.png
 
 newmtl Cabeca-Detalhe
 Ns 96.078431
@@ -107,7 +107,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Simbolo_2.png
+map_Kd /Textures/Simbolo_2.png
 
 newmtl Cabeca-Detalhe_NONE
 Ns 96.078431
@@ -118,7 +118,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Vermelho-Dukemon.png
+map_Kd /Textures/Vermelho-Dukemon.png
 
 newmtl Capa
 Ns 496.078431
@@ -129,7 +129,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Vermelho-Dukemon.png
+map_Kd /Textures/Vermelho-Dukemon.png
 
 newmtl Cinto-fecho
 Ns 96.078431
@@ -150,7 +150,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Corpo.png
+map_Kd /Textures/Corpo.png
 
 newmtl Corpo_NONE
 Ns 96.078431
@@ -161,7 +161,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Corpo.png
+map_Kd /Textures/Corpo.png
 
 newmtl Detalhe
 Ns 749.999996
@@ -172,7 +172,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Detalhe-Dukemon.png
+map_Kd /Textures/Detalhe-Dukemon.png
 
 newmtl Detalhe_Detalhe-Dukemon
 Ns 749.999996
@@ -183,7 +183,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Detalhe-Dukemon.png
+map_Kd /Textures/Detalhe-Dukemon.png
 
 newmtl Detalhe_Simbolo-Mask.png
 Ns 749.999996
@@ -194,7 +194,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Simbolo-Mask.png
+map_Kd /Textures/Simbolo-Mask.png
 
 newmtl Elmo
 Ns 96.078431
@@ -215,7 +215,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Escudo.png
+map_Kd /Textures/Escudo.png
 
 newmtl Escudo_NONE
 Ns 749.999996
@@ -226,7 +226,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Escudo.png
+map_Kd /Textures/Escudo.png
 
 newmtl Fita
 Ns 96.078431
@@ -247,7 +247,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Lanca.png
+map_Kd /Textures/Lanca.png
 
 newmtl Lanca_NONE
 Ns 551.587291
@@ -258,7 +258,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Lanca.png
+map_Kd /Textures/Lanca.png
 
 newmtl Mascara
 Ns 96.078431
@@ -287,7 +287,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Olho.png
+map_Kd /Textures/Olho.png
 
 newmtl Olhos_NONE
 Ns 96.078431
@@ -298,7 +298,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Olho.png
+map_Kd /Textures/Olho.png
 
 newmtl Peito
 Ns 96.078431
@@ -309,7 +309,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Simbolo.png
+map_Kd /Textures/Simbolo.png
 
 newmtl Vermelho
 Ns 749.999996
@@ -320,7 +320,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Vermelho-Dukemon.png
+map_Kd /Textures/Vermelho-Dukemon.png
 
 newmtl cinto
 Ns 96.078431
@@ -331,4 +331,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/Vermelho-Dukemon.png
+map_Kd /Textures/Vermelho-Dukemon.png
