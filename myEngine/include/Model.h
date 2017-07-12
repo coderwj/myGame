@@ -4,9 +4,7 @@
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 
-#undef STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#define STB_IMAGE_IMPLEMENTATION
+#include "myEngineCore.h"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -188,15 +186,16 @@ private:
 unsigned int TextureFromFile(const char * path, const string &directory, bool gamma)
 {
 	string filename = string(path);
+	filename = "/Textures/Simbolo.png";
 	filename = directory + filename;
-
+	//filename = "../../../../res/models/character1/Textures/Simbolo.png";
 	unsigned int textureID;
 
 	int width, height, nrComponents;
 	unsigned char * data = stbi_load(filename.c_str(), &width, &height, &nrComponents, STBI_default);
 	if(data)
 	{
-		GLenum format;
+		GLenum format = GL_RGBA;
 		if(nrComponents == 1)
 			format = GL_RED;
 		else if(nrComponents == 2)

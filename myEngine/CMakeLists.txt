@@ -15,22 +15,18 @@ include_directories(./lib/tinyxml2)
 if(APPLE)
 	include_directories(./lib/glew/mac/include)
 	include_directories(./lib/glfw/mac/include)
-	include_directories(./lib/tinyobjloader/mac/include)
 
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/mac/lib)
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/mac/lib)
 endif()
 
 if(WIN32)
 	include_directories(./lib/glew/win32/include)
 	include_directories(./lib/glfw/win32/include)
-	include_directories(./lib/tinyobjloader/win32/include)
 	include_directories(./lib/assimp/win32/include)
 
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib)
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib)
 endif()
 
@@ -43,8 +39,7 @@ add_library(myEngine STATIC ${SRC_ENGINE})
 SET_TARGET_PROPERTIES(myEngine PROPERTIES LINKER_LANGUAGE CPP)
 
 if(APPLE)
-	target_link_libraries(myEngine ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/mac/lib/libglfw3.a ${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib/libGLEW.a
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/mac/lib/libtinyobjloader.a)
+	target_link_libraries(myEngine ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/mac/lib/libglfw3.a ${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib/libGLEW.a)
 
 
 	FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
@@ -71,7 +66,6 @@ if(WIN32)
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib/glfw3.lib 
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32.lib 
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32s.lib
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/tinyobjloader/win32/lib/tinyobjloader.lib
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib)
 
 	#target_link_libraries(myEngine ${OPENGL_LIBRARY})
