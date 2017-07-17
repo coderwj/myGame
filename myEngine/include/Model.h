@@ -1,9 +1,6 @@
 #ifndef __MODEL_H__
 #define __MODEL_H__
 
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-
 #include "myEngineCore.h"
 
 #include "assimp/Importer.hpp"
@@ -186,9 +183,7 @@ private:
 unsigned int TextureFromFile(const char * path, const string &directory, bool gamma)
 {
 	string filename = string(path);
-	filename = "/Textures/Simbolo.png";
 	filename = directory + filename;
-	//filename = "../../../../res/models/character1/Textures/Simbolo.png";
 	unsigned int textureID;
 
 	int width, height, nrComponents;
@@ -201,6 +196,8 @@ unsigned int TextureFromFile(const char * path, const string &directory, bool ga
 		else if(nrComponents == 2)
 			format = GL_RGB;
 		else if(nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
 			format = GL_RGBA;
 
 		glGenTextures(1, &textureID);

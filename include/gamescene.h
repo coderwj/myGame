@@ -5,6 +5,7 @@ class GameScene{
 private:
 	static GameScene * gs;
 
+	Character * mainCharacter;
 public:
 	static GameScene * getInstance(){
 		if(gs == NULL)
