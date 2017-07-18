@@ -6,6 +6,8 @@ private:
 	static GameScene * gs;
 
 	Character * mainCharacter;
+
+	void onDestroy();
 public:
 	static GameScene * getInstance(){
 		if(gs == NULL)
@@ -16,12 +18,15 @@ public:
 	void destroyInstance(){
 		if(gs)
 		{
+			gs->onDestroy();
 			delete(gs);
 			gs = NULL;
 		}
 	}
 
 	bool init();
+
+	void render();
 };
 
 #endif //__GAMESCENE_H__

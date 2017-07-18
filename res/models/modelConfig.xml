@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<modelconfig>
+  <model id="1">
+    <name>model_1</name>
+    <path>character1/Dukemon-Final-2.obj</path>
+  </model>
+  <model id="2">
+    <name>model_2</name>
+    <path>character1/Dukemon-Final-2.obj</path>
+  </model>
+  <model id="3">
+    <name>model_3</name>
+    <path>character1/Dukemon-Final-2.obj</path>
+  </model>
+</modelconfig>
