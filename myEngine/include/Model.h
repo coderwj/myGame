@@ -1,7 +1,7 @@
 #ifndef __MODEL_H__
 #define __MODEL_H__
 
-#include "myEngineCore.h"
+#include "MyEngineCore.h"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"

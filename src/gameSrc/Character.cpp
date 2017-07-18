@@ -1,4 +1,7 @@
 #include "Character.h"
+#include "Config.h"
+
+using namespace std;
 
 
 Character::Character():

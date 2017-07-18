@@ -1,7 +1,7 @@
 #ifndef __CHARACTER_H__
 #define __CHARACTER_H__
 
-#include "myEngineCore.h"
+#include "MyEngineCore.h"
 #include "Model.h"
 #include <string>
 

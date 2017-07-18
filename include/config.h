@@ -3,9 +3,14 @@
 
 #include <string>
 
-class config
+using namespace std;
+
+class Config
 {
-	
+	static const string engine_res_path;
+	static const string game_res_path;
+	static const string model_path;
+	static const string scene_path;
 }
 
 #endif //__CONFIG_H__

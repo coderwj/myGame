@@ -1,5 +1,5 @@
 #include <iostream>
-#include "gamescene.h"
+#include "GameScene.h"
 
 int main(){
     GameScene * pGameScene = GameScene::getInstance();

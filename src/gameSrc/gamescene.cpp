@@ -10,10 +10,10 @@
 #include <math.h>
 #define _USE_MATH_DEFINES
 
-#include "myEngineCore.h"
+#include "MyEngineCore.h"
 
 
-#include "gamescene.h"
+#include "GameScene.h"
 
 #include "Shader.h"
 #include "Model.h"
@@ -22,6 +22,19 @@
 #include <thread>
 #include <sstream>
 
+#include "Config.h"
+
+#ifdef WIN32
+    static const Config::engine_res_path = "../../../../../myEngine/res/";
+    static const Config::game_res_path = "../../../../../res/";
+    static const Config::model_path = Config::game_res_path + "models/";
+    static const Config::scene_path = Config::game_res_path + "scenes/";
+#else
+    static const Config::engine_res_path = "../../../../../../myEngine/res/";
+    static const Config::game_res_path = "../../../../../../res/";
+    static const Config::model_path = Config::game_res_path + "models/";
+    static const Config::scene_path = Config::game_res_path + "scenes/";
+#endif
 
 GLFWwindow * window;
 
@@ -134,16 +147,8 @@ bool GameScene::init(){
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetKeyCallback(window, key_callback); 
 
-	std::string engine_res_path = "../../../../../../myEngine/res/";
-	std::string game_res_path = "../../../../../../res/";
-#ifdef WIN32
-	engine_res_path = "../../../../../myEngine/res/";
-	game_res_path = "../../../../../res/";
-#endif
-    std::string model_path = game_res_path + "models/";
-    //std::string scene_path = game_res_path + "scenes/";
     
-    std::string obj_file_path = model_path + "character1/Dukemon-Final-2.obj";
+    std::string obj_file_path = Config::model_path + "character1/Dukemon-Final-2.obj";
 
     Model test_model(obj_file_path);
 
