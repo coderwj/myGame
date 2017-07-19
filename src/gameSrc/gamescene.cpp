@@ -113,7 +113,8 @@ void key_callback(GLFWwindow * window, int key, int scancode, int action, int mo
     }
 }
 
-bool GameScene::init(){
+bool GameScene::initGlfw()
+{
     int width = 640;
     int height = 480;
 
@@ -137,22 +138,34 @@ bool GameScene::init(){
         glfwTerminate();
         return false;
     }
-
     glfwMakeContextCurrent(window);
 
+    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetKeyCallback(window, key_callback);
+    return true;
+}
+
+bool GameScene::initGlew()
+{
     if(glewInit() != GLEW_OK) {
         std::cerr << "failed to init GLEW" << std::endl;
         return false;
     }
-    
-    glfwSetScrollCallback(window, scroll_callback);
-    glfwSetKeyCallback(window, key_callback); 
+    return true;
+}
+
+bool GameScene::init(){
+
+    bool initSuccess = initGlfw();
+    if(!initSuccess)
+        return false;
+    initSuccess = initGlew();
+    if(!initSuccess)
+        return false;
 
     mainCharacter = Character::Create("model_1");
-    
-    // std::string obj_file_path = Config::model_path + "character1/Dukemon-Final-2.obj";
-
-    // Model test_model(obj_file_path);
+    if(mainCharacter == NULL)
+        return false;
 
     std::string material_name = "texture";
     std::string shader_config_path = engine_res_path + "shader/shaderConfig.xml";

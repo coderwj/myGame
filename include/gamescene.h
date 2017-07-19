@@ -26,6 +26,10 @@ public:
 
 	bool init();
 
+	bool initGlfw();
+
+	bool initGlew();
+
 	void render();
 };
 
