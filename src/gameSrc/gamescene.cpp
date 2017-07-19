@@ -37,7 +37,8 @@
     static const Config::scene_path = Config::game_res_path + "scenes/";
 #endif
 
-GLFWwindow * window;
+static GameScene * GameScene::gs = NULL;
+
 
 glm::mat4 model;
 glm::mat4 view;
@@ -52,9 +53,6 @@ float fov = 90.0f;
 
 float speed_r_y = 0.0f;
 float rotateAngle = 0.0f;
-
-GameScene * GameScene::gs = 0;
-
 
 void update_view()
 {
@@ -79,80 +77,6 @@ void update_view()
     view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
 }
 
-static void error_callback(int error, const char* description)
-{
-    fputs(description, stderr);
-}
-
-void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
-{
-    if(fov >= 1.0f && fov <= 90.0f)
-        fov -= float(yoffset);
-    if(fov <= 1.0f)
-        fov = 1.0f;
-    if(fov >= 90.0f)
-        fov = 90.0f;
-}
-
-void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods)
-{
-    if (action == GLFW_PRESS)
-    {
-        if (key == GLFW_KEY_A)
-        {
-            speed_r_y = -1.0f;
-        }
-        if (key == GLFW_KEY_D)
-        {
-            speed_r_y = 1.0f;
-        }
-    }
-    else if(action == GLFW_RELEASE)
-    {
-        speed_r_y = 0.0f;
-    }
-}
-
-bool GameScene::initGlfw()
-{
-    int width = 640;
-    int height = 480;
-
-
-    if(glfwInit() == GL_FALSE) {
-        std::cerr << "failed to init GLFW" << std::endl;
-        return false;
-    }
-
-    glfwSetErrorCallback(error_callback);
-
-    // select opengl version
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    // create a window
-    if((window = glfwCreateWindow(width, height, "myGame", 0, 0)) == 0) {
-        std::cerr << "failed to open window" << std::endl;
-        glfwTerminate();
-        return false;
-    }
-    glfwMakeContextCurrent(window);
-
-    glfwSetScrollCallback(window, scroll_callback);
-    glfwSetKeyCallback(window, key_callback);
-    return true;
-}
-
-bool GameScene::initGlew()
-{
-    if(glewInit() != GLEW_OK) {
-        std::cerr << "failed to init GLEW" << std::endl;
-        return false;
-    }
-    return true;
-}
 
 bool GameScene::init(){
 
