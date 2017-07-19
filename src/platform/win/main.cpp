@@ -1,10 +1,14 @@
 #include <iostream>
 #include "MyEngineCore.h"
 #include "gamescene.h"
+#include "Camera.h"
 
 static GLFWwindow * window = NULL;
 static int width = 640;
 static int height = 480;
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
 
 static void error_callback(int error, const char* description)
 {
@@ -13,12 +17,34 @@ static void error_callback(int error, const char* description)
 
 void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
-    if(fov >= 1.0f && fov <= 90.0f)
-        fov -= float(yoffset);
-    if(fov <= 1.0f)
-        fov = 1.0f;
-    if(fov >= 90.0f)
-        fov = 90.0f;
+    GameScene * gamescene = GameScene::getInstance();
+    if(!gamescene)
+        return;
+    Camera * camera = gamescene->getCamera();
+    if(!camera)
+        return;
+    camera->ProcessMouseScroll(yoffset);
+}
+
+void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+    {
+        if (key == GLFW_KEY_A)
+        {
+        }
+        if (key == GLFW_KEY_D)
+        {
+        }
+    }
+    else if(action == GLFW_RELEASE)
+    {
+    }
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
 }
 
 bool initGlfw()
@@ -43,9 +69,7 @@ bool initGlfw()
         return false;
     }
     glfwMakeContextCurrent(window);
-
-    glfwSetScrollCallback(window, scroll_callback);
-    glfwSetKeyCallback(window, key_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     return true;
 }
 
@@ -58,23 +82,24 @@ bool initGlew()
     return true;
 }
 
-void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods)
+void processInput(GLFWwindow *window)
 {
-    if (action == GLFW_PRESS)
-    {
-        if (key == GLFW_KEY_A)
-        {
-            speed_r_y = -1.0f;
-        }
-        if (key == GLFW_KEY_D)
-        {
-            speed_r_y = 1.0f;
-        }
-    }
-    else if(action == GLFW_RELEASE)
-    {
-        speed_r_y = 0.0f;
-    }
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+    GameScene * gamescene = GameScene::getInstance();
+    if(!gamescene)
+        return;
+    Camera * camera = gamescene->getCamera();
+    if(!camera)
+        return;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera->ProcessKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera->ProcessKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera->ProcessKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera->ProcessKeyboard(RIGHT, deltaTime);
 }
 
 int main(){
@@ -89,6 +114,9 @@ int main(){
         return 0;
     }
 
+    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetKeyCallback(window, key_callback);
+
     GameScene * pGameScene = GameScene::getInstance();
     if(pGameScene == NULL)
     {
@@ -100,6 +128,34 @@ int main(){
         std::cout << "GameScene Init error!" << std::endl;
         return 0;
     }
-    std::cout << "-----------GameScene start-----------" << std::endl;
+
+    while(!glfwWindowShouldClose(window))
+    {
+
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        processInput(window);
+
+        if(!pGameScene)
+        {
+            break;
+        }
+        pGameScene->tick(deltaTime);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+
+        // check for errors
+        GLenum error = glGetError();
+        if(error != GL_NO_ERROR) {
+            std::cerr << error << std::endl;
+            break;
+        }
+    }
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
     return 0;
 }

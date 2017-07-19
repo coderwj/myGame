@@ -1,7 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "glm.hpp"
+#include "myEngineCore.h"
 
 #include <string>
 #include <fstream>
@@ -93,6 +93,11 @@ public:
         glDeleteShader(fragment);
 		if(geometryPath != nullptr)
 			glDeleteShader(geometry);
+    }
+
+    ~Shader()
+    {
+        glDeleteProgram(ID);
     }
 
     void use() 

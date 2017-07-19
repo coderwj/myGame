@@ -1,15 +1,14 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
-#include "glew.h"
-#include "MyEngineCore.h"
 
+#include "MyEngineCore.h"
 #include <vector>
 
 enum CameraMove {
-    FORWARD,
-    BACK,
-    LEFT,
-    RIGHT
+	FORWARD,
+	BACKWARD,
+	LEFT,
+	RIGHT
 };
 
 // Default camera values
@@ -69,7 +68,7 @@ public:
         GLfloat velocity = this->MovementSpeed * deltaTime;
         if (direction == FORWARD)
             this->Position += this->Front * velocity;
-        if (direction == BACK)
+        if (direction == BACKWARD)
             this->Position -= this->Front * velocity;
         if (direction == LEFT)
             this->Position -= this->Right * velocity;

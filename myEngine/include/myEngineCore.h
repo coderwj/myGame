@@ -1,6 +1,9 @@
 #ifndef __MYENGINECORE_H__
 #define __MYENGINECORE_H__
 
+#include "glew.h"
+#include "glfw3.h"
+
 #include "tinyxml2.h"
 
 #ifndef STB_IMAGE_IMPLEMENTATION
