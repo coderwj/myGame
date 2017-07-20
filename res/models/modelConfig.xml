@@ -7,7 +7,7 @@
   </model>
   <model id="2">
     <name>model_2</name>
-    <path>character1/Dukemon-Final-2.obj</path>
+    <path>rock/rock.obj</path>
     <material>texture</material>
   </model>
   <model id="3">

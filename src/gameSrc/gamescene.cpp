@@ -36,10 +36,10 @@ GameScene * GameScene::gs = NULL;
 
 bool GameScene::init(){
 
-    m_mainCharacter = Character::Create("model_1");
+    m_mainCharacter = Character::Create("model_2");
     if(m_mainCharacter == NULL)
         return false;
-	m_camera = new Camera(glm::vec3(4.0f, 7.0f, 5.0f));
+	m_camera = new Camera(glm::vec3(0.0f, 0.0f, 500.0f));
     //glDeleteVertexArrays(1, &vao);
     //glDeleteBuffers(1, &vbo);
 
@@ -62,7 +62,7 @@ void GameScene::onDestroy()
 void GameScene::render()
 {
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+    glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if(m_mainCharacter)
     {
