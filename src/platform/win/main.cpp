@@ -1,6 +1,6 @@
 #include <iostream>
 #include "MyEngineCore.h"
-#include "gamescene.h"
+#include "Gamescene.h"
 #include "Camera.h"
 
 static GLFWwindow * window = NULL;

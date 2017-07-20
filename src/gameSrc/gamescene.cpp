@@ -12,7 +12,6 @@
 
 #include "Config.h"
 #include "Shader.h"
-#include "Model.h"
 
 
 #include <thread>

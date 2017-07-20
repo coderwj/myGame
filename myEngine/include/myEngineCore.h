@@ -6,12 +6,6 @@
 
 #include "tinyxml2.h"
 
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#endif // STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"

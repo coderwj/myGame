@@ -1,7 +1,9 @@
 #include "Character.h"
-#include "config.h"
+
 #include "GameScene.h"
 #include "Camera.h"
+
+#include "config.h"
 
 using namespace std;
 
@@ -33,7 +35,7 @@ bool Character::init(string modelName, glm::vec3 position, glm::vec3 orientation
 	string material_name = "";
 	string model_config_path = Config::model_path + "modelConfig.xml";
 	tinyxml2::XMLDocument character_model_doc;
-	character_model_doc:LoadFile(model_config_path.c_str());
+	character_model_doc.LoadFile(model_config_path.c_str());
 	tinyxml2::XMLElement* character_model_element = 
 	character_model_doc.FirstChildElement("modelconfig")->FirstChildElement("model");
 	for (;;character_model_element = character_model_element->NextSiblingElement("model")) {
