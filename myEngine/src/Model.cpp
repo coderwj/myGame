@@ -9,7 +9,7 @@
 unsigned int Model::TextureFromFile(const char * path, const string &directory, bool gamma)
 {
 	string filename = string(path);
-	filename = directory + filename;
+	filename = directory + "/" + filename;
 	unsigned int textureID;
 
 	int width, height, nrComponents;
