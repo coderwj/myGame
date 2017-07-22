@@ -4,8 +4,6 @@
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 
-#include "assimp/Importer.hpp"
-
 #include "Shader.h"
 
 #include <string>

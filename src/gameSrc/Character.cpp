@@ -2,8 +2,11 @@
 
 #include "GameScene.h"
 #include "Camera.h"
+#include "Model.h"
 
 #include "config.h"
+
+#include "tinyxml2.h"
 
 using namespace std;
 

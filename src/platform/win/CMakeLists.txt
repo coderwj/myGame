@@ -7,7 +7,6 @@ include_directories(../../../include)
 include_directories(../../../myEngine/include)
 
 include_directories(../../../myEngine/lib/glm/glm)
-include_directories(../../../myEngine/lib/tinyxml2)
 
 if(APPLE)
 	include_directories(../../../myEngine/lib/glew/mac/include)
@@ -20,15 +19,13 @@ endif()
 if(WIN32)
 	include_directories(../../../myEngine/lib/glew/win32/include)
 	include_directories(../../../myEngine/lib/glfw/win32/include)
-	include_directories(../../../myEngine/lib/assimp/win32/include)
 
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glew/win32/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glfw/win32/lib)
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/assimp/win32/lib)
 endif()
 
 add_executable(Main main.cpp)
 
-add_dependencies(Main GameSrc)
+target_link_libraries(Main GameSrc myEngine)
 
-target_link_libraries(Main GameSrc)
+add_dependencies(Main GameSrc myEngine)

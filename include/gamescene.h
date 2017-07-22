@@ -1,8 +1,8 @@
 #ifndef __GAMESCENE_H__
 #define __GAMESCENE_H__
 
-#include "Character.h"
-#include "Camera.h"
+class Camera;
+class Character;
 
 class GameScene{
 private:

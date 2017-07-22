@@ -6,6 +6,9 @@ message("--->Cmake GameSrc--->")
 # Set projectname
 project(GameSrc)
 
+file(GLOB_RECURSE HEAD_FILES *.h *.inl)
+file(GLOB_RECURSE SOURCE_FILES *.cpp *.cc *.c)
+
 include_directories(../../include)
 include_directories(../../myEngine/include)
 include_directories(../../myEngine/lib/glm/glm)

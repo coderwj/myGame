@@ -2,11 +2,13 @@
 #define __CHARACTER_H__
 
 #include "MyEngineCore.h"
-#include "Model.h"
-#include "Shader.h"
 #include <string>
 
+class Shader;
+
 using namespace std;
+
+class Model;
 
 class Character
 {

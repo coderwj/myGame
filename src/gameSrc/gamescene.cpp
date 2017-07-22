@@ -10,6 +10,9 @@
 #include "MyEngineCore.h"
 #include "GameScene.h"
 
+#include "Character.h"
+#include "Camera.h"
+
 #include "Config.h"
 #include "Shader.h"
 
