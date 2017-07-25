@@ -13,6 +13,7 @@ include_directories(../../include)
 include_directories(../../myEngine/include)
 include_directories(../../myEngine/lib/glm/glm)
 include_directories(../../myEngine/lib/tinyxml2)
+include_directories(../../myEngine/lib/imgui)
 
 if(APPLE)
 	include_directories(../../myEngine/lib/glew/mac/include)

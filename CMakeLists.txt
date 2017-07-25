@@ -16,7 +16,6 @@ if(WIN32)
 	set(CMAKE_CXX_FLAGS_RELEASE "/MD /D NDEBUG /Zi")
 	set(CMAKE_C_FLAGS_RELEASE "/MD /D NDEBUG /Zi")
 
-
 endif()
 
 

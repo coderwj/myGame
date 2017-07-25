@@ -7,10 +7,12 @@ message("--->Cmake myEngine--->")
 project(myEngine)
 
 add_subdirectory(lib/tinyxml2)
+add_subdirectory(lib/imgui)
 
 include_directories(./include)
 include_directories(./lib/glm/glm)
 include_directories(./lib/tinyxml2)
+include_directories(./lib/imgui)
 
 if(APPLE)
 	include_directories(./lib/glew/mac/include)
@@ -54,7 +56,7 @@ if(APPLE)
 	FIND_LIBRARY(COREVIDEO_LIBRARY CoreVideo)
 	message("--------find COREVIDEO_LIBRARY--->" ${COREVIDEO_LIBRARY})
 
-	target_link_libraries(myEngine ${OPENGL_LIBRARY} ${COCOA_LIBRARY} ${IOKIT_LIBRARY} ${COREVIDEO_LIBRARY})
+	target_link_libraries(myEngine ${OPENGL_LIBRARY} ${COCOA_LIBRARY} ${IOKIT_LIBRARY} ${COREVIDEO_LIBRARY} imgui)
 endif()
 
 if(WIN32)
@@ -66,7 +68,10 @@ if(WIN32)
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib/glfw3.lib 
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32.lib 
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32s.lib
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib)
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib
+	imgui)
 
 	#target_link_libraries(myEngine ${OPENGL_LIBRARY})
 endif()
+
+add_dependencies(myEngine imgui)
