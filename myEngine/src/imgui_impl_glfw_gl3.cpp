@@ -8,6 +8,7 @@
 
 #include <imgui.h>
 #include "imgui_impl_glfw_gl3.h"
+#include <iostream>
 
 // GL3W/GLFW
 #include "glew.h"    // This example is using gl3w to access OpenGL functions (because it is small). You may use glew/glad/glLoadGen/etc. whatever already works for you.
@@ -18,6 +19,8 @@
 #define GLFW_EXPOSE_NATIVE_WGL
 #include "glfw3native.h"
 #endif
+
+#include "gltools.h"
 
 // Data
 static GLFWwindow*  g_Window = NULL;
@@ -42,7 +45,6 @@ void ImGui_ImplGlfwGL3_RenderDrawLists(ImDrawData* draw_data)
     if (fb_width == 0 || fb_height == 0)
         return;
     draw_data->ScaleClipRects(io.DisplayFramebufferScale);
-
     // Backup GL state
     GLint last_active_texture; glGetIntegerv(GL_ACTIVE_TEXTURE, &last_active_texture);
     glActiveTexture(GL_TEXTURE0);

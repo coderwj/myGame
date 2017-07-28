@@ -13,6 +13,8 @@
 #include "Gamescene.h"
 #include "Camera.h"
 
+#include "gltools.h"
+
 static GLFWwindow * window = NULL;
 static int width = 640;
 static int height = 480;
@@ -162,16 +164,12 @@ int main(){
 
 		ImGui_ImplGlfwGL3_NewFrame();
 		ImGui::Text("Hello, world!");
-        //ImGui::Render();
+        ImGui::Render();
         glfwSwapBuffers(window);
         glfwPollEvents();
 
         // check for errors
-        GLenum error = glGetError();
-        if(error != GL_NO_ERROR) {
-            std::cerr << error << std::endl;
-            break;
-        }
+		glCheckError();
     }
     ImGui_ImplGlfwGL3_Shutdown();
     glfwDestroyWindow(window);
