@@ -5,8 +5,8 @@
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
-#include "imgui.h"
-#include "imgui_impl_glfw_gl3.h"
+//#include "imgui.h"
+//#include "imgui_impl_glfw_gl3.h"
 
 #include <iostream>
 
@@ -138,11 +138,7 @@ int main(){
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetKeyCallback(window, key_callback);
 
-    ImGui_ImplGlfwGL3_Init(window, false);
-
-    bool show_test_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImColor(114, 144, 154);
+    //ImGui_ImplGlfwGL3_Init(window, false);
 
     GameScene * pGameScene = GameScene::getInstance();
     if(pGameScene == NULL)
@@ -171,9 +167,9 @@ int main(){
         }
         pGameScene->tick(deltaTime);
 
-		ImGui_ImplGlfwGL3_NewFrame();
-		ImGui::Text("Hello, world!");
-        ImGui::Render();
+		//ImGui_ImplGlfwGL3_NewFrame();
+		//ImGui::Text("Hello, world!");
+        //ImGui::Render();
         glfwSwapBuffers(window);
         glfwPollEvents();
 
@@ -185,7 +181,7 @@ int main(){
 		if(runTime * 1000 < 1.0f / FPS * 1000)
 			sleepFunction(1.0f / FPS * 1000 - runTime * 1000);
     }
-    ImGui_ImplGlfwGL3_Shutdown();
+    //ImGui_ImplGlfwGL3_Shutdown();
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
