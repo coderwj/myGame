@@ -15,12 +15,21 @@
 
 #include "gltools.h"
 
+#ifdef WIN32
+	#include <Windows.h>
+	#define sleepFunction(t) Sleep(t)
+#else
+	#define sleepFunction(t)
+#endif
+
 static GLFWwindow * window = NULL;
 static int width = 640;
 static int height = 480;
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+
+static int FPS = 30;
 
 static void error_callback(int error, const char* description)
 {
@@ -170,6 +179,11 @@ int main(){
 
         // check for errors
 		glCheckError();
+
+		double runTime = glfwGetTime() - currentFrame;
+
+		if(runTime * 1000 < 1.0f / FPS * 1000)
+			sleepFunction(1.0f / FPS * 1000 - runTime * 1000);
     }
     ImGui_ImplGlfwGL3_Shutdown();
     glfwDestroyWindow(window);
