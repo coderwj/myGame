@@ -39,10 +39,10 @@ GameScene * GameScene::gs = NULL;
 
 bool GameScene::init(){
 
-    m_mainCharacter = Character::Create("model_2");
+    m_mainCharacter = Character::Create("model_1");
     if(m_mainCharacter == NULL)
         return false;
-	m_camera = new Camera(glm::vec3(0.0f, 0.0f, 500.0f));
+	m_camera = new Camera(glm::vec3(0.0f, 0.0f, 800.0f));
     //glDeleteVertexArrays(1, &vao);
     //glDeleteBuffers(1, &vbo);
 
