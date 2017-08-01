@@ -1,8 +1,13 @@
 #ifndef __GAMESCENE_H__
 #define __GAMESCENE_H__
 
+#include <string>
+using namespace std;
+
 class Camera;
 class Character;
+class Model;
+class Shader;
 
 class GameScene{
 private:
@@ -41,6 +46,8 @@ public:
 
 	void render();
 
+	void renderScene();
+
 	void tick(float delta);
 
 	Camera * getCamera()
@@ -48,7 +55,7 @@ public:
 		return m_camera;
 	}
 
-	void loadScene(int sceneid);
+	void loadScene(string scenename);
 };
 
 #endif //__GAMESCENE_H__

@@ -15,7 +15,8 @@
 
 #include "Config.h"
 #include "Shader.h"
-
+#include "Model.h"
+#include "tinyxml2.h"
 
 #include <thread>
 #include <sstream>
@@ -38,7 +39,8 @@ GameScene * GameScene::gs = NULL;
 
 
 bool GameScene::init(){
-    loadScene();
+	string modelname = "scene_2";
+    loadScene(modelname);
     m_mainCharacter = Character::Create("model_1");
     if(m_mainCharacter == NULL)
         return false;
@@ -70,7 +72,7 @@ void GameScene::render()
     renderScene();
     if(m_mainCharacter)
     {
-        m_mainCharacter->render();
+        //m_mainCharacter->render();
     }
 }
 
@@ -92,7 +94,7 @@ void GameScene::renderScene()
     m_shader->setMat4("projection", projection);
 
     m_model->Draw(*m_shader);
-    //m_shader->disuse();
+    m_shader->disuse();
 }
 
 void GameScene::tick(float delta)
@@ -100,7 +102,7 @@ void GameScene::tick(float delta)
     render();
 }
 
-void GameScene::loadScene(int sceneid)
+void GameScene::loadScene(string scenename)
 {
     string model_str = "";
     string material_name = "";
@@ -112,7 +114,7 @@ void GameScene::loadScene(int sceneid)
     for (;;scene_model_element = scene_model_element->NextSiblingElement("scene")) {
         if(scene_model_element == NULL)
             break;
-        if(modelName == scene_model_element->FirstChildElement("name")->GetText())
+        if(scenename == scene_model_element->FirstChildElement("name")->GetText())
         {
             model_str = scene_model_element->FirstChildElement("path")->GetText();
             material_name = scene_model_element->FirstChildElement("material")->GetText();
