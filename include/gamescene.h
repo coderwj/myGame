@@ -11,6 +11,9 @@ private:
 	Character * m_mainCharacter;
 	Camera * m_camera;
 
+	Model * m_model;
+	Shader * m_shader;
+
 	GameScene():
 	m_mainCharacter(NULL),
 	m_camera(NULL)
@@ -44,6 +47,8 @@ public:
 	{
 		return m_camera;
 	}
+
+	void loadScene(int sceneid);
 };
 
 #endif //__GAMESCENE_H__
