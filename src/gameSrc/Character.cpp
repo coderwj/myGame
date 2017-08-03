@@ -120,6 +120,11 @@ void Character::render()
     m_shader->setMat4("model", model);
     m_shader->setMat4("view", view);
     m_shader->setMat4("projection", projection);
+    m_shader->setVec3("light_color", glm::vec3(1.0f, 1.0f, 1.0f))
+    m_shader->setVec3("light_dir", glm::vec3(1.0f, 1.0f, 1.0f))
+    m_shader->setVec3("Ka", glm::vec3(1.0f, 1.0f, 1.0f))
+    m_shader->setVec3("Kd", glm::vec3(1.0f, 1.0f, 1.0f))
+    m_shader->setVec3("Ks", glm::vec3(1.0f, 1.0f, 1.0f))
 
     m_model->Draw(*m_shader);
     //m_shader->disuse();
