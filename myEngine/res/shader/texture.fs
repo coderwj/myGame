@@ -13,8 +13,11 @@ uniform vec3 Ks;
 
 void main()
 {
+    vec3 ambient = light_color * Ka;
+
     FragColor = texture(texture_diffuse1, TexCoords);
     vec3 lightdir = normalize(light_dir);
     vec3 nor = normalize(pNormal);
     float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = light_color * Kd * diff;
 }
