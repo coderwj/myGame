@@ -39,9 +39,9 @@ GameScene * GameScene::gs = NULL;
 
 
 bool GameScene::init(){
-	string modelname = "scene_2";
+	string modelname = "scene_1";
     loadScene(modelname);
-    m_mainCharacter = Character::Create("model_1");
+    m_mainCharacter = Character::Create("model_3");
     if(m_mainCharacter == NULL)
         return false;
 	m_camera = new Camera(glm::vec3(0.0f, 0.0f, 800.0f));
@@ -69,10 +69,10 @@ void GameScene::render()
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    renderScene();
+    //renderScene();
     if(m_mainCharacter)
     {
-        //m_mainCharacter->render();
+        m_mainCharacter->render();
     }
 }
 
@@ -94,7 +94,7 @@ void GameScene::renderScene()
     m_shader->setMat4("projection", projection);
 
     m_model->Draw(*m_shader);
-    m_shader->disuse();
+    //m_shader->disuse();
 }
 
 void GameScene::tick(float delta)

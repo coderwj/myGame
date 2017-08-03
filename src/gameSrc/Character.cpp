@@ -122,5 +122,5 @@ void Character::render()
     m_shader->setMat4("projection", projection);
 
     m_model->Draw(*m_shader);
-    m_shader->disuse();
+    //m_shader->disuse();
 }

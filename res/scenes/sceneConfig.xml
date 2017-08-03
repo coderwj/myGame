@@ -2,7 +2,7 @@
 <sceneconfig>
   <scene id="1">
     <name>scene_1</name>
-    <path>city1/Miami.obj</path>
+    <path>character1/Dukemon-Final-2.obj</path>
     <material>texture</material>
   </scene>
   <scene id="2">

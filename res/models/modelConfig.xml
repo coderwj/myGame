@@ -12,7 +12,7 @@
   </model>
   <model id="3">
     <name>model_3</name>
-    <path>Model_A/D0307030A.max</path>
+    <path>character2/IronMan.obj</path>
     <material>texture</material>
   </model>
 </modelconfig>
