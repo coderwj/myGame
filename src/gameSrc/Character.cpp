@@ -39,7 +39,7 @@ bool Character::init(string modelName, glm::vec3 position, glm::vec3 orientation
 	string model_config_path = Config::model_path + "modelConfig.xml";
 	tinyxml2::XMLDocument character_model_doc;
 	character_model_doc.LoadFile(model_config_path.c_str());
-	tinyxml2::XMLElement* character_model_element = 
+	tinyxml2::XMLElement* character_model_element =
 	character_model_doc.FirstChildElement("modelconfig")->FirstChildElement("model");
 	for (;;character_model_element = character_model_element->NextSiblingElement("model")) {
         if(character_model_element == NULL)
@@ -61,7 +61,7 @@ bool Character::init(string modelName, glm::vec3 position, glm::vec3 orientation
     string shader_config_path = Config::engine_res_path + "shader/shaderConfig.xml";
     tinyxml2::XMLDocument shader_doc;
     shader_doc.LoadFile(shader_config_path.c_str());
-    
+
     string vs_name = "", fs_name = "";
 
     tinyxml2::XMLElement* materialElement = shader_doc.FirstChildElement("shaderconfig")->FirstChildElement( "material" );
@@ -120,11 +120,12 @@ void Character::render()
     m_shader->setMat4("model", model);
     m_shader->setMat4("view", view);
     m_shader->setMat4("projection", projection);
-    m_shader->setVec3("light_color", glm::vec3(1.0f, 1.0f, 1.0f))
-    m_shader->setVec3("light_dir", glm::vec3(1.0f, 1.0f, 1.0f))
-    m_shader->setVec3("Ka", glm::vec3(1.0f, 1.0f, 1.0f))
-    m_shader->setVec3("Kd", glm::vec3(1.0f, 1.0f, 1.0f))
-    m_shader->setVec3("Ks", glm::vec3(1.0f, 1.0f, 1.0f))
+    m_shader->setVec3("light_color", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("light_dir", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("Ka", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("Kd", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("Ks", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("view_dir", camera->Position);
 
     m_model->Draw(*m_shader);
     //m_shader->disuse();

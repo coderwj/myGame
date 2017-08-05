@@ -41,7 +41,7 @@ GameScene * GameScene::gs = NULL;
 bool GameScene::init(){
 	string modelname = "scene_1";
     loadScene(modelname);
-    m_mainCharacter = Character::Create("model_3");
+    m_mainCharacter = Character::Create("model_1");
     if(m_mainCharacter == NULL)
         return false;
 	m_camera = new Camera(glm::vec3(0.0f, 0.0f, 800.0f));
@@ -109,7 +109,7 @@ void GameScene::loadScene(string scenename)
     string scene_config_path = Config::scene_path + "sceneConfig.xml";
     tinyxml2::XMLDocument scene_model_doc;
     scene_model_doc.LoadFile(scene_config_path.c_str());
-    tinyxml2::XMLElement* scene_model_element = 
+    tinyxml2::XMLElement* scene_model_element =
     scene_model_doc.FirstChildElement("sceneconfig")->FirstChildElement("scene");
     for (;;scene_model_element = scene_model_element->NextSiblingElement("scene")) {
         if(scene_model_element == NULL)
@@ -131,7 +131,7 @@ void GameScene::loadScene(string scenename)
     string shader_config_path = Config::engine_res_path + "shader/shaderConfig.xml";
     tinyxml2::XMLDocument shader_doc;
     shader_doc.LoadFile(shader_config_path.c_str());
-    
+
     string vs_name = "", fs_name = "";
 
     tinyxml2::XMLElement* materialElement = shader_doc.FirstChildElement("shaderconfig")->FirstChildElement( "material" );
