@@ -35,9 +35,10 @@ endif()
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/common)
 
 
-FILE(GLOB SRC_ENGINE "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+FILE(GLOB SRC_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
+FILE(GLOB_RECURSE HEAD_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h ${CMAKE_CURRENT_SOURCE_DIR}/include/*.inl)
 
-add_library(myEngine STATIC ${SRC_ENGINE})
+add_library(myEngine STATIC ${HEAD_ENGINE} ${SRC_ENGINE})
 SET_TARGET_PROPERTIES(myEngine PROPERTIES LINKER_LANGUAGE CPP)
 
 if(APPLE)
@@ -63,10 +64,10 @@ if(WIN32)
 	#FIND_LIBRARY(OPENGL_LIBRARY OpenGL32.Lib)
 	#message("--------find OPENGL_LIBRARY--->" ${OPENGL_LIBRARY})
 
-	target_link_libraries(myEngine 
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/common/OpenGL32.Lib 
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib/glfw3.lib 
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32.lib 
+	target_link_libraries(myEngine
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/common/OpenGL32.Lib
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib/glfw3.lib
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32.lib
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32s.lib
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib
 	imgui)
