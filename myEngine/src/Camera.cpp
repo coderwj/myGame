@@ -49,6 +49,7 @@ void Camera::ProcessKeyboard(CameraMove direction, GLfloat deltaTime)
         this->Position += this->Right * velocity;
 	if (direction == ROTATELEFT)
 	{
+		glm::quat quatStart = glm::quat(glm::vec3(Yaw, Pitch, 0.0f));
 		this->Yaw -= 0.1f;
 		this->updateCameraVectors();
 	}
