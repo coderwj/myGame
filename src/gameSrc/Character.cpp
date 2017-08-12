@@ -110,12 +110,19 @@ void Character::render()
         return;
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), 4.0f / 3.0f, 0.1f, 1000.0f);
     glm::mat4 view = camera->GetViewMatrix();
-    glm::vec3 model_pos = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::mat4 model = glm::mat4(1.0);
-    model = glm::rotate(model, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::translate(model, model_pos);
+
+    glm::mat4 rotateM = glm::mat4(1.0f);
+	rotateM = glm::rotate(rotateM, 30.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+
+	glm::mat4 scaleM = glm::mat4(1.0f);
+	scaleM = glm::scale(scaleM, glm::vec3(0.1f, 0.1f, 0.1f));
+
+	glm::mat4 translateM = glm::mat4(1.0f);
+	glm::vec3 model_pos = glm::vec3(0.0f, -10.0f, 0.0f);
+	translateM = glm::translate(translateM, model_pos);
+
+	glm::mat4 model = scaleM * rotateM * translateM * glm::mat4(1.0f);
+	//glm::mat4 model = scaleM * glm::mat4(1.0f);
 
     m_shader->setMat4("model", model);
     m_shader->setMat4("view", view);

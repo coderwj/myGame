@@ -7,12 +7,12 @@
   </model>
   <model id="2">
     <name>model_2</name>
-    <path>rock/rock.obj</path>
+    <path>character2/Maskboy.FBX</path>
     <material>texture</material>
   </model>
   <model id="3">
     <name>model_3</name>
-    <path>character2/IronMan.obj</path>
+    <path>character3/Police.obj</path>
     <material>texture</material>
   </model>
 </modelconfig>

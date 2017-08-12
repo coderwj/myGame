@@ -39,9 +39,9 @@ GameScene * GameScene::gs = NULL;
 
 
 bool GameScene::init(){
-	string modelname = "scene_1";
+	string modelname = "scene_2";
     loadScene(modelname);
-    m_mainCharacter = Character::Create("model_1");
+    m_mainCharacter = Character::Create("model_3");
     if(m_mainCharacter == NULL)
         return false;
 	m_camera = new Camera(glm::vec3(0.0f, 0.0f, 800.0f));
