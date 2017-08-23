@@ -12,10 +12,13 @@ using namespace std;
 
 Character::Character():
 m_model(NULL),
-m_modelName("")
+m_modelName(""),
+m_scale(1.0f),
+m_theta(0.0f)
 {
 	m_position = glm::vec3(0.0f);
 	m_orientation = glm::vec3(1.0f, 0.0f, .0f);
+	m_rotateVec = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
 Character::~Character()
@@ -48,6 +51,12 @@ bool Character::init(string modelName, glm::vec3 position, glm::vec3 orientation
         {
             model_str = character_model_element->FirstChildElement("path")->GetText();
             material_name = character_model_element->FirstChildElement("material")->GetText();
+			m_scale = character_model_element->FirstChildElement("scale")->FloatText(1.0f);
+			m_theta = character_model_element->FirstChildElement("rotateTheta")->FloatText(0.0f);
+			float rotateX = character_model_element->FirstChildElement("rotateX")->FloatText(0.0f);
+			float rotateY = character_model_element->FirstChildElement("rotateY")->FloatText(1.0f);
+			float rotateZ = character_model_element->FirstChildElement("rotateZ")->FloatText(0.0f);
+			m_rotateVec = glm::vec3(rotateX, rotateY, rotateZ);
             break;
         }
     }
@@ -112,13 +121,13 @@ void Character::render()
     glm::mat4 view = camera->GetViewMatrix();
 
     glm::mat4 rotateM = glm::mat4(1.0f);
-	rotateM = glm::rotate(rotateM, 30.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	rotateM = glm::rotate(rotateM, m_theta, m_rotateVec);
 
 	glm::mat4 scaleM = glm::mat4(1.0f);
-	scaleM = glm::scale(scaleM, glm::vec3(0.1f, 0.1f, 0.1f));
+	scaleM = glm::scale(scaleM, glm::vec3(m_scale));
 
 	glm::mat4 translateM = glm::mat4(1.0f);
-	glm::vec3 model_pos = glm::vec3(0.0f, -10.0f, 0.0f);
+	glm::vec3 model_pos = m_position;
 	translateM = glm::translate(translateM, model_pos);
 
 	glm::mat4 model = scaleM * rotateM * translateM * glm::mat4(1.0f);

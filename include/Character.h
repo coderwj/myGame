@@ -30,6 +30,10 @@ private:
 	Model * m_model;
 	Shader * m_shader;
 
+	float m_scale;
+	float m_theta;
+	glm::vec3 m_rotateVec;
+
 	bool init(string modelName, glm::vec3 position = glm::vec3(0.0f), glm::vec3 orientation = glm::vec3(1.0f, 0.0f, 0.0f));
 };
 

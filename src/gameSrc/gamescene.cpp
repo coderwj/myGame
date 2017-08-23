@@ -42,6 +42,11 @@ bool GameScene::init(){
 	string modelname = "scene_2";
     loadScene(modelname);
     m_mainCharacter = Character::Create("model_3");
+	m_mainCharacter->setPosition(glm::vec3(0.0f, -10.0f, 0.0f));
+
+    Character * character = Character::Create("model_3");
+	character->setPosition(glm::vec3(1.0f, -10.0f, 0.0f));
+    m_characters.push_back(character);
     if(m_mainCharacter == NULL)
         return false;
 	m_camera = new Camera(glm::vec3(0.0f, 0.0f, 800.0f));
@@ -62,6 +67,18 @@ void GameScene::onDestroy()
         delete(m_camera);
         m_camera = NULL;
     }
+    for (std::vector<Character *>::iterator it = m_characters.begin(); it != m_characters.end();)
+    {
+        if(*it)
+        {
+            delete(*it);
+            it = m_characters.erase(it);
+        }
+        else
+        {
+            it++;
+        }
+    }
 }
 
 void GameScene::render()
@@ -73,6 +90,13 @@ void GameScene::render()
     if(m_mainCharacter)
     {
         m_mainCharacter->render();
+    }
+    for (std::vector<Character *>::iterator it = m_characters.begin(); it != m_characters.end(); it++)
+    {
+        if(*it)
+        {
+            (*it)->render();
+        }
     }
 }
 

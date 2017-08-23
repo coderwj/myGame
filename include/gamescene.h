@@ -2,6 +2,7 @@
 #define __GAMESCENE_H__
 
 #include <string>
+#include <vector>
 using namespace std;
 
 class Camera;
@@ -18,6 +19,7 @@ private:
 
 	Model * m_model;
 	Shader * m_shader;
+	std::vector<Character *> m_characters;
 
 	GameScene():
 	m_mainCharacter(NULL),
