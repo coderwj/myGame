@@ -93,6 +93,11 @@ public:
 			glDeleteShader(geometry);
     }
 
+	Shader(Shader &shader)
+	{
+		ID = 0;
+	}
+
     ~Shader()
     {
         glDeleteProgram(ID);

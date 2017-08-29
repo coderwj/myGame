@@ -20,8 +20,6 @@
 #include "glfw3native.h"
 #endif
 
-#include "gltools.h"
-
 // Data
 static GLFWwindow*  g_Window = NULL;
 static double       g_Time = 0.0f;

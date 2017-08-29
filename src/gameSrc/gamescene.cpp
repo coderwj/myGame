@@ -25,31 +25,31 @@ using namespace std;
 
 #ifdef WIN32
     const string Config::engine_res_path = "../../../../../myEngine/res/";
-	const string Config::game_res_path = "../../../../../res/";
-	const string Config::model_path = Config::game_res_path + "models/";
-	const string Config::scene_path = Config::game_res_path + "scenes/";
+    const string Config::game_res_path = "../../../../../res/";
+    const string Config::model_path = Config::game_res_path + "models/";
+    const string Config::scene_path = Config::game_res_path + "scenes/";
 #else
-	const string Config::engine_res_path = "../../../../../../myEngine/res/";
-	const string Config::game_res_path = "../../../../../../res/";
-	const string Config::model_path = Config::game_res_path + "models/";
-	const string Config::scene_path = Config::game_res_path + "scenes/";
+    const string Config::engine_res_path = "../../../../../../myEngine/res/";
+    const string Config::game_res_path = "../../../../../../res/";
+    const string Config::model_path = Config::game_res_path + "models/";
+    const string Config::scene_path = Config::game_res_path + "scenes/";
 #endif
 
 GameScene * GameScene::gs = NULL;
 
 
 bool GameScene::init(){
-	string modelname = "scene_2";
+    string modelname = "scene_2";
     loadScene(modelname);
     m_mainCharacter = Character::Create("model_3");
-	m_mainCharacter->setPosition(glm::vec3(0.0f, -10.0f, 0.0f));
+    m_mainCharacter->setPosition(glm::vec3(2.0f, -30.0f, 30.0f));
 
-    Character * character = Character::Create("model_3");
-	character->setPosition(glm::vec3(1.0f, -10.0f, 0.0f));
+    Character * character = Character::Create("model_4");
+    character->setPosition(glm::vec3(1.0f, -10.0f, -30.0f));
     m_characters.push_back(character);
     if(m_mainCharacter == NULL)
         return false;
-	m_camera = new Camera(glm::vec3(0.0f, 0.0f, 800.0f));
+    m_camera = new Camera(glm::vec3(0.0f, 0.0f, 800.0f));
     //glDeleteVertexArrays(1, &vao);
     //glDeleteBuffers(1, &vbo);
 

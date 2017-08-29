@@ -30,7 +30,7 @@ public:
 		loadModel(path);
 	}
 
-	void Draw(Shader shader)
+	void Draw(Shader &shader)
 	{
 		for (unsigned int i = 0; i < m_meshs.size(); i++)
 			m_meshs[i].Draw(shader);

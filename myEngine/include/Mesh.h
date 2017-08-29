@@ -50,7 +50,7 @@ public:
   //   	glDeleteBuffers(1, &EBO);
 	}
 
-	void Draw(Shader shader)
+	void Draw(Shader &shader)
 	{
 		unsigned int diffuseNr = 1;
 		unsigned int specularNr = 1;
@@ -78,7 +78,6 @@ public:
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 
 		}
-
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);

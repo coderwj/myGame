@@ -30,4 +30,14 @@
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
   </model>
+  <model id="4">
+    <name>model_4</name>
+    <path>character3/Police.obj</path>
+    <material>texture</material>
+    <scale>0.15</scale>
+    <rotateTheta>-30</rotateTheta>
+    <rotateX>0.0</rotateX>
+    <rotateY>1.0</rotateY>
+    <rotateZ>0.0</rotateZ>
+  </model>
 </modelconfig>

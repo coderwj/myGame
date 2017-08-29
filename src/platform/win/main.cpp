@@ -5,8 +5,8 @@
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
-//#include "imgui.h"
-//#include "imgui_impl_glfw_gl3.h"
+#include "imgui.h"
+#include "imgui_impl_glfw_gl3.h"
 
 #include <iostream>
 
@@ -16,10 +16,10 @@
 #include "gltools.h"
 
 #ifdef WIN32
-	#include <Windows.h>
-	#define sleepFunction(t) Sleep(t)
+    #include <Windows.h>
+    #define sleepFunction(t) Sleep(t)
 #else
-	#define sleepFunction(t)
+    #define sleepFunction(t)
 #endif
 
 static GLFWwindow * window = NULL;
@@ -121,10 +121,10 @@ void processInput(GLFWwindow *window)
         camera->ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera->ProcessKeyboard(RIGHT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		camera->ProcessKeyboard(ROTATELEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		camera->ProcessKeyboard(ROTATERIGHT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+        camera->ProcessKeyboard(ROTATELEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        camera->ProcessKeyboard(ROTATERIGHT, deltaTime);
 }
 
 int main(){
@@ -142,7 +142,7 @@ int main(){
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetKeyCallback(window, key_callback);
 
-    //ImGui_ImplGlfwGL3_Init(window, false);
+    ImGui_ImplGlfwGL3_Init(window, false);
 
     GameScene * pGameScene = GameScene::getInstance();
     if(pGameScene == NULL)
@@ -171,21 +171,21 @@ int main(){
         }
         pGameScene->tick(deltaTime);
 
-		//ImGui_ImplGlfwGL3_NewFrame();
-		//ImGui::Text("Hello, world!");
-        //ImGui::Render();
+        ImGui_ImplGlfwGL3_NewFrame();
+        ImGui::Text("Hello, world!");
+        ImGui::Render();
         glfwSwapBuffers(window);
         glfwPollEvents();
 
         // check for errors
-		glCheckError();
+        glCheckError();
 
-		double runTime = glfwGetTime() - currentFrame;
+        double runTime = glfwGetTime() - currentFrame;
 
-		if(runTime * 1000 < 1.0f / FPS * 1000)
-			sleepFunction(1.0f / FPS * 1000 - runTime * 1000);
+        if(runTime * 1000 < 1.0f / FPS * 1000)
+            sleepFunction(1.0f / FPS * 1000 - runTime * 1000);
     }
-    //ImGui_ImplGlfwGL3_Shutdown();
+    ImGui_ImplGlfwGL3_Shutdown();
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
