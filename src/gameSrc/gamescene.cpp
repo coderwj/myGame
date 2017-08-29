@@ -42,10 +42,10 @@ bool GameScene::init(){
     string modelname = "scene_2";
     loadScene(modelname);
     m_mainCharacter = Character::Create("model_3");
-    m_mainCharacter->setPosition(glm::vec3(2.0f, -30.0f, 30.0f));
+    m_mainCharacter->setPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
 
     Character * character = Character::Create("model_4");
-    character->setPosition(glm::vec3(1.0f, -10.0f, -30.0f));
+    character->setPosition(glm::vec3(2.0f, 0.0f, 0.0f));
     m_characters.push_back(character);
     if(m_mainCharacter == NULL)
         return false;
@@ -86,7 +86,7 @@ void GameScene::render()
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //renderScene();
+    renderScene();
     if(m_mainCharacter)
     {
         m_mainCharacter->render();
