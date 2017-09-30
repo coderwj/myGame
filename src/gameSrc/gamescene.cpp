@@ -18,6 +18,14 @@
 #include "Model.h"
 #include "tinyxml2.h"
 
+extern "C"
+{
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+};
+#include "lua_tinker.h"
+
 #include <thread>
 #include <sstream>
 
@@ -28,17 +36,28 @@ using namespace std;
     const string Config::game_res_path = "../../../../../res/";
     const string Config::model_path = Config::game_res_path + "models/";
     const string Config::scene_path = Config::game_res_path + "scenes/";
+	const string Config::lua_path = Config::game_res_path + "luafiles/";
 #else
     const string Config::engine_res_path = "../../../../../../myEngine/res/";
     const string Config::game_res_path = "../../../../../../res/";
     const string Config::model_path = Config::game_res_path + "models/";
     const string Config::scene_path = Config::game_res_path + "scenes/";
+	const string Config::lua_path = Config::game_res_path + "luafiles/";
 #endif
 
 GameScene * GameScene::gs = NULL;
 
 
 bool GameScene::init(){
+
+	m_state = lua_open();
+	luaopen_base(m_state);
+	luaL_openlibs(m_state);
+	string luafile = Config::lua_path + "dofile.lua";
+	lua_tinker::dofile(m_state, luafile.c_str());
+
+	lua_tinker::call<void>(m_state, "InitGame");
+
     string modelname = "scene_2";
     loadScene(modelname);
     m_mainCharacter = Character::Create("model_3");
@@ -123,6 +142,7 @@ void GameScene::renderScene()
 
 void GameScene::tick(float delta)
 {
+	//lua_tinker::call<void, float>(m_state, "LuaGameMgr.Tick", delta);
     render();
 }
 

@@ -8,11 +8,16 @@
   <scene id="2">
     <name>scene_2</name>
     <path>scene2/RmhDktMako.obj</path>
-    <material>texture</material>
+    <material>common</material>
   </scene>
   <scene id="3">
     <name>scene_3</name>
     <path>city1/Miami.obj</path>
     <material>texture</material>
+  </scene>
+  <scene id="4">
+    <name>scene_4</name>
+    <path>lola/lola.obj</path>
+    <material>common</material>
   </scene>
 </sceneconfig>

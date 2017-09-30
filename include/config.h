@@ -12,6 +12,7 @@ public:
 	static const string game_res_path;
 	static const string model_path;
 	static const string scene_path;
+	static const string lua_path;
 };
 
 #endif //__CONFIG_H__

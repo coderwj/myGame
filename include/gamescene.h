@@ -1,6 +1,7 @@
 #ifndef __GAMESCENE_H__
 #define __GAMESCENE_H__
 
+
 #include <string>
 #include <vector>
 using namespace std;
@@ -21,9 +22,12 @@ private:
 	Shader * m_shader;
 	std::vector<Character *> m_characters;
 
+	struct lua_State * m_state;
+
 	GameScene():
 	m_mainCharacter(NULL),
-	m_camera(NULL)
+	m_camera(NULL),
+	m_state(NULL)
 	{
 	}
 	~GameScene(){}

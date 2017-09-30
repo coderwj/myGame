@@ -40,4 +40,14 @@
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
   </model>
+  <model id="5">
+    <name>model_5</name>
+    <path>lola/lola.obj</path>
+    <material>texture</material>
+    <scale>0.2</scale>
+    <rotateTheta>-10</rotateTheta>
+    <rotateX>0.0</rotateX>
+    <rotateY>1.0</rotateY>
+    <rotateZ>0.0</rotateZ>
+  </model>
 </modelconfig>

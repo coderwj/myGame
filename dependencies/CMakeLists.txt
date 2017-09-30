@@ -1,4 +1,4 @@
-# add_subdirectory(threads)
+add_subdirectory(LuaTinker)
 # add_subdirectory(boost)
 # add_subdirectory(process)
 # add_subdirectory(zlib)

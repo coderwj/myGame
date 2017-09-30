@@ -14,6 +14,7 @@ include_directories(../../myEngine/include)
 include_directories(../../myEngine/lib/glm/glm)
 include_directories(../../myEngine/lib/tinyxml2)
 include_directories(../../myEngine/lib/imgui)
+include_directories(../../dependencies/LuaTinker)
 
 if(APPLE)
 	include_directories(../../myEngine/lib/glew/mac/include)
@@ -35,11 +36,12 @@ endif()
 
 
 FILE(GLOB SRC_1 "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+FILE(GLOB_RECURSE HEAD_GAMESRC ${CMAKE_CURRENT_SOURCE_DIR}/../../include/*.h )
 
-add_library(GameSrc STATIC ${SRC_1})
+add_library(GameSrc STATIC ${SRC_1} ${HEAD_GAMESRC})
 
 SET(LIBRARIES myEngine)
 
-target_link_libraries(GameSrc ${LIBRARIES} tinyxml2)
+target_link_libraries(GameSrc ${LIBRARIES} tinyxml2 LuaTinker)
 
-add_dependencies(GameSrc myEngine tinyxml2)
+add_dependencies(GameSrc myEngine tinyxml2 LuaTinker)
