@@ -1,5 +1,6 @@
+add_subdirectory(Lua53)
 add_subdirectory(LuaTinker)
-# add_subdirectory(boost)
+
 # add_subdirectory(process)
 # add_subdirectory(zlib)
 # add_subdirectory(g3dlite)

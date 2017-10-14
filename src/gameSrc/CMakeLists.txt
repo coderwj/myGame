@@ -14,6 +14,7 @@ include_directories(../../myEngine/include)
 include_directories(../../myEngine/lib/glm/glm)
 include_directories(../../myEngine/lib/tinyxml2)
 include_directories(../../myEngine/lib/imgui)
+include_directories(../../dependencies/Lua53/src)
 include_directories(../../dependencies/LuaTinker)
 
 if(APPLE)
@@ -28,12 +29,10 @@ if(WIN32)
 	include_directories(../../myEngine/lib/glew/win32/include)
 	include_directories(../../myEngine/lib/glfw/win32/include)
 	include_directories(../../myEngine/lib/assimp/win32/include)
-	include_directories(../../dependencies/Lua51/include)
 
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../myEngine/lib/glew/win32/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../myEngine/lib/glfw/win32/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../myEngine/lib/assimp/win32/lib)
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../dependencies/Lua51/lib)
 endif()
 
 
@@ -44,6 +43,6 @@ add_library(GameSrc STATIC ${SRC_1} ${HEAD_GAMESRC})
 
 SET(LIBRARIES myEngine)
 
-target_link_libraries(GameSrc ${LIBRARIES} tinyxml2 LuaTinker)
+target_link_libraries(GameSrc ${LIBRARIES} tinyxml2 LuaTinker Lua53)
 
-add_dependencies(GameSrc myEngine tinyxml2 LuaTinker)
+add_dependencies(GameSrc myEngine tinyxml2 LuaTinker Lua53)

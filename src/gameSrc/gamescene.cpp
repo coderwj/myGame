@@ -50,7 +50,7 @@ GameScene * GameScene::gs = NULL;
 
 bool GameScene::init(){
 
-	m_state = lua_open();
+	m_state = luaL_newstate();
 	luaopen_base(m_state);
 	luaL_openlibs(m_state);
 	string luafile = Config::lua_path + "dofile.lua";
