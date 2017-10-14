@@ -56,7 +56,7 @@ bool GameScene::init(){
 	string luafile = Config::lua_path + "dofile.lua";
 	lua_tinker::dofile(m_state, luafile.c_str());
 
-	lua_tinker::call<void>(m_state, "InitGame");
+	lua_tinker::call<void>(m_state, "LuaGameMgr", "InitGame");
 
     string modelname = "scene_2";
     loadScene(modelname);
@@ -143,6 +143,7 @@ void GameScene::renderScene()
 void GameScene::tick(float delta)
 {
 	//lua_tinker::call<void, float>(m_state, "LuaGameMgr.Tick", delta);
+	lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
     render();
 }
 
