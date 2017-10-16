@@ -1,0 +1,24 @@
+#ifndef __GAMESCENE_H__
+#define __GAMESCENE_H__
+
+
+#include <string>
+#include <vector>
+
+class Camera;
+class Character;
+class Model;
+class Shader;
+
+class GameScene{
+public:
+	static GameScene * getInstance();
+
+	void destroyInstance();
+
+	Camera * getCamera();
+
+	void loadScene(string scenename);
+};
+
+#endif //__GAMESCENE_H__
