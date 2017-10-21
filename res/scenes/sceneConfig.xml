@@ -4,20 +4,40 @@
     <name>scene_1</name>
     <path>character1/Dukemon-Final-2.obj</path>
     <material>texture</material>
+    <scale>0.1</scale>
+    <rotateTheta>0.0</rotateTheta>
+    <rotateX>0.0</rotateX>
+    <rotateY>1.0</rotateY>
+    <rotateZ>0.0</rotateZ>
   </scene>
   <scene id="2">
     <name>scene_2</name>
     <path>scene2/RmhDktMako.obj</path>
     <material>common</material>
+    <scale>0.1</scale>
+    <rotateTheta>0.0</rotateTheta>
+    <rotateX>0.0</rotateX>
+    <rotateY>1.0</rotateY>
+    <rotateZ>0.0</rotateZ>
   </scene>
   <scene id="3">
     <name>scene_3</name>
-    <path>city1/Miami.obj</path>
-    <material>texture</material>
+    <path>scene3/city.obj</path>
+    <material>common</material>
+    <scale>0.1</scale>
+    <rotateTheta>0.0</rotateTheta>
+    <rotateX>0.0</rotateX>
+    <rotateY>1.0</rotateY>
+    <rotateZ>0.0</rotateZ>
   </scene>
   <scene id="4">
     <name>scene_4</name>
     <path>lola/lola.obj</path>
     <material>common</material>
+    <scale>0.1</scale>
+    <rotateTheta>0.0</rotateTheta>
+    <rotateX>0.0</rotateX>
+    <rotateY>1.0</rotateY>
+    <rotateZ>0.0</rotateZ>
   </scene>
 </sceneconfig>

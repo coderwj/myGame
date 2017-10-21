@@ -58,7 +58,7 @@ bool GameScene::init(){
 
 	lua_tinker::call<void>(m_state, "LuaGameMgr", "InitGame");
 
-    string modelname = "scene_2";
+    string modelname = "scene_3";
     loadScene(modelname);
     m_mainCharacter = Character::Create("model_3");
     m_mainCharacter->setPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
@@ -125,12 +125,18 @@ void GameScene::renderScene()
     m_shader->use();
     glm::mat4 projection = glm::perspective(glm::radians(m_camera->Zoom), 4.0f / 3.0f, 0.1f, 1000.0f);
     glm::mat4 view = m_camera->GetViewMatrix();
-    glm::vec3 model_pos = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::mat4 model = glm::mat4(1.0);
-    model = glm::rotate(model, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::translate(model, model_pos);
+
+	glm::mat4 scaleM = glm::mat4(1.0f);
+	scaleM = glm::scale(scaleM, glm::vec3(m_scale));
+
+	glm::mat4 rotateM = glm::mat4(1.0f);
+	rotateM = glm::rotate(rotateM, m_theta, m_rotateVec);
+
+	glm::mat4 translateM = glm::mat4(1.0f);
+	glm::vec3 model_pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	translateM = glm::translate(translateM, model_pos);
+
+	glm::mat4 model = translateM * rotateM * scaleM * glm::mat4(1.0f);
 
     m_shader->setMat4("model", model);
     m_shader->setMat4("view", view);
@@ -163,6 +169,12 @@ void GameScene::loadScene(string scenename)
         {
             model_str = scene_model_element->FirstChildElement("path")->GetText();
             material_name = scene_model_element->FirstChildElement("material")->GetText();
+			m_scale = scene_model_element->FirstChildElement("scale")->FloatText(1.0f);
+			m_theta = scene_model_element->FirstChildElement("rotateTheta")->FloatText(0.0f);
+			float rotateX = scene_model_element->FirstChildElement("rotateX")->FloatText(0.0f);
+			float rotateY = scene_model_element->FirstChildElement("rotateY")->FloatText(1.0f);
+			float rotateZ = scene_model_element->FirstChildElement("rotateZ")->FloatText(0.0f);
+			m_rotateVec = glm::vec3(rotateX, rotateY, rotateZ);
             break;
         }
     }

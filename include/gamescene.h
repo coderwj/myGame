@@ -1,7 +1,7 @@
 #ifndef __GAMESCENE_H__
 #define __GAMESCENE_H__
 
-
+#include "MyEngineCore.h"
 #include <string>
 #include <vector>
 using namespace std;
@@ -20,16 +20,25 @@ private:
 
 	Model * m_model;
 	Shader * m_shader;
+
+	float m_scale;
+	float m_theta;
+	glm::vec3 m_rotateVec;
+
 	std::vector<Character *> m_characters;
 
 	struct lua_State * m_state;
 
 	GameScene():
-	m_mainCharacter(NULL),
-	m_camera(NULL),
-	m_state(NULL)
+		m_mainCharacter(NULL),
+		m_camera(NULL),
+		m_state(NULL),
+		m_scale(1.0f),
+		m_theta(0.0f)
 	{
+		m_rotateVec = glm::vec3(0.0f, 1.0f, 0.0f);
 	}
+
 	~GameScene(){}
 	void onDestroy();
 public:
