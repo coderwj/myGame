@@ -14,6 +14,11 @@ public:
 	float m31, m32, m33;
 	float tx, ty, tz;
 
+	Matrix4x3()
+	{
+		identity();
+	}
+
 	void identity();
 
 	void zeroTranslation();
@@ -32,6 +37,10 @@ public:
 	void fromQuaternion(const Quaternion &q);
 
 	void setupScale(const Vector3 &s);
+
+	void setupLookAt(const Vector3 &eye, const Vector3 &center, const Vector3 &up);
+
+	void setupPerspective(float fovy, float aspect, float zNear, float zFar);
 
 };
 

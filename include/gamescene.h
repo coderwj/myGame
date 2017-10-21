@@ -23,7 +23,7 @@ private:
 
 	float m_scale;
 	float m_theta;
-	glm::vec3 m_rotateVec;
+	Vector3 m_rotateVec;
 
 	std::vector<Character *> m_characters;
 
@@ -36,7 +36,7 @@ private:
 		m_scale(1.0f),
 		m_theta(0.0f)
 	{
-		m_rotateVec = glm::vec3(0.0f, 1.0f, 0.0f);
+		m_rotateVec = Vector3(0.0f, 1.0f, 0.0f);
 	}
 
 	~GameScene(){}

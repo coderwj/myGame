@@ -79,6 +79,46 @@ void Matrix4x3::fromQuaternion(const Quaternion &q)
 
 void Matrix4x3::setupScale(const Vector3 &s)
 {
-
+	m11 *= s.x; m12 *= s.x; m13 *= s.x;
+	m21 *= s.y; m22 *= s.y; m23 *= s.y;
+	m31 *= s.z; m32 *= s.z; m33 *= s.z;
 }
 
+void Matrix4x3::setupLookAt(const Vector3 &eye, const Vector3 &center, const Vector3 &up)
+{
+	Vector3 f = (center - eye).normalize();
+	Vector3 u = (up).normalize();
+	Vector3 s = (crossVector(f, u)).normalize();
+	u = crossVector(s, f);
+
+	m11 = s.x;
+	m21 = s.y;
+	m31 = s.z;
+
+	m12 = u.x;
+	m22 = u.y;
+	m32 = u.z;
+
+	m13 = -f.x;
+	m23 = -f.y;
+	m33 = -f.z;
+
+	tx = -(s * eye);
+	ty = -(u * eye);
+	tz = (f * eye);
+}
+
+void Matrix4x3::setupPerspective(float fovy, float aspect, float zNear, float zFar)
+{
+	float range = tan(toRad(fovy * 0.5f)) * zNear;
+	float left = -range * aspect;
+	float right = range * aspect;
+	float bottom = -range;
+	float top = range;
+
+	m11 = (2.0f * zNear) / (right - left);
+	m22 = (2.0f * zNear) / (top - bottom);
+	m33 = - (zFar + zNear) / (zFar - zNear);
+	m34 = -1.0f;
+	m43 = -(2.0f * zFar * zNear) / (zFar - zNear);
+}

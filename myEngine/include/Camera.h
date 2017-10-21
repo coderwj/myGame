@@ -24,11 +24,11 @@ class Camera
 {
 public:
     // Camera Attributes
-    glm::vec3 Position;
-    glm::vec3 Front;
-    glm::vec3 Up;
-    glm::vec3 Right;
-    glm::vec3 WorldUp;
+    Vector3 Position;
+    Vector3 Front;
+    Vector3 Up;
+    Vector3 Right;
+    Vector3 WorldUp;
 
     // Eular Angles
     GLfloat Yaw;
@@ -39,16 +39,16 @@ public:
     GLfloat MouseSensitivity;
     GLfloat Zoom;
 
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), 
-           glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), 
-           GLfloat yaw = YAW, 
+    Camera(Vector3 position = Vector3(0.0f, 0.0f, 0.0f),
+           Vector3 up = Vector3(0.0f, 1.0f, 0.0f),
+           GLfloat yaw = YAW,
            GLfloat pitch = PITCH);
 
-    Camera(GLfloat posX, GLfloat posY, GLfloat posZ, 
-           GLfloat upX, GLfloat upY, GLfloat upZ, 
+    Camera(GLfloat posX, GLfloat posY, GLfloat posZ,
+           GLfloat upX, GLfloat upY, GLfloat upZ,
            GLfloat yaw, GLfloat pitch);
 
-    glm::mat4 GetViewMatrix();
+    Matrix4x3 GetViewMatrix();
 
     void ProcessKeyboard(CameraMove direction, GLfloat deltaTime);
 

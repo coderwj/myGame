@@ -1,10 +1,6 @@
 #include "glew.h"
 #include "glfw3.h"
 
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
-
 #include "imgui.h"
 #include "imgui_impl_glfw_gl3.h"
 

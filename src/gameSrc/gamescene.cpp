@@ -61,14 +61,14 @@ bool GameScene::init(){
     string modelname = "scene_3";
     loadScene(modelname);
     m_mainCharacter = Character::Create("model_3");
-    m_mainCharacter->setPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
+    m_mainCharacter->setPosition(Vector3(-2.0f, 0.0f, 0.0f));
 
     Character * character = Character::Create("model_4");
-    character->setPosition(glm::vec3(2.0f, 0.0f, 0.0f));
+    character->setPosition(Vector3(2.0f, 0.0f, 0.0f));
     m_characters.push_back(character);
     if(m_mainCharacter == NULL)
         return false;
-    m_camera = new Camera(glm::vec3(0.0f, 0.0f, 800.0f));
+    m_camera = new Camera(Vector3(0.0f, 0.0f, 800.0f));
     //glDeleteVertexArrays(1, &vao);
     //glDeleteBuffers(1, &vbo);
 
@@ -123,20 +123,16 @@ void GameScene::renderScene()
 {
     // use the shader program
     m_shader->use();
-    glm::mat4 projection = glm::perspective(glm::radians(m_camera->Zoom), 4.0f / 3.0f, 0.1f, 1000.0f);
-    glm::mat4 view = m_camera->GetViewMatrix();
+    Matrix4x3 projection;
+    projection.setupPerspective(m_camera->Zoom, 4.0f / 3.0f, 0.1f, 1000.0f);
+    Matrix4x3 view = m_camera->GetViewMatrix();
 
-	glm::mat4 scaleM = glm::mat4(1.0f);
-	scaleM = glm::scale(scaleM, glm::vec3(m_scale));
+    Matrix4x3 model;
+    model.identity();
+    model.setupScale(m_scale);
+    model.setupRotate(m_rotateVec, m_theta);
+    model.setTranslation(model_pos);
 
-	glm::mat4 rotateM = glm::mat4(1.0f);
-	rotateM = glm::rotate(rotateM, m_theta, m_rotateVec);
-
-	glm::mat4 translateM = glm::mat4(1.0f);
-	glm::vec3 model_pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	translateM = glm::translate(translateM, model_pos);
-
-	glm::mat4 model = translateM * rotateM * scaleM * glm::mat4(1.0f);
 
     m_shader->setMat4("model", model);
     m_shader->setMat4("view", view);
@@ -174,7 +170,7 @@ void GameScene::loadScene(string scenename)
 			float rotateX = scene_model_element->FirstChildElement("rotateX")->FloatText(0.0f);
 			float rotateY = scene_model_element->FirstChildElement("rotateY")->FloatText(1.0f);
 			float rotateZ = scene_model_element->FirstChildElement("rotateZ")->FloatText(0.0f);
-			m_rotateVec = glm::vec3(rotateX, rotateY, rotateZ);
+			m_rotateVec = Vector3(rotateX, rotateY, rotateZ);
             break;
         }
     }

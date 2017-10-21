@@ -4,8 +4,8 @@
 #include <vector>
 
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, GLfloat yaw, GLfloat pitch):
-Front(glm::vec3(0.0f, 0.0f, -1.0f)),
+Camera::Camera(Vector3 position, Vector3 up, GLfloat yaw, GLfloat pitch):
+Front(Vector3(0.0f, 0.0f, -1.0f)),
 MovementSpeed(SPEED),
 MouseSensitivity(SENSITIVTY),
 Zoom(ZOOM)
@@ -18,21 +18,22 @@ Zoom(ZOOM)
 }
 
 Camera::Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch):
-Front(glm::vec3(0.0f, 0.0f, -1.0f)),
+Front(Vector3(0.0f, 0.0f, -1.0f)),
 MovementSpeed(SPEED),
 MouseSensitivity(SENSITIVTY),
 Zoom(ZOOM)
 {
-    this->Position = glm::vec3(posX, posY, posZ);
-    this->WorldUp = glm::vec3(upX, upY, upZ);
+    this->Position = Vector3(posX, posY, posZ);
+    this->WorldUp = Vector3(upX, upY, upZ);
     this->Yaw = yaw;
     this->Pitch = pitch;
     this->updateCameraVectors();
 }
 
-glm::mat4 Camera::GetViewMatrix()
+Matrix4x3 Camera::GetViewMatrix()
 {
-	glm::mat4 result = glm::lookAt(this->Position, this->Position + this->Front, this->Up);
+    Matrix4x3 result;
+    result.setupLookAt(this->Position, this->Position + this->Front, this->Up);
     return result;
 }
 
@@ -49,7 +50,6 @@ void Camera::ProcessKeyboard(CameraMove direction, GLfloat deltaTime)
         this->Position += this->Right * velocity;
 	if (direction == ROTATELEFT)
 	{
-		glm::quat quatStart = glm::quat(glm::vec3(Yaw, Pitch, 0.0f));
 		this->Yaw -= 0.1f;
 		this->updateCameraVectors();
 	}
@@ -92,12 +92,12 @@ void Camera::ProcessMouseScroll(GLfloat yoffset)
 void Camera::updateCameraVectors()
 {
     // Calculate the new Front vector
-    glm::vec3 front;
-    front.x = cos(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
-    front.y = sin(glm::radians(this->Pitch));
-    front.z = sin(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
-    this->Front = glm::normalize(front);
+    Vector3 front;
+    front.x = cos(toRad(this->Yaw)) * cos(toRad(this->Pitch));
+    front.y = sin(toRad(this->Pitch));
+    front.z = sin(toRad(this->Yaw)) * cos(toRad(this->Pitch));
+    this->Front = front.normalize();
     // Also re-calculate the Right and Up vector
-    this->Right = glm::normalize(glm::cross(this->Front, this->WorldUp));
-    this->Up    = glm::normalize(glm::cross(this->Right, this->Front));
+    this->Right = crossVector(this->Front, this->WorldUp).normalize();
+    this->Up    = crossVector(this->Right, this->Front)normalize();
 }
