@@ -30,10 +30,10 @@ Zoom(ZOOM)
     this->updateCameraVectors();
 }
 
-Matrix4x3 Camera::GetViewMatrix()
+Matrix4 Camera::GetViewMatrix()
 {
-    Matrix4x3 result;
-    result.setupLookAt(this->Position, this->Position + this->Front, this->Up);
+    Matrix4 result;
+    result.initWithLookAt(this->Position, this->Position + this->Front, this->Up);
     return result;
 }
 
@@ -99,5 +99,5 @@ void Camera::updateCameraVectors()
     this->Front = front.normalize();
     // Also re-calculate the Right and Up vector
     this->Right = crossVector(this->Front, this->WorldUp).normalize();
-    this->Up    = crossVector(this->Right, this->Front)normalize();
+    this->Up    = crossVector(this->Right, this->Front).normalize();
 }

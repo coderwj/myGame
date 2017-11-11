@@ -139,7 +139,7 @@ public:
 
     void setVec3(const std::string &name, const Vector3 &value) const
     {
-        glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+        glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &(value.x));
     }
     void setVec3(const std::string &name, float x, float y, float z) const
     {
@@ -165,9 +165,9 @@ public:
     //     glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     // }
 
-    void setMat4(const std::string &name, const Matrix4x3 &mat) const
+    void setMat4(const std::string &name, const Matrix4 &mat) const
     {
-        glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+        glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &(mat.m11));
     }
 
 private:

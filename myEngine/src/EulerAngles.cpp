@@ -4,7 +4,7 @@
 #include "Quaternion.h"
 #include "EulerAngles.h"
 #include "MathUtil.h"
-#include "Matrix4x3.h"
+#include "Matrix4.h"
 #include "RotationMatrix.h"
 
 const EulerAngles kEulerAnglesIdentity(0.0f, 0.0f, 0.0f);
@@ -62,7 +62,7 @@ void EulerAngles::fromInertialToObjectQuaternion(const Quaternion &q){
 	}
 }
 
-void EulerAngles::fromObjectToWorldMatrix(const Matrix4x3 &m){
+void EulerAngles::fromObjectToWorldMatrix(const Matrix4 &m){
 	float sp = -m.m32;
 
 	if(fabs(sp) > 9.99999f){
@@ -77,7 +77,7 @@ void EulerAngles::fromObjectToWorldMatrix(const Matrix4x3 &m){
 	}
 }
 
-void EulerAngles::fromWorldToObjectMatrix(const Matrix4x3 &m){
+void EulerAngles::fromWorldToObjectMatrix(const Matrix4 &m){
 	float sp = -m.m23;
 	if(fabs(sp) > 9.99999f){
 		pitch = kPiOver2 * sp;

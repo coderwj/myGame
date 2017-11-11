@@ -4,12 +4,8 @@
 #include "glew.h"
 #include "glfw3.h"
 
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
-
 #include "Vector3.h"
-#include "Matrix4x3.h"
+#include "Matrix4.h"
 #include "MathUtil.h"
 
 #include "HelperFunc.h"

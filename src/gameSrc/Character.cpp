@@ -16,9 +16,9 @@ m_modelName(""),
 m_scale(1.0f),
 m_theta(0.0f)
 {
-    m_position = glm::vec3(0.0f);
-    m_orientation = glm::vec3(1.0f, 0.0f, .0f);
-    m_rotateVec = glm::vec3(0.0f, 1.0f, 0.0f);
+    m_position = Vector3(0.0f);
+    m_orientation = Vector3(1.0f, 0.0f, .0f);
+    m_rotateVec = Vector3(0.0f, 1.0f, 0.0f);
 }
 
 Character::~Character()
@@ -35,7 +35,7 @@ Character::~Character()
     }
 }
 
-bool Character::init(string modelName, glm::vec3 position, glm::vec3 orientation)
+bool Character::init(string modelName, Vector3 position, Vector3 orientation)
 {
     string model_str = "";
     string material_name = "";
@@ -56,7 +56,7 @@ bool Character::init(string modelName, glm::vec3 position, glm::vec3 orientation
             float rotateX = character_model_element->FirstChildElement("rotateX")->FloatText(0.0f);
             float rotateY = character_model_element->FirstChildElement("rotateY")->FloatText(1.0f);
             float rotateZ = character_model_element->FirstChildElement("rotateZ")->FloatText(0.0f);
-            m_rotateVec = glm::vec3(rotateX, rotateY, rotateZ);
+            m_rotateVec = Vector3(rotateX, rotateY, rotateZ);
             break;
         }
     }
@@ -98,7 +98,7 @@ bool Character::init(string modelName, glm::vec3 position, glm::vec3 orientation
     return true;
 }
 
-Character * Character::Create(string modelName, glm::vec3 position, glm::vec3 orientation)
+Character * Character::Create(string modelName, Vector3 position, Vector3 orientation)
 {
     Character * cha = new Character();
     if(cha->init(modelName, position, orientation))
@@ -116,30 +116,27 @@ void Character::render()
     Camera * camera = gamescene->getCamera();
     if(!camera)
         return;
-    glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), 4.0f / 3.0f, 0.1f, 1000.0f);
-    glm::mat4 view = camera->GetViewMatrix();
+    Matrix4 projection;
+    projection.initWithPerspective(camera->Zoom, 4.0f / 3.0f, 0.1f, 1000.0f);
+    Matrix4 view = camera->GetViewMatrix();
 
-    glm::mat4 scaleM = glm::mat4(1.0f);
-    scaleM = glm::scale(scaleM, glm::vec3(m_scale));
+    Matrix4 scaleM;
+    scaleM.initWithScale(Vector3(m_scale));
+    Matrix4 rotateM;
+    rotateM.initWithRotate(m_rotateVec, m_theta);
+    Matrix4 transM;
+    transM.initWithTranslate(m_position);
 
-    glm::mat4 rotateM = glm::mat4(1.0f);
-    rotateM = glm::rotate(rotateM, m_theta, m_rotateVec);
-
-    glm::mat4 translateM = glm::mat4(1.0f);
-    glm::vec3 model_pos = m_position;
-    translateM = glm::translate(translateM, model_pos);
-
-    glm::mat4 model = translateM * rotateM * scaleM * glm::mat4(1.0f);
-    //glm::mat4 model = scaleM * glm::mat4(1.0f);
+    Matrix4 model = transM * rotateM * scaleM;
 
     m_shader->setMat4("model", model);
     m_shader->setMat4("view", view);
     m_shader->setMat4("projection", projection);
-    m_shader->setVec3("light_color", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shader->setVec3("light_dir", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shader->setVec3("Ka", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shader->setVec3("Kd", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shader->setVec3("Ks", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("light_color", Vector3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("light_dir", Vector3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("Ka", Vector3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("Kd", Vector3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("Ks", Vector3(1.0f, 1.0f, 1.0f));
     m_shader->setVec3("view_dir", camera->Position);
 
     m_model->Draw(*m_shader);

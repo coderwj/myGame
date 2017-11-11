@@ -48,7 +48,7 @@ public:
            GLfloat upX, GLfloat upY, GLfloat upZ,
            GLfloat yaw, GLfloat pitch);
 
-    Matrix4x3 GetViewMatrix();
+    Matrix4 GetViewMatrix();
 
     void ProcessKeyboard(CameraMove direction, GLfloat deltaTime);
 

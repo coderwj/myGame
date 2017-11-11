@@ -2,7 +2,7 @@
 #define __EULERANGLES_H__
 
 class Quaternion;
-class Matrix4x3;
+class Matrix4;
 class RotationMatrix;
 
 class EulerAngles{
@@ -19,8 +19,8 @@ public:
 	void fromObjectToInertialQuaternion(const Quaternion &q);
 	void fromInertialToObjectQuaternion(const Quaternion &q);
 
-	void fromObjectToWorldMatrix(const Matrix4x3 &m);
-	void fromWorldToObjectMatrix(const Matrix4x3 &m);
+	void fromObjectToWorldMatrix(const Matrix4 &m);
+	void fromWorldToObjectMatrix(const Matrix4 &m);
 
 	void fromRotationMatrix(const RotationMatrix &m);
 };

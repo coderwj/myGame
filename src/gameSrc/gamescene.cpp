@@ -123,15 +123,18 @@ void GameScene::renderScene()
 {
     // use the shader program
     m_shader->use();
-    Matrix4x3 projection;
-    projection.setupPerspective(m_camera->Zoom, 4.0f / 3.0f, 0.1f, 1000.0f);
-    Matrix4x3 view = m_camera->GetViewMatrix();
+    Matrix4 projection;
+    projection.initWithPerspective(m_camera->Zoom, 4.0f / 3.0f, 0.1f, 1000.0f);
+    Matrix4 view = m_camera->GetViewMatrix();
 
-    Matrix4x3 model;
-    model.identity();
-    model.setupScale(m_scale);
-    model.setupRotate(m_rotateVec, m_theta);
-    model.setTranslation(model_pos);
+    Matrix4 scaleM;
+    scaleM.initWithScale(Vector3(m_scale));
+    Matrix4 rotateM;
+    rotateM.initWithRotate(m_rotateVec, m_theta);
+    Matrix4 transM;
+    transM.initWithTranslate(Vector3(0.0f));
+
+    Matrix4 model = transM * rotateM * scaleM;
 
 
     m_shader->setMat4("model", model);

@@ -11,6 +11,7 @@ public:
 	Vector3(){}
 	Vector3(const Vector3 &v): x(v.x), y(v.y), z(v.z){}
 	Vector3(float xx, float yy, float zz): x(xx), y(yy), z(zz){}
+	Vector3(float vv): x(vv), y(vv), z(vv){}
 
 	Vector3 & operator =(const Vector3 & v){
 		x = v.x;
@@ -76,7 +77,7 @@ public:
 		return *this;
 	}
 
-	void normalize(){
+	Vector3 & normalize(){
 		float sqMod = x*x + y*y + z*z;
 		if(sqMod > 0.0f){
 			float oneOverMod = 1.0f / sqrt(sqMod);
@@ -84,6 +85,7 @@ public:
 			y *= oneOverMod;
 			z *= oneOverMod;
 		}
+		return *this;
 	}
 
 	float operator *(const Vector3 &v) const{

@@ -1,10 +1,8 @@
 #ifndef __MESH_H__
 #define __MESH_H__
 
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-
 #include "Shader.h"
+#include "Vector3.h"
 
 #include <string>
 #include <vector>
@@ -14,11 +12,11 @@
 using namespace std;
 
 struct Vertex {
-	glm::vec3 Position;
-	glm::vec3 Normal;
-	glm::vec2 TexCoords;
-	glm::vec3 Tangent;
-	glm::vec3 Bitangent;
+	Vector3 Position;
+	Vector3 Normal;
+	Vector3 TexCoords;
+	Vector3 Tangent;
+	Vector3 Bitangent;
 };
 
 struct Texture {

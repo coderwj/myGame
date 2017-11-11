@@ -114,7 +114,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene)
 	for(unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
-		glm::vec3 vector;
+		Vector3 vector;
 
 		vector.x = mesh->mVertices[i].x;
 		vector.y = mesh->mVertices[i].y;
@@ -129,17 +129,17 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene)
 			vertex.Normal = vector;
 		}
 		else
-			vertex.Normal = glm::vec3(0.0f, 0.0f, 0.0f);
+			vertex.Normal = Vector3(0.0f, 0.0f, 0.0f);
 
 		if(mesh->mTextureCoords[0])
 		{
-			glm::vec2 vec;
+			Vector3 vec = Vector3(0.0f);
 			vec.x = mesh->mTextureCoords[0][i].x;
 			vec.y = mesh->mTextureCoords[0][i].y;
 			vertex.TexCoords = vec;
 		}
 		else
-			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+			vertex.TexCoords = Vector3(0.0f);
 
 		// tangent
 		if (mesh->mTangents)
@@ -150,7 +150,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene)
 			vertex.Tangent = vector;
 		}
 		else
-			vertex.Tangent = glm::vec3(0.0f, 0.0f, 0.0f);
+			vertex.Tangent = Vector3(0.0f, 0.0f, 0.0f);
 		// bitangent
 		if (mesh->mBitangents)
 		{
@@ -160,7 +160,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene)
 			vertex.Bitangent = vector;
 		}
 		else
-			vertex.Bitangent = glm::vec3(0.0f, 0.0f, 0.0f);
+			vertex.Bitangent = Vector3(0.0f, 0.0f, 0.0f);
 
 		vertices.push_back(vertex);
 
