@@ -10,7 +10,9 @@ enum CameraMove {
     LEFT,
     RIGHT,
 	ROTATELEFT,
-	ROTATERIGHT
+	ROTATERIGHT,
+	ROTATEUP,
+	ROTATEDOWN
 };
 
 // Default camera values

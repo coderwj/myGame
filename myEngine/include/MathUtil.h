@@ -1,4 +1,4 @@
-#ifndef __MATHUTIL_H__
+﻿#ifndef __MATHUTIL_H__
 #define __MATHUTIL_H__
 
 #include<math.h>

@@ -82,7 +82,7 @@ void Matrix4::initWithPerspective(float fovy, float aspect, float zN, float zF)
     identity();
     m11 = (2.0f * zN) / (right - left);
     m22 = (2.0f * zN) / (top - bottom);
-    m33 = - (zF + zN) / (zF - zF);
+    m33 = - (zF + zN) / (zF - zN);
     m34 = -1.0f;
     m43 = -(2.0f * zF * zN) / (zF - zN);
     m44 = 0.0f;

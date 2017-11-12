@@ -1,4 +1,4 @@
-#include "glew.h"
+﻿#include "glew.h"
 #include "glfw3.h"
 
 #include "imgui.h"
@@ -121,6 +121,10 @@ void processInput(GLFWwindow *window)
         camera->ProcessKeyboard(ROTATELEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
         camera->ProcessKeyboard(ROTATERIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+		camera->ProcessKeyboard(ROTATEUP, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+		camera->ProcessKeyboard(ROTATEDOWN, deltaTime);
 }
 
 int main(){
@@ -168,8 +172,8 @@ int main(){
         pGameScene->tick(deltaTime);
 
         ImGui_ImplGlfwGL3_NewFrame();
-        ImGui::Text("Hello, world!");
-        ImGui::Render();
+        //ImGui::Text("Hello, world!");
+        //ImGui::Render();
         glfwSwapBuffers(window);
         glfwPollEvents();
 

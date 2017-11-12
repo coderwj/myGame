@@ -68,7 +68,7 @@ bool GameScene::init(){
     m_characters.push_back(character);
     if(m_mainCharacter == NULL)
         return false;
-    m_camera = new Camera(Vector3(0.0f, 0.0f, 800.0f));
+    m_camera = new Camera(Vector3(0.0f, 0.0f, 50.0f));
     //glDeleteVertexArrays(1, &vao);
     //glDeleteBuffers(1, &vbo);
 
@@ -148,7 +148,7 @@ void GameScene::renderScene()
 void GameScene::tick(float delta)
 {
 	//lua_tinker::call<void, float>(m_state, "LuaGameMgr.Tick", delta);
-	lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
+	//lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
     render();
 }
 

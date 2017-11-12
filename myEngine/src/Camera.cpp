@@ -58,6 +58,16 @@ void Camera::ProcessKeyboard(CameraMove direction, GLfloat deltaTime)
 		this->Yaw += 0.1f;
 		this->updateCameraVectors();
 	}
+	if (direction == ROTATEUP)
+	{
+		this->Pitch += 0.1f;
+		this->updateCameraVectors();
+	}
+	if (direction == ROTATEDOWN)
+	{
+		this->Pitch -= 0.1f;
+		this->updateCameraVectors();
+	}
 }
 
 void Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch)
