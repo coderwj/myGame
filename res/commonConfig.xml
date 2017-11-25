@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<commonconfig>
+  <config id="1">
+    <key>shader_test</key>
+    <value>false</value>
+  </config>
+</commonconfig>

@@ -2,6 +2,7 @@
 #define __CONFIG_H__
 
 #include <string>
+#include <unordered_map>
 
 using namespace std;
 
@@ -13,6 +14,12 @@ public:
 	static const string model_path;
 	static const string scene_path;
 	static const string lua_path;
+
+    static const unordered_map<string, string> configMap;
+
+    static void InitConfigMap();
+
+	static bool GetIsShaderTest();
 };
 
 #endif //__CONFIG_H__

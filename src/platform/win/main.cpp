@@ -6,6 +6,7 @@
 
 #include <iostream>
 
+#include "Config.h"
 #include "Gamescene.h"
 #include "Camera.h"
 
@@ -141,6 +142,8 @@ int main(){
 
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetKeyCallback(window, key_callback);
+
+    Config::InitConfigMap();
 
     ImGui_ImplGlfwGL3_Init(window, false);
 
