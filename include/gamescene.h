@@ -29,12 +29,15 @@ private:
 
 	struct lua_State * m_state;
 
+	float m_nowTime;
+
 	GameScene():
 		m_mainCharacter(NULL),
 		m_camera(NULL),
 		m_state(NULL),
 		m_scale(1.0f),
-		m_theta(0.0f)
+		m_theta(0.0f),
+		m_nowTime(0)
 	{
 		m_rotateVec = Vector3(0.0f, 1.0f, 0.0f);
 	}

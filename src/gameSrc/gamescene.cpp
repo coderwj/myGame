@@ -199,6 +199,7 @@ void GameScene::render()
 		testShader->setMat4("model", model);
 		testShader->setMat4("view", view);
 		testShader->setMat4("projection", projection);
+        testShader->setFloat("time", m_nowTime);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
@@ -248,6 +249,7 @@ void GameScene::tick(float delta)
 {
 	//lua_tinker::call<void, float>(m_state, "LuaGameMgr.Tick", delta);
 	//lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
+    m_nowTime += delta;
     render();
 }
 
