@@ -13,8 +13,8 @@ if(APPLE)
 	include_directories(../../../myEngine/lib/glew/mac/include)
 	include_directories(../../../myEngine/lib/glfw/mac/include)
 
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glew/mac/lib)
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glfw/mac/lib)
+	# link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glew/mac/lib)
+	# link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glfw/mac/lib)
 endif()
 
 if(WIN32)
