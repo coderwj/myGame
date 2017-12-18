@@ -33,7 +33,7 @@ void lua_tinker::init(lua_State *L)
 static int tostring_s64(lua_State *L)
 {
 	char temp[64];
-	sprintf_s(temp, "%I64d", *(long long*)lua_topointer(L, 1));
+	sprintf(temp, "%I64d", *(long long*)lua_topointer(L, 1));
 	lua_pushstring(L, temp);
 	return 1;
 }
@@ -94,7 +94,7 @@ void lua_tinker::init_s64(lua_State *L)
 static int tostring_u64(lua_State *L)
 {
 	char temp[64];
-	sprintf_s(temp, "%I64u", *(unsigned long long*)lua_topointer(L, 1));
+	sprintf(temp, "%I64u", *(unsigned long long*)lua_topointer(L, 1));
 	lua_pushstring(L, temp);
 	return 1;
 }
@@ -242,7 +242,7 @@ void lua_tinker::print_error(lua_State *L, const char* fmt, ...)
 
 	va_list args;
 	va_start(args, fmt);
-	vsprintf_s(text, fmt, args);
+	vsprintf(text, fmt, args);
 	va_end(args);
 
 	lua_getglobal(L, "_ALERT");
