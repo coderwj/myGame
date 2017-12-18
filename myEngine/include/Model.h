@@ -3,10 +3,6 @@
 
 #include "MyEngineCore.h"
 
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
-
 #include "Mesh.h"
 #include "Shader.h"
 
@@ -15,6 +11,11 @@
 #include <vector>
 
 using namespace std;
+
+struct aiNode;
+struct aiScene;
+struct aiMesh;
+struct aiMaterial;
 
 class Model
 {
@@ -43,7 +44,7 @@ private:
 
 	Mesh processMesh(aiMesh * mesh, const aiScene * scene);
 
-	vector<Texture> loadMaterialTextures(aiMaterial * mat, aiTextureType type, string typeName);
+	vector<Texture> loadMaterialTextures(aiMaterial * mat, int type, string typeName);
 
 	unsigned int TextureFromFile(const char * path, const string &directory, bool gamma = false);
 };

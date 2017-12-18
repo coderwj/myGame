@@ -2,6 +2,6 @@
 <commonconfig>
   <config id="1">
     <key>shader_test</key>
-    <value>true</value>
+    <value>false</value>
   </config>
 </commonconfig>

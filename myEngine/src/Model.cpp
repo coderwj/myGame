@@ -4,13 +4,16 @@
 #include "stb_image.h"
 
 #include "Model.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
 
 
 unsigned int Model::TextureFromFile(const char * path, const string &directory, bool gamma)
 {
 	string filename = string(path);
 	filename = directory + "/" + filename;
-	unsigned int textureID;
+	unsigned int textureID = 0;
 
 	int width, height, nrComponents;
 	unsigned char * data = stbi_load(filename.c_str(), &width, &height, &nrComponents, STBI_default);
@@ -47,17 +50,17 @@ unsigned int Model::TextureFromFile(const char * path, const string &directory, 
 	return textureID;
 }
 
-vector<Texture> Model::loadMaterialTextures(aiMaterial * mat, aiTextureType type, string typeName)
+vector<Texture> Model::loadMaterialTextures(aiMaterial * mat, int type, string typeName)
 {
 	vector<Texture> textures;
-	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+	for (unsigned int i = 0; i < mat->GetTextureCount(aiTextureType(type)); i++)
 	{
 		aiString str;
-		mat->GetTexture(type, i, &str);
+		mat->GetTexture(aiTextureType(type), i, &str);
 		bool skip = false;
 		for (unsigned int j = 0; j < m_texturesLoaded.size(); j++)
 		{
-			if (strcmp(m_texturesLoaded[j].path.C_Str(), str.C_Str()) == 0)
+			if (strcmp(m_texturesLoaded[j].path.c_str(), str.C_Str()) == 0)
 			{
 				textures.push_back(m_texturesLoaded[j]);
 				skip = true;
@@ -69,7 +72,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial * mat, aiTextureType type
 			Texture texture;
 			texture.id = TextureFromFile(str.C_Str(), this->m_directory);
 			texture.type = typeName;
-			texture.path = str;
+			texture.path = str.C_Str();
 			textures.push_back(texture);
 			m_texturesLoaded.push_back(texture);
 		}

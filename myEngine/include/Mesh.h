@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "Vector3.h"
 
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -22,7 +23,7 @@ struct Vertex {
 struct Texture {
 	unsigned int id;
 	string type;
-	aiString path;
+	string path;
 };
 
 class Mesh {

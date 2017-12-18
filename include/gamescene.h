@@ -34,9 +34,9 @@ private:
 	GameScene():
 		m_mainCharacter(NULL),
 		m_camera(NULL),
-		m_state(NULL),
 		m_scale(1.0f),
 		m_theta(0.0f),
+        m_state(NULL),
 		m_nowTime(0)
 	{
 		m_rotateVec = Vector3(0.0f, 1.0f, 0.0f);

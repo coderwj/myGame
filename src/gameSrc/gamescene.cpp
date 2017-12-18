@@ -306,7 +306,8 @@ void GameScene::loadScene(string scenename)
     }
     if(vs_name == "" || fs_name == "")
     {
-        assert(true);
+        return;
+        //assert(true);
     }
     string vs_path = Config::engine_res_path + "shader/" + vs_name;
     string fs_path = Config::engine_res_path + "shader/" + fs_name;

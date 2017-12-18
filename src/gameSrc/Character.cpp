@@ -11,8 +11,8 @@
 using namespace std;
 
 Character::Character():
-m_model(NULL),
 m_modelName(""),
+m_model(NULL),
 m_scale(1.0f),
 m_theta(0.0f)
 {
@@ -88,7 +88,8 @@ bool Character::init(string modelName, Vector3 position, Vector3 orientation)
     }
     if(vs_name == "" || fs_name == "")
     {
-        assert(true);
+        return false;
+        //assert(true);
     }
     string vs_path = Config::engine_res_path + "shader/" + vs_name;
     string fs_path = Config::engine_res_path + "shader/" + fs_name;

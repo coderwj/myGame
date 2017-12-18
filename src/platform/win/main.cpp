@@ -16,7 +16,8 @@
     #include <Windows.h>
     #define sleepFunction(t) Sleep(t)
 #else
-    #define sleepFunction(t)
+    #include <unistd.h>
+    #define sleepFunction(t) usleep(t)
 #endif
 
 static GLFWwindow * window = NULL;
