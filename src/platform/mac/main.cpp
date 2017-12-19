@@ -17,7 +17,7 @@
     #define sleepFunction(t) Sleep(t)
 #else
     #include <unistd.h>
-    #define sleepFunction(t) usleep(t)
+    #define sleepFunction(t) usleep((t) * 1000)
 #endif
 
 static GLFWwindow * window = NULL;

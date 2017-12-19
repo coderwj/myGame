@@ -135,10 +135,10 @@ void Character::render()
     m_shader->setMat4("projection", projection);
     m_shader->setVec3("light_color", Vector3(1.0f, 1.0f, 1.0f));
     m_shader->setVec3("light_dir", Vector3(1.0f, 1.0f, 1.0f));
-    m_shader->setVec3("Ka", Vector3(1.0f, 1.0f, 1.0f));
+    m_shader->setVec3("Ka", Vector3(0.2f, 0.2f, 0.2f));
     m_shader->setVec3("Kd", Vector3(1.0f, 1.0f, 1.0f));
     m_shader->setVec3("Ks", Vector3(1.0f, 1.0f, 1.0f));
-    m_shader->setVec3("view_dir", camera->Position);
+    m_shader->setVec3("view_pos", camera->Position);
 
     m_model->Draw(*m_shader);
     m_shader->disuse();

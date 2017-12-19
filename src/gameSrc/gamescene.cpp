@@ -247,8 +247,7 @@ void GameScene::renderScene()
 
 void GameScene::tick(float delta)
 {
-	//lua_tinker::call<void, float>(m_state, "LuaGameMgr.Tick", delta);
-	//lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
+	lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
     m_nowTime += delta;
     render();
 }
