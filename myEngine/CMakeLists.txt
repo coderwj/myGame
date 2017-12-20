@@ -8,6 +8,7 @@ project(myEngine)
 
 add_subdirectory(lib/tinyxml2)
 add_subdirectory(lib/imgui)
+add_subdirectory(lib/ozz-animation)
 
 include_directories(./include)
 include_directories(./lib/glm/glm)
@@ -59,19 +60,21 @@ if(APPLE)
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/mac/lib/libglfw3.a
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib/libGLEW.a
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/mac/lib/libassimp.dylib
-		imgui)
+		imgui
+		ozz_animation)
 endif()
 
 if(WIN32)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/common)
 
 	target_link_libraries(myEngine
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/common/OpenGL32.Lib
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib/glfw3.lib
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32.lib
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32s.lib
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib
-	imgui)
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/common/OpenGL32.Lib
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib/glfw3.lib
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32.lib
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32s.lib
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib
+		imgui
+		ozz_animation)
 endif()
 
-add_dependencies(myEngine imgui)
+add_dependencies(myEngine imgui tinyxml2 ozz_animation)
