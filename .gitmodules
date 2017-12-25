@@ -1,0 +1,3 @@
+[submodule "myEngine/lib/ozz-animation"]
+	path = myEngine/lib/ozz-animation
+	url = https://coderwj@github.com/guillaumeblanc/ozz-animation.git
