@@ -1,18 +1,18 @@
-LuaGameMgr = {}
+LuaUiMgr = {}
 
-LuaGameMgr.m_time = 0
+LuaUiMgr.m_time = 0
 
 function InitGame()
-    print("----LuaGameMgr.InitGame----")
+    print("----LuaUiMgr.InitGame----")
 end
 
-function LuaGameMgr.InitGame()
-    print("----LuaGameMgr.InitGame----")
+function LuaUiMgr.InitGame()
+    print("----LuaUiMgr.InitGame----")
 end
 
-function LuaGameMgr.Tick(delta)
-    LuaGameMgr.m_time = LuaGameMgr.m_time + delta
-    print("----LuaGameMgr.Tick----".. LuaGameMgr.m_time)
+function LuaUiMgr.Tick(delta)
+    LuaUiMgr.m_time = LuaUiMgr.m_time + delta
+    print("----LuaUiMgr.Tick----".. LuaUiMgr.m_time)
 end
 
-return LuaGameMgr
+return LuaUiMgr
