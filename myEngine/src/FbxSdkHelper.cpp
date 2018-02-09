@@ -51,7 +51,7 @@ void PrintAttribute(FbxNodeAttribute* pAttribute) {
     FbxString attrName = pAttribute->GetName();
     PrintTabs();
     // Note: to retrieve the character array of a FbxString, use its Buffer() method.
-    printf("\nname:%s,%s", typeName.Buffer(), attrName.Buffer());
+    printf("name:%s,%s\n", typeName.Buffer(), attrName.Buffer());
 }
 
 /**
@@ -65,7 +65,7 @@ void PrintNode(FbxNode* pNode) {
     FbxDouble3 scaling = pNode->LclScaling.Get();
 
     // Print the contents of the node.
-    printf("\n%s:%f,%f,%f,%f,%f,%f,%f,%f,%f",
+    printf("%s:%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
         nodeName,
         translation[0], translation[1], translation[2],
         rotation[0], rotation[1], rotation[2],
