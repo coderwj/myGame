@@ -9,7 +9,7 @@ end
 
 function LuaGameMgr.Tick(delta)
     LuaGameMgr.m_time = LuaGameMgr.m_time + delta
-    print("----LuaGameMgr.Tick----".. LuaGameMgr.m_time)
+    --print("----LuaGameMgr.Tick----".. LuaGameMgr.m_time)
     LuaUiMgr.Tick(delta)
 end
 

@@ -6,6 +6,10 @@ message("--->Cmake myGame--->")
 # Set projectname
 project(myGame)
 
+# if(NOT DEFINED ENV{ENGINE_PATH})
+#     message(FATAL_ERROR "can't find ENGINE_PATH")
+# endif()
+
 if(WIN32)
 
 	set(CMAKE_CONFIGURATION_TYPES Debug Release)

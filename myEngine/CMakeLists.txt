@@ -29,10 +29,21 @@ if(WIN32)
 	include_directories(./lib/glew/win32/include)
 	include_directories(./lib/glfw/win32/include)
 	include_directories(./lib/assimp/win32/include)
+	include_directories(./lib/fbxsdk/win32/include)
 
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/win32/lib)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib)
+	set(WINDOWS_PLATTYPE .)
+	if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+		set(WINDOWS_PLATTYPE x86)
+		link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/x86/debug)
+	elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		set(WINDOWS_PLATTYPE x64)
+		link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/x64/debug)
+		# message("${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/x64/${CMAKE_BUILD_TYPE}")
+	endif()
+	message("WINDOWS_PLATTYPE----------------->${WINDOWS_PLATTYPE}")
 endif()
 
 
@@ -73,6 +84,7 @@ if(WIN32)
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32.lib
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/win32/lib/glew32s.lib
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/${WINDOWS_PLATTYPE}/debug/libfbxsdk.lib
 		imgui
 		ozz_animation)
 endif()

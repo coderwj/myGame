@@ -18,6 +18,8 @@
 #include "Model.h"
 #include "tinyxml2.h"
 
+#include "FbxSdkHelper.h"
+
 extern "C"
 {
 #include "lua.h"
@@ -49,6 +51,9 @@ bool GameScene::init(){
 	{
 		return true;
 	}
+
+    string fbxFile = Config::model_path + "character2/Maskboy.FBX";
+    printFbxFileData(fbxFile.c_str());
 
     string modelname = "scene_3";
     loadScene(modelname);
