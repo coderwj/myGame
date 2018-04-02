@@ -8,7 +8,6 @@ set(DEVELOPMENT_PROJECT_NAME "myGame_project")                  # <== Set to you
 set(DEVELOPMENT_TEAM_ID "coderwj")                       # <== Set to your team ID from Apple
 set(APP_NAME "myGame")                                     # <== Set To your app's name
 set(APP_BUNDLE_IDENTIFIER "com.coderwj.app")                # <== Set to your app's bundle identifier
-set(FRAMEWORK_NAME "FooBar")                                # <== Set to your framework's name
 set(FRAMEWORK_BUNDLE_IDENTIFIER "com.coderwj.framework")    # <== Set to your framework's bundle identifier (cannot be the same as app bundle identifier)
 set(CODE_SIGN_IDENTITY "iPhone Developer")                  # <== Set to your preferred code sign identity, to see list:
 set(DEPLOYMENT_TARGET 8.0)                                  # <== Set your deployment target version of iOS
@@ -133,7 +132,7 @@ target_link_libraries(${APP_NAME} ${SYSTEMCONFIGURATION})
 
 # Link the framework to the app
 set_target_properties(${APP_NAME} PROPERTIES
-                      XCODE_ATTRIBUTE_OTHER_LDFLAGS "${XCODE_ATTRIBUTE_OTHER_LDFLAGS} -framework ${FRAMEWORK_NAME}"
+                      XCODE_ATTRIBUTE_OTHER_LDFLAGS "${XCODE_ATTRIBUTE_OTHER_LDFLAGS}"
 )
 
 # Turn on ARC
@@ -160,17 +159,17 @@ set_target_properties(${APP_NAME} PROPERTIES
 # Include framework headers, needed to make "Build" Xcode action work.
 # "Archive" works fine just relying on default search paths as it has different
 # build product output directory.
-target_include_directories(${APP_NAME} PUBLIC
-    "${PROJECT_BINARY_DIR}/cppframework/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${FRAMEWORK_NAME}.framework"
-)
+# target_include_directories(${APP_NAME} PUBLIC
+#     "${PROJECT_BINARY_DIR}/cppframework/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${FRAMEWORK_NAME}.framework"
+# )
 
 # Set the app's linker search path to the default location on iOS
-set_target_properties(
-    ${APP_NAME}
-    PROPERTIES
-    XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS
-    "@executable_path/Frameworks"
-)
+# set_target_properties(
+#     ${APP_NAME}
+#     PROPERTIES
+#     XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS
+#     "@executable_path/Frameworks"
+# )
 
 # Note that commands below are indented just for readability. They will endup as
 # one liners after processing and unescaped ; will disappear so \; are needed.
@@ -178,90 +177,3 @@ set_target_properties(
 # \&\>/dev/null makes sure that failure of one command and success of other
 # is not printed and does not make Xcode complain that /bin/sh failed and build
 # continued.
-
-# Create Frameworks directory in app bundle
-add_custom_command(
-    TARGET
-    ${APP_NAME}
-    POST_BUILD COMMAND /bin/sh -c
-    \"COMMAND_DONE=0 \;
-    if ${CMAKE_COMMAND} -E make_directory
-        ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks
-        \&\>/dev/null \; then
-        COMMAND_DONE=1 \;
-    fi \;
-    if ${CMAKE_COMMAND} -E make_directory
-        \${BUILT_PRODUCTS_DIR}/${APP_NAME}.app/Frameworks
-        \&\>/dev/null \; then
-        COMMAND_DONE=1 \;
-    fi \;
-    if [ \\$$COMMAND_DONE -eq 0 ] \; then
-        echo Failed to create Frameworks directory in app bundle \;
-        exit 1 \;
-    fi\"
-)
-
-# Copy the framework into the app bundle
-add_custom_command(
-    TARGET
-    ${APP_NAME}
-    POST_BUILD COMMAND /bin/sh -c
-    \"COMMAND_DONE=0 \;
-    if ${CMAKE_COMMAND} -E copy_directory
-        ${PROJECT_BINARY_DIR}/cppframework/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/
-        ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks
-        \&\>/dev/null \; then
-        COMMAND_DONE=1 \;
-    fi \;
-    if ${CMAKE_COMMAND} -E copy_directory
-        \${BUILT_PRODUCTS_DIR}/${FRAMEWORK_NAME}.framework
-        \${BUILT_PRODUCTS_DIR}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
-        \&\>/dev/null \; then
-        COMMAND_DONE=1 \;
-    fi \;
-    if [ \\$$COMMAND_DONE -eq 0 ] \; then
-        echo Failed to copy the framework into the app bundle \;
-        exit 1 \;
-    fi\"
-)
-
-# Codesign the framework in it's new spot
-add_custom_command(
-    TARGET
-    ${APP_NAME}
-    POST_BUILD COMMAND /bin/sh -c
-    \"COMMAND_DONE=0 \;
-    if codesign --force --verbose
-        ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
-        --sign ${CODE_SIGN_IDENTITY}
-        \&\>/dev/null \; then
-        COMMAND_DONE=1 \;
-    fi \;
-    if codesign --force --verbose
-        \${BUILT_PRODUCTS_DIR}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
-        --sign ${CODE_SIGN_IDENTITY}
-        \&\>/dev/null \; then
-        COMMAND_DONE=1 \;
-    fi \;
-    if [ \\$$COMMAND_DONE -eq 0 ] \; then
-        echo Framework codesign failed \;
-        exit 1 \;
-    fi\"
-)
-
-# Add a "PlugIns" folder as a kludge fix for how the XcTest package generates paths
-add_custom_command(
-    TARGET
-    ${APP_NAME}
-    POST_BUILD COMMAND /bin/sh -c
-    \"COMMAND_DONE=0 \;
-    if ${CMAKE_COMMAND} -E make_directory
-        ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/PlugIns
-        \&\>/dev/null \; then
-        COMMAND_DONE=1 \;
-    fi \;
-    if [ \\$$COMMAND_DONE -eq 0 ] \; then
-        echo Failed to create PlugIns directory in EFFECTIVE_PLATFORM_NAME folder. \;
-        exit 1 \;
-    fi\"
-)
