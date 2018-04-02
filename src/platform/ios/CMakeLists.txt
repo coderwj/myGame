@@ -1,7 +1,9 @@
 cmake_minimum_required (VERSION 3.7)
 
-set(DCMAKE_TOOLCHAIN_FILE ./ios.cmake)
-set(DIOS_PLATFORM OS)
+message("--->Cmake ios--->" ${CMAKE_MODULE_PATH})
+INCLUDE(ios)
+
+set(IOS_PLATFORM OS)
 set(DEVELOPMENT_PROJECT_NAME "myGame_project")                  # <== Set to your project name, e.g. project.xcodeproj
 set(DEVELOPMENT_TEAM_ID "coderwj")                       # <== Set to your team ID from Apple
 set(APP_NAME "myGame")                                     # <== Set To your app's name
@@ -87,9 +89,33 @@ add_executable(
 #   PUBLIC ${PROJECT_SOURCE_DIR}/framework/include
 # )
 
-# Build the C++ dynamically linked framework
-add_subdirectory(cppframework)
-add_dependencies(${APP_NAME} ${FRAMEWORK_NAME})
+# We require CMake >= 2.8
+
+include_directories(../../../include)
+include_directories(../../../myEngine/include)
+
+include_directories(../../../myEngine/lib/glm/glm)
+include_directories(../../../myEngine/lib/imgui)
+
+if(APPLE)
+  include_directories(../../../myEngine/lib/glew/mac/include)
+  include_directories(../../../myEngine/lib/glfw/mac/include)
+
+  link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glew/mac/lib)
+  link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glfw/mac/lib)
+endif()
+
+if(WIN32)
+  include_directories(../../../myEngine/lib/glew/win32/include)
+  include_directories(../../../myEngine/lib/glfw/win32/include)
+
+  link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glew/win32/lib)
+  link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glfw/win32/lib)
+endif()
+
+target_link_libraries(${APP_NAME} GameSrc myEngine)
+
+add_dependencies(${APP_NAME} GameSrc myEngine)
 
 # Locate system libraries on iOS
 find_library(UIKIT UIKit PATHS ENV PATH)

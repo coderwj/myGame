@@ -16,8 +16,8 @@ endif (CMAKE_UNAME)
 
 # Force the compilers to Clang for iOS
 include (CMakeForceCompiler)
-set(CMAKE_C_COMPILER /usr/bin/clang Clang)
-set(CMAKE_CXX_COMPILER /usr/bin/clang++ Clang)
+set(CMAKE_C_COMPILER "/usr/bin/clang")
+set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 set(CMAKE_AR ar CACHE FILEPATH "" FORCE)
 
 # Skip the platform compiler checks for cross compiling
@@ -108,7 +108,7 @@ set (CMAKE_IOS_DEVELOPER_ROOT ${CMAKE_IOS_DEVELOPER_ROOT} CACHE PATH "Location o
 # Find and use the most recent iOS sdk unless specified manually with CMAKE_IOS_SDK_ROOT
 if (NOT DEFINED CMAKE_IOS_SDK_ROOT)
 	file (GLOB _CMAKE_IOS_SDKS "${CMAKE_IOS_DEVELOPER_ROOT}/SDKs/*")
-	if (_CMAKE_IOS_SDKS) 
+	if (_CMAKE_IOS_SDKS)
 		list (SORT _CMAKE_IOS_SDKS)
 		list (REVERSE _CMAKE_IOS_SDKS)
 		list (GET _CMAKE_IOS_SDKS 0 CMAKE_IOS_SDK_ROOT)
@@ -122,7 +122,7 @@ set (CMAKE_IOS_SDK_ROOT ${CMAKE_IOS_SDK_ROOT} CACHE PATH "Location of the select
 # Set the sysroot default to the most recent SDK
 set (CMAKE_OSX_SYSROOT ${CMAKE_IOS_SDK_ROOT} CACHE PATH "Sysroot used for iOS support")
 
-# set the architecture for iOS 
+# set the architecture for iOS
 if (IOS_PLATFORM STREQUAL "OS")
     set (IOS_ARCH armv7 armv7s arm64)
 elseif (IOS_PLATFORM STREQUAL "SIMULATOR")

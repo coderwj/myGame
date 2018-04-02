@@ -9,6 +9,7 @@ project(myGame)
 # if(NOT DEFINED ENV{ENGINE_PATH})
 #     message(FATAL_ERROR "can't find ENGINE_PATH")
 # endif()
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/scriptAndTools/cmake)
 
 if(WIN32)
 
