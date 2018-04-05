@@ -8,7 +8,6 @@ project(myEngine)
 
 add_subdirectory(lib/tinyxml2)
 add_subdirectory(lib/imgui)
-add_subdirectory(lib/ozz-animation)
 
 include_directories(./include)
 include_directories(./lib/glm/glm)
@@ -55,27 +54,41 @@ SET_TARGET_PROPERTIES(myEngine PROPERTIES LINKER_LANGUAGE CPP)
 
 if(APPLE)
 
-	FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
-	message("--------find OPENGL_LIBRARY--->" ${OPENGL_LIBRARY})
+	if(IOS)
+		message("myEngine---------------choose ios -------")
+		target_link_libraries(myEngine
+			${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/mac/lib/libglfw3.a
+			${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib/libGLEW.a
+			${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/mac/lib/libassimp.dylib
+			imgui)
+		add_dependencies(myEngine imgui tinyxml2)
+	else()
+		add_subdirectory(lib/ozz-animation)
+		message("myEngine---------------choose mac -------")
+		FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
+		message("--------find OPENGL_LIBRARY--->" ${OPENGL_LIBRARY})
 
-	FIND_LIBRARY(COCOA_LIBRARY Cocoa)
-	message("--------find COCOA_LIBRARY--->" ${COCOA_LIBRARY})
+		FIND_LIBRARY(COCOA_LIBRARY Cocoa)
+		message("--------find COCOA_LIBRARY--->" ${COCOA_LIBRARY})
 
-	FIND_LIBRARY(IOKIT_LIBRARY IOKit)
-	message("--------find IOKIT_LIBRARY--->" ${IOKIT_LIBRARY})
+		FIND_LIBRARY(IOKIT_LIBRARY IOKit)
+		message("--------find IOKIT_LIBRARY--->" ${IOKIT_LIBRARY})
 
-	FIND_LIBRARY(COREVIDEO_LIBRARY CoreVideo)
-	message("--------find COREVIDEO_LIBRARY--->" ${COREVIDEO_LIBRARY})
+		FIND_LIBRARY(COREVIDEO_LIBRARY CoreVideo)
+		message("--------find COREVIDEO_LIBRARY--->" ${COREVIDEO_LIBRARY})
 
-	target_link_libraries(myEngine ${OPENGL_LIBRARY} ${COCOA_LIBRARY} ${IOKIT_LIBRARY} ${COREVIDEO_LIBRARY}
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/mac/lib/libglfw3.a
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib/libGLEW.a
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/mac/lib/libassimp.dylib
-		imgui
-		ozz_animation)
+		target_link_libraries(myEngine ${OPENGL_LIBRARY} ${COCOA_LIBRARY} ${IOKIT_LIBRARY} ${COREVIDEO_LIBRARY}
+			${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/mac/lib/libglfw3.a
+			${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib/libGLEW.a
+			${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/mac/lib/libassimp.dylib
+			imgui
+			ozz_animation)
+		add_dependencies(myEngine imgui tinyxml2 ozz_animation)
+	endif()
 endif()
 
 if(WIN32)
+	add_subdirectory(lib/ozz-animation)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/common)
 
 	target_link_libraries(myEngine
@@ -87,6 +100,6 @@ if(WIN32)
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/${WINDOWS_PLATTYPE}/debug/libfbxsdk.lib
 		imgui
 		ozz_animation)
+	add_dependencies(myEngine imgui tinyxml2 ozz_animation)
 endif()
 
-add_dependencies(myEngine imgui tinyxml2 ozz_animation)
