@@ -4,6 +4,9 @@ set (UNIX True)
 set (APPLE True)
 set (IOS True)
 
+message ("---------------ios.cmake---------start")
+
+
 # Required as of cmake 2.8.10
 set (CMAKE_OSX_DEPLOYMENT_TARGET "" CACHE STRING "Force unset of the deployment target for iOS" FORCE)
 
@@ -172,3 +175,5 @@ macro (find_host_package)
 	set (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 	set (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 endmacro (find_host_package)
+
+message ("---------------ios.cmake---------end")

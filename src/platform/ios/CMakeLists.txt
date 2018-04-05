@@ -1,11 +1,10 @@
 cmake_minimum_required (VERSION 3.7)
 
 message("--->Cmake ios--->" ${CMAKE_MODULE_PATH})
+set(IOS_PLATFORM SIMULATOR64)
 INCLUDE(ios)
-
-set(IOS_PLATFORM OS)
 set(DEVELOPMENT_PROJECT_NAME "myGame_project")                  # <== Set to your project name, e.g. project.xcodeproj
-set(DEVELOPMENT_TEAM_ID "coderwj")                       # <== Set to your team ID from Apple
+set(DEVELOPMENT_TEAM_ID "1019139374@qq.com")                       # <== Set to your team ID from Apple
 set(APP_NAME "myGame")                                     # <== Set To your app's name
 set(APP_BUNDLE_IDENTIFIER "com.coderwj.app")                # <== Set to your app's bundle identifier
 set(FRAMEWORK_BUNDLE_IDENTIFIER "com.coderwj.framework")    # <== Set to your framework's bundle identifier (cannot be the same as app bundle identifier)
