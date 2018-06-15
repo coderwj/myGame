@@ -1,15 +1,19 @@
 #include "FbxSdkHelper.h"
 #include <fbxsdk.h>
+#include "StringDef.h"
+#include "HelperFunc.h"
 
 /* Tab character ("\t") counter */
 int numTabs = 0;
 
+#define BUFF_SIZE 40000
+
 /**
  * Print the required number of tabs.
  */
-void PrintTabs() {
+void PrintTabs(char * buff) {
     for(int i = 0; i < numTabs; i++)
-        printf("\t");
+        eml::sprintf(buff, BUFF_SIZE, "%s\t", buff);
 }
 
 /**
@@ -44,28 +48,29 @@ FbxString GetAttributeTypeName(FbxNodeAttribute::EType type) {
 /**
  * Print an attribute.
  */
-void PrintAttribute(FbxNodeAttribute* pAttribute) {
+void PrintAttribute(FbxNodeAttribute* pAttribute, char* buff) {
     if(!pAttribute) return;
 
     FbxString typeName = GetAttributeTypeName(pAttribute->GetAttributeType());
     FbxString attrName = pAttribute->GetName();
-    PrintTabs();
+    PrintTabs(buff);
     // Note: to retrieve the character array of a FbxString, use its Buffer() method.
-    printf("name:%s,%s\n", typeName.Buffer(), attrName.Buffer());
+    eml::sprintf(buff, BUFF_SIZE, "%sname:%s,%s\n", buff, typeName.Buffer(), attrName.Buffer());
 }
 
 /**
  * Print a node, its attributes, and all its children recursively.
  */
-void PrintNode(FbxNode* pNode) {
-    PrintTabs();
+void PrintNode(FbxNode* pNode, char* buff) {
+    PrintTabs(buff);
     const char* nodeName = pNode->GetName();
     FbxDouble3 translation = pNode->LclTranslation.Get();
     FbxDouble3 rotation = pNode->LclRotation.Get();
     FbxDouble3 scaling = pNode->LclScaling.Get();
 
     // Print the contents of the node.
-    printf("%s:%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
+    eml::sprintf(buff, BUFF_SIZE,"%s%s:%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
+		buff,
         nodeName,
         translation[0], translation[1], translation[2],
         rotation[0], rotation[1], rotation[2],
@@ -75,15 +80,15 @@ void PrintNode(FbxNode* pNode) {
 
     // Print the node's attributes.
     for(int i = 0; i < pNode->GetNodeAttributeCount(); i++)
-        PrintAttribute(pNode->GetNodeAttributeByIndex(i));
+        PrintAttribute(pNode->GetNodeAttributeByIndex(i), buff);
 
     // Recursively print the children.
     for(int j = 0; j < pNode->GetChildCount(); j++)
-        PrintNode(pNode->GetChild(j));
+        PrintNode(pNode->GetChild(j), buff);
 
     numTabs--;
-    PrintTabs();
-    printf("\n");
+    PrintTabs(buff);
+	eml::sprintf(buff, BUFF_SIZE, "%s\n", buff);
 }
 
 void printFbxFileData(const char* fileName)
@@ -98,12 +103,12 @@ void printFbxFileData(const char* fileName)
     // Create an importer using the SDK manager.
     FbxImporter* lImporter = FbxImporter::Create(lSdkManager,"");
 
-    freopen("../../../../../log.txt", "w", stdout);
+	char buff[BUFF_SIZE] = {0};
 
     // Use the first argument as the filename for the importer.
     if(!lImporter->Initialize(fileName, -1, lSdkManager->GetIOSettings())) {
-        printf("Call to FbxImporter::Initialize() failed.\n");
-        printf("Error returned: %s\n\n", lImporter->GetStatus().GetErrorString());
+        eml::sprintf(buff, BUFF_SIZE, "%sCall to FbxImporter::Initialize() failed.\n", buff);
+		eml::sprintf(buff, BUFF_SIZE, "%sError returned: %s\n\n", buff, lImporter->GetStatus().GetErrorString());
         exit(-1);
     }
 
@@ -122,10 +127,11 @@ void printFbxFileData(const char* fileName)
     FbxNode* lRootNode = lScene->GetRootNode();
     if(lRootNode) {
         for(int i = 0; i < lRootNode->GetChildCount(); i++)
-            PrintNode(lRootNode->GetChild(i));
+            PrintNode(lRootNode->GetChild(i), buff);
     }
     // Destroy the SDK manager and all the other objects it was handling.
     lSdkManager->Destroy();
-    fclose(stdout);
+
+	HelperFunc::WriteToFile("../../../../../log.txt", buff);
 }
 
