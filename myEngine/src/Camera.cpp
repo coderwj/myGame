@@ -50,22 +50,22 @@ void Camera::ProcessKeyboard(CameraMove direction, GLfloat deltaTime)
         this->Position += this->Right * velocity;
 	if (direction == ROTATELEFT)
 	{
-		this->Yaw -= 0.1f;
+		this->Yaw -= 0.02f;
 		this->updateCameraVectors();
 	}
 	if (direction == ROTATERIGHT)
 	{
-		this->Yaw += 0.1f;
+		this->Yaw += 0.02f;
 		this->updateCameraVectors();
 	}
 	if (direction == ROTATEUP)
 	{
-		this->Pitch += 0.1f;
+		this->Pitch += 0.02f;
 		this->updateCameraVectors();
 	}
 	if (direction == ROTATEDOWN)
 	{
-		this->Pitch -= 0.1f;
+		this->Pitch -= 0.02f;
 		this->updateCameraVectors();
 	}
 }
