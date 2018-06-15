@@ -1,7 +1,7 @@
 ﻿#ifndef __MATHUTIL_H__
 #define __MATHUTIL_H__
 
-#include<math.h>
+#include<cmath>
 
 const float kPi = 3.14159265f;
 const float k2Pi = kPi * 2.0f;

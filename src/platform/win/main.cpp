@@ -186,8 +186,8 @@ int main(){
 
         double runTime = glfwGetTime() - currentFrame;
 
-        if(runTime * 1000 < 1.0f / FPS * 1000)
-            sleepFunction(1.0f / FPS * 1000 - runTime * 1000);
+        if(runTime < 1.0 / FPS)
+            sleepFunction(static_cast<unsigned long>(1.0 / FPS - runTime) * 1000);
     }
     ImGui_ImplGlfwGL3_Shutdown();
     glfwDestroyWindow(window);

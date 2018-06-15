@@ -1,10 +1,11 @@
 #include "HelperFunc.h"
+#include "StringDef.h"
 
 bool HelperFunc::convToWinPath(char * path)
 {
 	const unsigned int MAX_LEN = 2048;
 	char temppath[MAX_LEN] = { '\0' };
-	strncpy(temppath, path, MAX_LEN);
+	eml::strcpy(temppath, MAX_LEN, path);
 
 	char * prepath = temppath;
 	for (size_t i = 0; i < MAX_LEN; i++)
@@ -26,6 +27,6 @@ bool HelperFunc::convToWinPath(char * path)
 		prepath++;
 		path++;
 	}
-	strncpy(path, temppath, MAX_LEN);
+	eml::strcpy(path, MAX_LEN, temppath);
 	return false;
 }

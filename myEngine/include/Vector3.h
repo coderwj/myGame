@@ -1,7 +1,7 @@
 #ifndef __VECTOR3_H__
 #define __VECTOR3_H__
 
-#include <math.h>
+#include <cmath>
 
 class Vector3
 {
