@@ -45,27 +45,27 @@ void Camera::ProcessKeyboard(CameraMove direction, GLfloat deltaTime)
     if (direction == BACKWARD)
         this->Position -= this->Up * velocity;
     if (direction == LEFT)
-        this->Position -= this->Right * velocity;
+        this->Position -= this->Right * velocity * 2.f;
     if (direction == RIGHT)
-        this->Position += this->Right * velocity;
+        this->Position += this->Right * velocity * 2.f;
 	if (direction == ROTATELEFT)
 	{
-		this->Yaw -= 0.02f;
+		this->Yaw -= 0.03f;
 		this->updateCameraVectors();
 	}
 	if (direction == ROTATERIGHT)
 	{
-		this->Yaw += 0.02f;
+		this->Yaw += 0.03f;
 		this->updateCameraVectors();
 	}
 	if (direction == ROTATEUP)
 	{
-		this->Pitch += 0.02f;
+		this->Pitch += 0.03f;
 		this->updateCameraVectors();
 	}
 	if (direction == ROTATEDOWN)
 	{
-		this->Pitch -= 0.02f;
+		this->Pitch -= 0.03f;
 		this->updateCameraVectors();
 	}
 }
@@ -91,12 +91,8 @@ void Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean co
 
 void Camera::ProcessMouseScroll(GLfloat yoffset)
 {
-    if (this->Zoom >= 1.0f && this->Zoom <= 45.0f)
-        this->Zoom -= yoffset;
-    if (this->Zoom <= 1.0f)
-        this->Zoom = 1.0f;
-    if (this->Zoom >= 45.0f)
-        this->Zoom = 45.0f;
+	GLfloat velocity = this->MovementSpeed * yoffset;
+	this->Position += this->Front * velocity * 0.2f;
 }
 
 void Camera::updateCameraVectors()
