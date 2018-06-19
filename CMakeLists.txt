@@ -12,17 +12,12 @@ project(myGame)
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/scriptAndTools/cmake)
 
 if(WIN32)
-
 	set(CMAKE_CONFIGURATION_TYPES Debug Release)
-
-	set(CMAKE_CXX_FLAGS_DEBUG "/D_DEBUG /MDd /Zi")
-	set(CMAKE_C_FLAGS_DEBUG "/D_DEBUG /MDd /Zi")
-
-	set(CMAKE_CXX_FLAGS_RELEASE "/MD /D NDEBUG /Zi")
-	set(CMAKE_C_FLAGS_RELEASE "/MD /D NDEBUG /Zi")
-
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /D_DEBUG /MDd /Zi /EHsc /W3 /Od")
+	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /D_DEBUG /MDd /Zi /EHsc /W3 /Od")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /D NDEBUG /Zi /EHsc")
+	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MD /D NDEBUG /Zi /EHsc")
 endif()
-
 
 # add dependencies
 add_subdirectory(dependencies)
