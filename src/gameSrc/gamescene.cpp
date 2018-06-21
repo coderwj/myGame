@@ -245,6 +245,9 @@ void GameScene::renderScene()
     m_shader->setMat4("model", model);
     m_shader->setMat4("view", view);
     m_shader->setMat4("projection", projection);
+	m_shader->setVec3("cameraWorldPos", m_camera->Position);
+	m_shader->setVec3("fogcolor", m_fogpara.color);
+	m_shader->setVec3("fogpara", m_fogpara.start, m_fogpara.end, m_fogpara.intensity);
 
     m_model->Draw(*m_shader);
     //m_shader->disuse();
@@ -279,6 +282,18 @@ void GameScene::loadScene(string scenename)
 			float rotateY = scene_model_element->FirstChildElement("rotateY")->FloatText(1.0f);
 			float rotateZ = scene_model_element->FirstChildElement("rotateZ")->FloatText(0.0f);
 			m_rotateVec = Vector3(rotateX, rotateY, rotateZ);
+
+			tinyxml2::XMLElement* fog_element = scene_model_element->FirstChildElement("fogpara");
+			if(NULL != fog_element)
+			{
+				float red = fog_element->FirstChildElement("color")->FirstChildElement("red")->FloatText(m_fogpara.color.x);
+				float green = fog_element->FirstChildElement("color")->FirstChildElement("green")->FloatText(m_fogpara.color.y);
+				float blue = fog_element->FirstChildElement("color")->FirstChildElement("blue")->FloatText(m_fogpara.color.z);
+				m_fogpara.color = Vector3(red, green, blue);
+				m_fogpara.start = fog_element->FirstChildElement("start")->FloatText(m_fogpara.start);
+				m_fogpara.end = fog_element->FirstChildElement("end")->FloatText(m_fogpara.end);
+				m_fogpara.intensity = fog_element->FirstChildElement("intensity")->FloatText(m_fogpara.intensity);
+			}
             break;
         }
     }
@@ -317,5 +332,5 @@ void GameScene::loadScene(string scenename)
     string fs_path = Config::engine_res_path + "shader/" + fs_name;
 
     m_shader = new Shader(vs_path.c_str(), fs_path.c_str());
-
+	glCheckError();
 }

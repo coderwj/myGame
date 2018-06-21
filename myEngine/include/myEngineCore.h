@@ -9,5 +9,6 @@
 #include "MathUtil.h"
 
 #include "HelperFunc.h"
+#include "gltools.h"
 
 #endif //__MYENGINECORE_H__

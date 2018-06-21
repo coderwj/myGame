@@ -11,6 +11,13 @@ class Character;
 class Model;
 class Shader;
 
+struct FogPara{
+	Vector3 color;
+	float	start;
+	float	end;
+	float	intensity;
+};
+
 class GameScene{
 private:
 	static GameScene * gs;
@@ -31,6 +38,8 @@ private:
 
 	float m_nowTime;
 
+	struct FogPara m_fogpara;
+
 	GameScene():
 		m_mainCharacter(NULL),
 		m_camera(NULL),
@@ -40,6 +49,10 @@ private:
 		m_nowTime(0)
 	{
 		m_rotateVec = Vector3(0.0f, 1.0f, 0.0f);
+		m_fogpara.color = Vector3(1.0f, 1.0f, 1.0f);
+		m_fogpara.start = 10.f;
+		m_fogpara.end = 100.f;
+		m_fogpara.intensity = 1.f;
 	}
 
 	~GameScene(){}

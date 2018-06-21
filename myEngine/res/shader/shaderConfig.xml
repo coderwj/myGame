@@ -11,8 +11,8 @@
     <fragmentshader>texture.fs</fragmentshader>
   </material>
   <material id="3">
-    <name>common</name>
-    <vertexshader>common.vs</vertexshader>
-    <fragmentshader>common.fs</fragmentshader>
+    <name>scenecommon</name>
+    <vertexshader>scenecommon.vs</vertexshader>
+    <fragmentshader>scenecommon.fs</fragmentshader>
   </material>
 </shaderconfig>
