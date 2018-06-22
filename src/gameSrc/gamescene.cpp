@@ -61,7 +61,7 @@ bool GameScene::init(){
     m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
 
     Character * character = Character::Create("model_4");
-    character->setPosition(Vector3(0.0f, 0.0f, 0.0f));
+    character->setPosition(Vector3(18.0f, 1.0f, 11.0f));
     m_characters.push_back(character);
     if(m_mainCharacter == NULL)
         return false;
@@ -232,7 +232,7 @@ void GameScene::renderScene()
     // use the shader program
     m_shader->use();
     Matrix4 projection;
-    projection.initWithPerspective(m_camera->Zoom, 4.0f / 3.0f, 0.01f, 1000.0f);
+    projection.initWithPerspective(m_camera->Zoom, 4.0f / 3.0f, 0.1f, 1000.0f);
     Matrix4 view = m_camera->GetViewMatrix();
 
     Matrix4 scaleM;
@@ -253,7 +253,7 @@ void GameScene::renderScene()
 	m_shader->setVec3("fogpara", m_fogpara.start, m_fogpara.end, m_fogpara.intensity);
 
     m_model->Draw(*m_shader);
-    //m_shader->disuse();
+    m_shader->disuse();
 }
 
 void GameScene::tick(float delta)

@@ -2,7 +2,7 @@
 in vec2 ftexcoord;
 in float fogIntensity;
 
-layout(location = 0) out vec4 FragColor;
+out vec4 FragColor;
 
 uniform sampler2D texture_diffuse1;
 uniform vec3 fogcolor; //(r, g, b)
