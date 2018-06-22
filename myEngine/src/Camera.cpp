@@ -134,8 +134,17 @@ void Camera::SetFocusPos(Vector3 fpos)
 		else
 			this->Yaw = -90.f;
 	}
-	else
+	else if (dir.x > 0.f)
+	{
 		this->Yaw = toTheta(::atanf(dir.z / dir.x));
+	}
+	else
+	{
+		if (dir.z >= 0.f)
+			this->Yaw = 180.f + toTheta(::atanf(dir.z / dir.x));
+		else
+			this->Yaw = -180.f + toTheta(::atanf(dir.z / dir.x));
+	}
 
 	// re-calculate the Right and Up vector
 	this->Right = crossVector(this->Front, this->WorldUp).normalize();
