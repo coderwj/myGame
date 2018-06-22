@@ -24,7 +24,7 @@
     <name>model_3</name>
     <path>character3/Police.obj</path>
     <material>texture</material>
-    <scale>0.1</scale>
+    <scale>0.01</scale>
     <rotateTheta>30</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
@@ -34,7 +34,7 @@
     <name>model_4</name>
     <path>character3/Police.obj</path>
     <material>texture</material>
-    <scale>0.15</scale>
+    <scale>0.01</scale>
     <rotateTheta>-10</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>

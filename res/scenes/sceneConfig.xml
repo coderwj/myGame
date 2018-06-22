@@ -24,19 +24,19 @@
     <name>scene_3</name>
     <path>scene3/city.obj</path>
     <material>scenecommon</material>
-    <scale>0.5</scale>
+    <scale>0.1</scale>
     <rotateTheta>0.0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
     <fogpara>
       <color>
-          <red>0.0</red>
-          <green>0.2</green>
-          <blue>0.5</blue>
+          <red>0.5</red>
+          <green>0.6</green>
+          <blue>1.0</blue>
       </color>
       <start>0</start>
-      <end>400</end>
+      <end>40</end>
       <intensity>1.0</intensity>
     </fogpara>
   </scene>

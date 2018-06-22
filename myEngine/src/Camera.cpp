@@ -50,12 +50,12 @@ void Camera::ProcessKeyboard(CameraMove direction, GLfloat deltaTime)
         this->Position += this->Right * velocity * 2.f;
 	if (direction == ROTATELEFT)
 	{
-		this->Yaw -= 0.04f;
+		this->Yaw -= 0.08f;
 		this->updateCameraVectors();
 	}
 	if (direction == ROTATERIGHT)
 	{
-		this->Yaw += 0.04f;
+		this->Yaw += 0.08f;
 		this->updateCameraVectors();
 	}
 	if (direction == ROTATEUP)
@@ -103,11 +103,41 @@ void Camera::updateCameraVectors()
 {
     // Calculate the new Front vector
     Vector3 front;
-    front.x = cos(toRad(this->Yaw)) * cos(toRad(this->Pitch));
+    front.x = cos(toRad(this->Pitch)) * cos(toRad(this->Yaw));
     front.y = sin(toRad(this->Pitch));
-    front.z = sin(toRad(this->Yaw)) * cos(toRad(this->Pitch));
+    front.z = cos(toRad(this->Pitch)) * sin(toRad(this->Yaw));
     this->Front = front.normalize();
     // Also re-calculate the Right and Up vector
     this->Right = crossVector(this->Front, this->WorldUp).normalize();
     this->Up    = crossVector(this->Right, this->Front).normalize();
+}
+
+void Camera::SetFocusPos(Vector3 fpos)
+{
+	Vector3 dir = (fpos - Position).normalize();
+	if (dir == Vector3(0.f))
+		return;
+	this->Front = dir;
+
+	this->Pitch = toTheta(::asinf(dir.y));
+	if (this->Pitch > 89.0f)
+		this->Pitch = 89.0f;
+	if (this->Pitch < -89.0f)
+		this->Pitch = -89.0f;
+
+	if (fequal(dir.x, 0.f))
+	{
+		if (fequal(dir.z, 0.f))
+			this->Yaw = 0.f;
+		else if (dir.z > 0.f)
+			this->Yaw = 90.f;
+		else
+			this->Yaw = -90.f;
+	}
+	else
+		this->Yaw = toTheta(::atanf(dir.z / dir.x));
+
+	// re-calculate the Right and Up vector
+	this->Right = crossVector(this->Front, this->WorldUp).normalize();
+	this->Up = crossVector(this->Right, this->Front).normalize();
 }

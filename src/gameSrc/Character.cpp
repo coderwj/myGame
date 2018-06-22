@@ -128,7 +128,7 @@ void Character::render()
     Matrix4 transM;
     transM.initWithTranslate(m_position);
 
-    Matrix4 model = transM * rotateM * scaleM;
+    Matrix4 model = scaleM * rotateM * transM;
 
     m_shader->setMat4("model", model);
     m_shader->setMat4("view", view);

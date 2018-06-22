@@ -18,7 +18,7 @@ enum CameraMove {
 // Default camera values
 const GLfloat YAW        = -90.0f;
 const GLfloat PITCH      =  0.0f;
-const GLfloat SPEED      =  10.f;
+const GLfloat SPEED      =  2.f;
 const GLfloat SENSITIVTY =  0.1f;
 const GLfloat ZOOM       =  45.0f;
 
@@ -57,6 +57,8 @@ public:
     void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch = true);
 
     void ProcessMouseScroll(GLfloat yoffset);
+
+	void SetFocusPos(Vector3 pos);
 
 private:
     // Calculates the front vector from the Camera's (updated) Eular Angles

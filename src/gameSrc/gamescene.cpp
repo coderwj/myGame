@@ -58,14 +58,17 @@ bool GameScene::init(){
     string modelname = "scene_3";
     loadScene(modelname);
     m_mainCharacter = Character::Create("model_3");
-    m_mainCharacter->setPosition(Vector3(-2.0f, 0.0f, 0.0f));
+    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
 
     Character * character = Character::Create("model_4");
-    character->setPosition(Vector3(2.0f, 0.0f, 0.0f));
+    character->setPosition(Vector3(0.0f, 0.0f, 0.0f));
     m_characters.push_back(character);
     if(m_mainCharacter == NULL)
         return false;
-    m_camera = new Camera(Vector3(0.0f, 0.0f, 50.0f));
+	Vector3 characterPos = m_mainCharacter->getPosition();
+	Vector3 cameraPos = characterPos + Vector3(1.0f, 1.0f, 3.0f);
+    m_camera = new Camera(cameraPos);
+	m_camera->SetFocusPos(characterPos);
     //glDeleteVertexArrays(1, &vao);
     //glDeleteBuffers(1, &vbo);
 
@@ -200,7 +203,7 @@ void GameScene::render()
 		Matrix4 transM;
 		transM.initWithTranslate(Vector3(0.0f));
 
-		Matrix4 model = transM * rotateM * scaleM;
+		Matrix4 model = scaleM * rotateM * transM;
 		testShader->setMat4("model", model);
 		testShader->setMat4("view", view);
 		testShader->setMat4("projection", projection);
@@ -229,7 +232,7 @@ void GameScene::renderScene()
     // use the shader program
     m_shader->use();
     Matrix4 projection;
-    projection.initWithPerspective(m_camera->Zoom, 4.0f / 3.0f, 0.1f, 1000.0f);
+    projection.initWithPerspective(m_camera->Zoom, 4.0f / 3.0f, 0.01f, 1000.0f);
     Matrix4 view = m_camera->GetViewMatrix();
 
     Matrix4 scaleM;
@@ -239,7 +242,7 @@ void GameScene::renderScene()
     Matrix4 transM;
     transM.initWithTranslate(Vector3(0.0f));
 
-    Matrix4 model = transM * rotateM * scaleM;
+    Matrix4 model = scaleM * rotateM * transM;
 
 
     m_shader->setMat4("model", model);

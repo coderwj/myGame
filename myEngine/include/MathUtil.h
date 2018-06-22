@@ -21,11 +21,33 @@ inline float toRad(float f)
     return f / 180.0f * kPi;
 }
 
+//弧度转角度
+inline float toTheta(float f)
+{
+	return f / kPi * 180.0f;
+}
+
 //计算sin和cos
 inline void sinCos(float *resSin, float *resCos, float theta){
 	//简化版
 	*resSin = sin(theta);
 	*resCos = cos(theta);
+}
+
+//浮点数比较
+inline bool fequal(float f1, float f2, float delta = 0.00001f)
+{
+	return abs( f1 - f2) < delta;
+}
+
+inline bool fgreater(float f1, float f2, float delta = 0.00001f)
+{
+	return f1 - f2 >= delta;
+}
+
+inline bool fsmaller(float f1, float f2, float delta = 0.00001f)
+{
+	return f2 - f1 <= delta;
 }
 
 #endif //__MATHUTIL_H__
