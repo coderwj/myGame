@@ -1,1 +1,0 @@
-tolua++ -o luaClientPort.cpp ./pkgs/gamescene.pkg ./pkgs/Character.pkg

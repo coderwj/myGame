@@ -1,5 +1,6 @@
 add_subdirectory(Lua53)
 add_subdirectory(LuaTinker)
+add_subdirectory(tolua)
 
 # add_subdirectory(process)
 # add_subdirectory(zlib)

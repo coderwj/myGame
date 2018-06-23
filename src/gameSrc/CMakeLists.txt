@@ -16,6 +16,7 @@ include_directories(../../myEngine/lib/tinyxml2)
 include_directories(../../myEngine/lib/imgui)
 include_directories(../../dependencies/Lua53/src)
 include_directories(../../dependencies/LuaTinker)
+include_directories(../../dependencies/tolua)
 
 if(APPLE)
 	include_directories(../../myEngine/lib/glew/mac/include)
@@ -41,6 +42,6 @@ add_library(GameSrc STATIC ${SRC_1} ${HEAD_GAMESRC})
 
 SET(LIBRARIES myEngine)
 
-target_link_libraries(GameSrc ${LIBRARIES} tinyxml2 LuaTinker Lua53)
+target_link_libraries(GameSrc ${LIBRARIES} tinyxml2 LuaTinker Lua53 tolua)
 
-add_dependencies(GameSrc myEngine tinyxml2 LuaTinker Lua53)
+add_dependencies(GameSrc myEngine tinyxml2 LuaTinker Lua53 tolua)

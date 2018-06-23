@@ -87,6 +87,8 @@ public:
 	}
 
 	void loadScene(string scenename);
+
+	void changeScene(string scenename);
 };
 
 #endif //__GAMESCENE_H__

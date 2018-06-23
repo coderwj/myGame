@@ -12,6 +12,7 @@
 
 #include "Character.h"
 #include "Camera.h"
+#include "luaClientPort.h"
 
 #include "Config.h"
 #include "Shader.h"
@@ -42,6 +43,7 @@ bool GameScene::init(){
 	m_state = luaL_newstate();
 	luaopen_base(m_state);
 	luaL_openlibs(m_state);
+	tolua__open(m_state);
 	string luafile = Config::lua_path + "dofile.lua";
 	lua_tinker::dofile(m_state, luafile.c_str());
 
@@ -340,5 +342,20 @@ void GameScene::loadScene(string scenename)
     string fs_path = Config::engine_res_path + "shader/" + fs_name;
 
     m_shader = new Shader(vs_path.c_str(), fs_path.c_str());
-	glCheckError();
+	//glCheckError();
+}
+
+void GameScene::changeScene(string scenename)
+{
+	if (m_shader)
+	{
+		delete m_shader;
+		m_shader = NULL;
+	}
+	if (m_model)
+	{
+		delete m_model;
+		m_model = NULL;
+	}
+	loadScene(scenename);
 }
