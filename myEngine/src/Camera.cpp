@@ -3,113 +3,133 @@
 #include "MyEngineCore.h"
 #include <vector>
 
+const float NEAR_CLIP = 0.1f;
+const float FAR_CLIP = 1000.f;
+const float FOV = 45.0f;
+const float ASPECT = 1.777778f;
+const float VIEW_PORT_WIDTH = 1280.f;
 
 Camera::Camera(Vector3 position, Vector3 up, GLfloat yaw, GLfloat pitch):
-Front(Vector3(0.0f, 0.0f, -1.0f)),
-MovementSpeed(SPEED),
-MouseSensitivity(SENSITIVTY),
-Zoom(ZOOM)
+Front(Vector3(0.0f, 0.0f, -1.0f))
+, MovementSpeed(SPEED)
+, MouseSensitivity(SENSITIVTY)
+, m_nearClip(NEAR_CLIP)
+, m_farClip(FAR_CLIP)
+, m_fov(FOV)
+, m_aspect(ASPECT)
+, m_viewProtWidth(VIEW_PORT_WIDTH)
 {
-    this->Position = position;
-    this->WorldUp = up;
-    this->Yaw = yaw;
-    this->Pitch = pitch;
-    this->updateCameraVectors();
+    Position = position;
+    WorldUp = up;
+    Yaw = yaw;
+    Pitch = pitch;
+    updateCameraVectors();
 }
 
 Camera::Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch):
-Front(Vector3(0.0f, 0.0f, -1.0f)),
-MovementSpeed(SPEED),
-MouseSensitivity(SENSITIVTY),
-Zoom(ZOOM)
+Front(Vector3(0.0f, 0.0f, -1.0f))
+, MovementSpeed(SPEED)
+, MouseSensitivity(SENSITIVTY)
+, m_nearClip(NEAR_CLIP)
+, m_farClip(FAR_CLIP)
+, m_fov(FOV)
+, m_aspect(ASPECT)
+, m_viewProtWidth(VIEW_PORT_WIDTH)
 {
-    this->Position = Vector3(posX, posY, posZ);
-    this->WorldUp = Vector3(upX, upY, upZ);
-    this->Yaw = yaw;
-    this->Pitch = pitch;
-    this->updateCameraVectors();
+    Position = Vector3(posX, posY, posZ);
+    WorldUp = Vector3(upX, upY, upZ);
+    Yaw = yaw;
+    Pitch = pitch;
+    updateCameraVectors();
 }
 
-Matrix4 Camera::GetViewMatrix()
+Matrix4 Camera::GetViewMatrix() const
 {
     Matrix4 result;
-    result.initWithLookAt(this->Position, this->Position + this->Front, this->Up);
+    result.initWithLookAt(Position, Position + Front, Up);
     return result;
+}
+
+Matrix4 Camera::GetProjectMatrix() const
+{
+	Matrix4 result;
+	result.initWithPerspective(getFov(), getAspect(), getNearClip(), getFarClip());
+	return result;
 }
 
 void Camera::ProcessKeyboard(CameraMove direction, GLfloat deltaTime)
 {
-    GLfloat velocity = this->MovementSpeed * deltaTime;
+    GLfloat velocity = MovementSpeed * deltaTime;
     if (direction == FORWARD)
-        this->Position += this->Up * velocity;
+        Position += Up * velocity;
     if (direction == BACKWARD)
-        this->Position -= this->Up * velocity;
+        Position -= Up * velocity;
     if (direction == LEFT)
-        this->Position -= this->Right * velocity * 2.f;
+        Position -= Right * velocity * 2.f;
     if (direction == RIGHT)
-        this->Position += this->Right * velocity * 2.f;
+        Position += Right * velocity * 2.f;
 	if (direction == ROTATELEFT)
 	{
-		this->Yaw -= 0.08f;
-		this->updateCameraVectors();
+		Yaw -= 0.08f;
+		updateCameraVectors();
 	}
 	if (direction == ROTATERIGHT)
 	{
-		this->Yaw += 0.08f;
-		this->updateCameraVectors();
+		Yaw += 0.08f;
+		updateCameraVectors();
 	}
 	if (direction == ROTATEUP)
 	{
-		this->Pitch += 0.03f;
-		if (this->Pitch > 89.f)
-			this->Pitch = 89.f;
-		this->updateCameraVectors();
+		Pitch += 0.03f;
+		if (Pitch > 89.f)
+			Pitch = 89.f;
+		updateCameraVectors();
 	}
 	if (direction == ROTATEDOWN)
 	{
-		this->Pitch -= 0.03f;
-		if (this->Pitch < -89.f)
-			this->Pitch = -89.f;
-		this->updateCameraVectors();
+		Pitch -= 0.03f;
+		if (Pitch < -89.f)
+			Pitch = -89.f;
+		updateCameraVectors();
 	}
 }
 
 void Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch)
 {
-    xoffset *= this->MouseSensitivity;
-    yoffset *= this->MouseSensitivity;
+    xoffset *= MouseSensitivity;
+    yoffset *= MouseSensitivity;
 
-    this->Yaw   += xoffset;
-    this->Pitch += yoffset;
+    Yaw   += xoffset;
+    Pitch += yoffset;
 
     if (constrainPitch)
     {
-        if (this->Pitch > 89.0f)
-            this->Pitch = 89.0f;
-        if (this->Pitch < -89.0f)
-            this->Pitch = -89.0f;
+        if (Pitch > 89.0f)
+            Pitch = 89.0f;
+        if (Pitch < -89.0f)
+            Pitch = -89.0f;
     }
 
-    this->updateCameraVectors();
+    updateCameraVectors();
 }
 
 void Camera::ProcessMouseScroll(GLfloat yoffset)
 {
-	GLfloat velocity = this->MovementSpeed * yoffset;
-	this->Position += this->Front * velocity * 0.2f;
+	GLfloat velocity = MovementSpeed * yoffset;
+	Position += Front * velocity * 0.2f;
 }
 
 void Camera::updateCameraVectors()
 {
     // Calculate the new Front vector
     Vector3 front;
-    front.x = cos(toRad(this->Pitch)) * cos(toRad(this->Yaw));
-    front.y = sin(toRad(this->Pitch));
-    front.z = cos(toRad(this->Pitch)) * sin(toRad(this->Yaw));
-    this->Front = front.normalize();
+    front.x = cos(toRad(Pitch)) * cos(toRad(Yaw));
+    front.y = sin(toRad(Pitch));
+    front.z = cos(toRad(Pitch)) * sin(toRad(Yaw));
+    Front = front.normalize();
     // Also re-calculate the Right and Up vector
-    this->Right = crossVector(this->Front, this->WorldUp).normalize();
-    this->Up    = crossVector(this->Right, this->Front).normalize();
+    Right = crossVector(Front, WorldUp).normalize();
+    Up    = crossVector(Right, Front).normalize();
 }
 
 void Camera::SetFocusPos(Vector3 fpos)
@@ -117,36 +137,36 @@ void Camera::SetFocusPos(Vector3 fpos)
 	Vector3 dir = (fpos - Position).normalize();
 	if (dir == Vector3(0.f))
 		return;
-	this->Front = dir;
+	Front = dir;
 
-	this->Pitch = toTheta(::asinf(dir.y));
-	if (this->Pitch > 89.0f)
-		this->Pitch = 89.0f;
-	if (this->Pitch < -89.0f)
-		this->Pitch = -89.0f;
+	Pitch = toTheta(::asinf(dir.y));
+	if (Pitch > 89.0f)
+		Pitch = 89.0f;
+	if (Pitch < -89.0f)
+		Pitch = -89.0f;
 
 	if (fequal(dir.x, 0.f))
 	{
 		if (fequal(dir.z, 0.f))
-			this->Yaw = 0.f;
+			Yaw = 0.f;
 		else if (dir.z > 0.f)
-			this->Yaw = 90.f;
+			Yaw = 90.f;
 		else
-			this->Yaw = -90.f;
+			Yaw = -90.f;
 	}
 	else if (dir.x > 0.f)
 	{
-		this->Yaw = toTheta(::atanf(dir.z / dir.x));
+		Yaw = toTheta(::atanf(dir.z / dir.x));
 	}
 	else
 	{
 		if (dir.z >= 0.f)
-			this->Yaw = 180.f + toTheta(::atanf(dir.z / dir.x));
+			Yaw = 180.f + toTheta(::atanf(dir.z / dir.x));
 		else
-			this->Yaw = -180.f + toTheta(::atanf(dir.z / dir.x));
+			Yaw = -180.f + toTheta(::atanf(dir.z / dir.x));
 	}
 
 	// re-calculate the Right and Up vector
-	this->Right = crossVector(this->Front, this->WorldUp).normalize();
-	this->Up = crossVector(this->Right, this->Front).normalize();
+	Right = crossVector(Front, WorldUp).normalize();
+	Up = crossVector(Right, Front).normalize();
 }

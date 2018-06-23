@@ -117,8 +117,7 @@ void Character::render()
     Camera * camera = gamescene->getCamera();
     if(!camera)
         return;
-    Matrix4 projection;
-    projection.initWithPerspective(camera->Zoom, 4.0f / 3.0f, 0.1f, 1000.0f);
+	Matrix4 projection = camera->GetProjectMatrix();
     Matrix4 view = camera->GetViewMatrix();
 
     Matrix4 scaleM;

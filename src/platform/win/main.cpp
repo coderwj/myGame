@@ -21,8 +21,8 @@
 #endif
 
 static GLFWwindow * window = NULL;
-static int width = 640;
-static int height = 480;
+static int width = 960;
+static int height = 540;
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -64,6 +64,14 @@ void key_callback(GLFWwindow * window, int key, int scancode, int action, int mo
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+	GameScene * gamescene = GameScene::getInstance();
+	if (!gamescene)
+		return;
+	Camera * camera = gamescene->getCamera();
+	if (!camera)
+		return;
+	camera->setAspect(static_cast<float>(width) / static_cast<float>(height));
+	camera->setViewPortWidth(static_cast<float>(width));
 }
 
 bool initGlfw()

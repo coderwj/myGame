@@ -191,8 +191,14 @@ void GameScene::render()
 		static Shader * testShader = new Shader(temp_vs_path.c_str(), temp_fs_path.c_str());
 
 		testShader->use();
-		Matrix4 projection;
-		projection.initWithPerspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.0f);
+
+		GameScene * gamescene = GameScene::getInstance();
+		if (!gamescene)
+			return;
+		Camera * camera = gamescene->getCamera();
+		if (!camera)
+			return;
+		Matrix4 projection = camera->GetProjectMatrix();
 		Matrix4 view;
 		view.initWithLookAt(Vector3(0.0f, 0.0f, -1.0f), Vector3(0.0f), Vector3(0.0f, 1.0f, 0.0f));
 
@@ -231,8 +237,7 @@ void GameScene::renderScene()
 {
     // use the shader program
     m_shader->use();
-    Matrix4 projection;
-    projection.initWithPerspective(m_camera->Zoom, 4.0f / 3.0f, 0.1f, 1000.0f);
+    Matrix4 projection = m_camera->GetProjectMatrix();
     Matrix4 view = m_camera->GetViewMatrix();
 
     Matrix4 scaleM;
