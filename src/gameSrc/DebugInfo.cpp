@@ -28,7 +28,7 @@ void DebugInfo::tick(float delta)
 void DebugInfo::render()
 {
 	ImGui_ImplGlfwGL3_NewFrame();
-	ImGui::Text("FPS:  %.3f.", 1.f / m_deltaTime);
+	ImGui::Text("FPS:  %d.", static_cast<int>(1.f / m_deltaTime + 0.5f));
 	if (ImGui::ButtonEx("Reset Camera", ImVec2(100.f, 20.f), ImGuiButtonFlags_PressedOnClick))
 	{
 		GameScene* pGameScene = GameScene::getInstance();
