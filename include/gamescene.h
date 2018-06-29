@@ -10,6 +10,7 @@ class Camera;
 class Character;
 class Model;
 class Shader;
+class SkyBox;
 
 struct FogPara{
 	Vector3 color;
@@ -24,6 +25,8 @@ private:
 
 	Character * m_mainCharacter;
 	Camera * m_camera;
+
+	SkyBox* m_skyBox;
 
 	Model * m_model;
 	Shader * m_shader;

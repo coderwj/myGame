@@ -9,6 +9,7 @@
 
 #include "MyEngineCore.h"
 #include "GameScene.h"
+#include "SkyBox.h"
 
 #include "Character.h"
 #include "Camera.h"
@@ -56,6 +57,9 @@ bool GameScene::init(){
 
     string fbxFile = Config::model_path + "character2/Maskboy.FBX";
     printFbxFileData(fbxFile.c_str());
+
+	m_skyBox = new SkyBox;
+	m_skyBox->init("");
 
     string modelname = "scene_3";
     loadScene(modelname);
@@ -237,6 +241,8 @@ void GameScene::render()
 
 void GameScene::renderScene()
 {
+	m_skyBox->render();
+
     // use the shader program
     m_shader->use();
     Matrix4 projection = m_camera->GetProjectMatrix();

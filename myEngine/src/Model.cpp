@@ -1,7 +1,10 @@
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #endif // STB_IMAGE_IMPLEMENTATION
+extern "C"
+{
 #include "stb_image.h"
+}
 
 #include "Model.h"
 #include "assimp/Importer.hpp"
