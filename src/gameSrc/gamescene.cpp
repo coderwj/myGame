@@ -71,10 +71,9 @@ bool GameScene::init(){
     m_characters.push_back(character);
     if(m_mainCharacter == NULL)
         return false;
-	Vector3 characterPos = m_mainCharacter->getPosition();
-	Vector3 cameraPos = characterPos + Vector3(1.0f, 1.0f, 3.0f);
-    m_camera = new Camera(cameraPos);
-	m_camera->SetFocusPos(characterPos);
+
+	m_camera = new Camera;
+	resetCameraPos();
     //glDeleteVertexArrays(1, &vao);
     //glDeleteBuffers(1, &vbo);
 
@@ -109,8 +108,6 @@ void GameScene::onDestroy()
 void GameScene::render()
 {
     glEnable(GL_DEPTH_TEST);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if (Config::GetIsShaderTest())
 	{
 		static bool hasInit = false;
@@ -271,9 +268,9 @@ void GameScene::renderScene()
 
 void GameScene::tick(float delta)
 {
+	m_deltaTime = delta;
 	lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
     m_nowTime += delta;
-    render();
 }
 
 void GameScene::loadScene(string scenename)
@@ -364,4 +361,12 @@ void GameScene::changeScene(string scenename)
 		m_model = NULL;
 	}
 	loadScene(scenename);
+}
+
+void GameScene::resetCameraPos()
+{
+	Vector3 characterPos = m_mainCharacter->getPosition();
+	Vector3 cameraPos = characterPos + Vector3(1.0f, 1.0f, 3.0f);
+	m_camera->Position = cameraPos;
+	m_camera->SetFocusPos(characterPos);
 }

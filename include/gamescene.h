@@ -39,6 +39,7 @@ private:
 
 	struct lua_State * m_state;
 
+	float m_deltaTime;
 	float m_nowTime;
 
 	struct FogPara m_fogpara;
@@ -84,14 +85,17 @@ public:
 
 	void tick(float delta);
 
-	Camera * getCamera()
-	{
-		return m_camera;
-	}
+	Camera * getCamera() { return m_camera; }
+
+	Character * getMainCharacter() { return m_mainCharacter; }
 
 	void loadScene(string scenename);
 
 	void changeScene(string scenename);
+
+	void resetCameraPos();
+
+	float getDeltaTime() { return m_deltaTime; }
 };
 
 #endif //__GAMESCENE_H__

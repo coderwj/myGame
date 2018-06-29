@@ -1,16 +1,17 @@
 ﻿#include "glew.h"
 #include "glfw3.h"
 
-#include "imgui.h"
-#include "imgui_impl_glfw_gl3.h"
-
 #include <iostream>
 
 #include "Config.h"
 #include "Gamescene.h"
 #include "Camera.h"
+#include "DebugInfo.h"
 
 #include "gltools.h"
+
+#include "imgui.h"
+#include "imgui_impl_glfw_gl3.h"
 
 #ifdef WIN32
     #include <Windows.h>
@@ -156,6 +157,18 @@ int main(){
 
     ImGui_ImplGlfwGL3_Init(window, false);
 
+	DebugInfo * pDebugInfo = DebugInfo::getInstance();
+	if (NULL == pDebugInfo)
+	{
+		std::cout << "DebugInfo Create error!" << std::endl;
+		return 0;
+	}
+	if (!pDebugInfo->init())
+	{
+		std::cout << "DebugInfo Init error!" << std::endl;
+		return 0;
+	}
+
     GameScene * pGameScene = GameScene::getInstance();
     if(pGameScene == NULL)
     {
@@ -177,15 +190,16 @@ int main(){
 
         processInput(window);
 
-        if(!pGameScene)
-        {
-            break;
-        }
         pGameScene->tick(deltaTime);
+		pDebugInfo->tick(deltaTime);
 
-        ImGui_ImplGlfwGL3_NewFrame();
-        //ImGui::Text("Hello, world!");
-        //ImGui::Render();
+
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		pGameScene->render();
+		pDebugInfo->render();
+
         glfwSwapBuffers(window);
         glfwPollEvents();
 
