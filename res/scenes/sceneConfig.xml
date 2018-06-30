@@ -31,13 +31,13 @@
     <rotateZ>0.0</rotateZ>
     <fogpara>
       <color>
-          <red>0.5</red>
-          <green>0.6</green>
-          <blue>1.0</blue>
+          <red>0.369</red>
+          <green>0.141</green>
+          <blue>0.616</blue>
       </color>
       <start>0</start>
-      <end>40</end>
-      <intensity>1.0</intensity>
+      <end>80</end>
+      <intensity>0.9</intensity>
     </fogpara>
   </scene>
   <scene id="4">

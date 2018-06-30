@@ -15,6 +15,8 @@
     const string Config::lua_path = Config::game_res_path + "luafiles/";
 #endif
 
+const string Config::INVALID_STR = "";
+
 const unordered_map<string, string> Config::configMap = unordered_map<string, string>();
 
 
@@ -27,12 +29,12 @@ void Config::InitConfigMap()
 	tinyxml2::XMLDocument config_doc;
 	config_doc.LoadFile(conifg_path.c_str());
 	tinyxml2::XMLElement* config_element =
-		config_doc.FirstChildElement("commonconfig")->FirstChildElement("config");
-	for (;; config_element = config_element->NextSiblingElement("config")) {
+		config_doc.FirstChildElement("commonconfig")->FirstChildElement();
+	for (;; config_element = config_element->NextSiblingElement()) {
 		if (config_element == NULL)
 			break;
-		key = config_element->FirstChildElement("key")->GetText();
-		value = config_element->FirstChildElement("value")->GetText();
+		key = config_element->Name();
+		value = config_element->Attribute("v");
 		temp->insert(pair<string, string>(key, value));
 	}
 }
@@ -45,4 +47,14 @@ bool Config::GetIsShaderTest()
 		return resStr == "true";
 	}
 	return false;
+}
+
+const string& Config::GetConfigStr(const string& key)
+{
+	if (configMap.find(key) != configMap.end())
+	{
+		const string& resStr = configMap.at(key);
+		return resStr;
+	}
+	return INVALID_STR;
 }

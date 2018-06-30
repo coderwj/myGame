@@ -126,18 +126,23 @@ bool SkyBox::init(const char*  fileName)
 {
 
 	// Cubemap (Skybox)
+	string skybox_path = Config::game_res_path + "skybox/";
+	string skybox_name = Config::GetConfigStr("skybox_name");
+	string skybox_type = Config::GetConfigStr("skybox_type");
 	vector<string> faces;
-	faces.push_back(Config::game_res_path + "skybox/right.jpg");
-	faces.push_back(Config::game_res_path + "skybox/left.jpg");
-	faces.push_back(Config::game_res_path + "skybox/top.jpg");
-	faces.push_back(Config::game_res_path + "skybox/bottom.jpg");
-	faces.push_back(Config::game_res_path + "skybox/back.jpg");
-	faces.push_back(Config::game_res_path + "skybox/front.jpg");
+	faces.push_back(skybox_path + skybox_name + "r" + skybox_type);
+	faces.push_back(skybox_path + skybox_name + "l" + skybox_type);
+	faces.push_back(skybox_path + skybox_name + "u" + skybox_type);
+	faces.push_back(skybox_path + skybox_name + "d" + skybox_type);
+	faces.push_back(skybox_path + skybox_name + "b" + skybox_type);
+	faces.push_back(skybox_path + skybox_name + "f" + skybox_type);
 	cubemapTexture = loadCubemap(faces);
 
 	string vs_path = Config::engine_res_path + "shader/" + "skybox.vs";
 	string fs_path = Config::engine_res_path + "shader/" + "skybox.fs";
 	m_shader = new Shader(vs_path.c_str(), fs_path.c_str());
+
+	m_scale = ::atoi(Config::GetConfigStr("skybox_scale").c_str());
 
 
 	vector<float> vertices;
