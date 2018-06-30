@@ -9,6 +9,8 @@ private:
 
 	float m_deltaTime;
 
+	float m_cameraSpeed;
+
 public:
 	static DebugInfo * getInstance() {
 		if (debugInfo == NULL)

@@ -142,7 +142,7 @@ bool SkyBox::init(const char*  fileName)
 	string fs_path = Config::engine_res_path + "shader/" + "skybox.fs";
 	m_shader = new Shader(vs_path.c_str(), fs_path.c_str());
 
-	m_scale = ::atoi(Config::GetConfigStr("skybox_scale").c_str());
+	m_scale = static_cast<float>(::atoi(Config::GetConfigStr("skybox_scale").c_str()));
 
 
 	vector<float> vertices;

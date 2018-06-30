@@ -12,6 +12,7 @@ const float VIEW_PORT_WIDTH = 1280.f;
 Camera::Camera(Vector3 position, Vector3 up, GLfloat yaw, GLfloat pitch):
 Front(Vector3(0.0f, 0.0f, -1.0f))
 , MovementSpeed(SPEED)
+, RotateSpeed(ROTATE_SPEED)
 , MouseSensitivity(SENSITIVTY)
 , m_nearClip(NEAR_CLIP)
 , m_farClip(FAR_CLIP)
@@ -29,6 +30,7 @@ Front(Vector3(0.0f, 0.0f, -1.0f))
 Camera::Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch):
 Front(Vector3(0.0f, 0.0f, -1.0f))
 , MovementSpeed(SPEED)
+, RotateSpeed(ROTATE_SPEED)
 , MouseSensitivity(SENSITIVTY)
 , m_nearClip(NEAR_CLIP)
 , m_farClip(FAR_CLIP)
@@ -60,6 +62,7 @@ Matrix4 Camera::GetProjectMatrix() const
 void Camera::ProcessKeyboard(CameraMove direction, GLfloat deltaTime)
 {
     GLfloat velocity = MovementSpeed * deltaTime;
+	GLfloat angle = RotateSpeed * deltaTime;
     if (direction == FORWARD)
         Position += Up * velocity;
     if (direction == BACKWARD)
@@ -70,24 +73,24 @@ void Camera::ProcessKeyboard(CameraMove direction, GLfloat deltaTime)
         Position += Right * velocity * 2.f;
 	if (direction == ROTATELEFT)
 	{
-		Yaw -= 0.08f;
+		Yaw -= angle;
 		updateCameraVectors();
 	}
 	if (direction == ROTATERIGHT)
 	{
-		Yaw += 0.08f;
+		Yaw += angle;
 		updateCameraVectors();
 	}
 	if (direction == ROTATEUP)
 	{
-		Pitch += 0.03f;
+		Pitch += angle;
 		if (Pitch > 89.f)
 			Pitch = 89.f;
 		updateCameraVectors();
 	}
 	if (direction == ROTATEDOWN)
 	{
-		Pitch -= 0.03f;
+		Pitch -= angle;
 		if (Pitch < -89.f)
 			Pitch = -89.f;
 		updateCameraVectors();
@@ -116,7 +119,7 @@ void Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean co
 void Camera::ProcessMouseScroll(GLfloat yoffset)
 {
 	GLfloat velocity = MovementSpeed * yoffset;
-	Position += Front * velocity * 0.2f;
+	Position += Front * velocity * 0.3f;
 }
 
 void Camera::updateCameraVectors()

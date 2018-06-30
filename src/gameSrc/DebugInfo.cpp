@@ -1,5 +1,6 @@
 #include "DebugInfo.h"
 #include "GameScene.h"
+#include "Camera.h"
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -11,18 +12,37 @@ DebugInfo* DebugInfo::debugInfo = NULL;
 
 DebugInfo::DebugInfo()
 :m_deltaTime(1.f)
+,m_cameraSpeed(0.f)
 {
 
 }
 
 bool DebugInfo::init()
 {
+	GameScene* pGameScene = GameScene::getInstance();
+	if (NULL != pGameScene)
+	{
+		Camera* pCamera = pGameScene->getCamera();
+		if (NULL != pCamera)
+		{
+			m_cameraSpeed = pCamera->MovementSpeed;
+		}
+	}
 	return true;
 }
 
 void DebugInfo::tick(float delta)
 {
 	m_deltaTime = delta;
+	GameScene* pGameScene = GameScene::getInstance();
+	if (NULL != pGameScene)
+	{
+		Camera* pCamera = pGameScene->getCamera();
+		if (NULL != pCamera)
+		{
+			pCamera->MovementSpeed = m_cameraSpeed;
+		}
+	}
 }
 
 void DebugInfo::render()
@@ -37,5 +57,7 @@ void DebugInfo::render()
 			pGameScene->resetCameraPos();
 		}
 	}
+	static float start = m_cameraSpeed;
+	ImGui::SliderFloat("CameraMove Speed", &m_cameraSpeed, start, 8.f * start, "Speed = %.3f");
 	ImGui::Render();
 }

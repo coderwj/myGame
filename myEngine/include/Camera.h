@@ -19,6 +19,7 @@ enum CameraMove {
 const GLfloat YAW        = -90.0f;
 const GLfloat PITCH      =  0.0f;
 const GLfloat SPEED      =  2.f;
+const GLfloat ROTATE_SPEED = 45.f;
 const GLfloat SENSITIVTY =  0.1f;
 
 class Camera
@@ -37,6 +38,7 @@ public:
 
     // Camera options
     GLfloat MovementSpeed;
+	GLfloat RotateSpeed;
     GLfloat MouseSensitivity;
 
     Camera(Vector3 position = Vector3(0.0f, 0.0f, 0.0f),

@@ -157,18 +157,6 @@ int main(){
 
     ImGui_ImplGlfwGL3_Init(window, false);
 
-	DebugInfo * pDebugInfo = DebugInfo::getInstance();
-	if (NULL == pDebugInfo)
-	{
-		std::cout << "DebugInfo Create error!" << std::endl;
-		return 0;
-	}
-	if (!pDebugInfo->init())
-	{
-		std::cout << "DebugInfo Init error!" << std::endl;
-		return 0;
-	}
-
     GameScene * pGameScene = GameScene::getInstance();
     if(pGameScene == NULL)
     {
@@ -180,6 +168,18 @@ int main(){
         std::cout << "GameScene Init error!" << std::endl;
         return 0;
     }
+
+	DebugInfo * pDebugInfo = DebugInfo::getInstance();
+	if (NULL == pDebugInfo)
+	{
+		std::cout << "DebugInfo Create error!" << std::endl;
+		return 0;
+	}
+	if (!pDebugInfo->init())
+	{
+		std::cout << "DebugInfo Init error!" << std::endl;
+		return 0;
+	}
 
     while(!glfwWindowShouldClose(window))
     {
