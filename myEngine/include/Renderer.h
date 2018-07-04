@@ -19,7 +19,7 @@ namespace myEngine
 				r = new Renderer();
 			return r;
 		}
-		void destroyInstance(){
+		static void destroyInstance(){
 			if(r)
 			{
 				delete(r);

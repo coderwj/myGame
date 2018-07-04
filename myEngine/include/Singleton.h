@@ -9,15 +9,15 @@ namespace myEngine
 	
 	public:
 		static Singleton * getInstance(){
-			if(instance == NULL)
+			if(nullptr == instance)
 				instance = new Singleton();
 			return instance;
 		}
-		/*virtual*/ void DestroyInstance(){
+		static void destroyInstance(){
 			if(instance)
 			{
 				delete(instance);
-				instance = NULL;
+				instance = nullptr;
 			}
 		}
 	};

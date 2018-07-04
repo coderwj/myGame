@@ -52,53 +52,12 @@ namespace myEngine
 		return result;
 	}
 	
-	//void Camera::updateCameraVectors()
-	//{
-	//    // Calculate the new Front vector
-	//    Vector3 front;
-	//    front.x = cos(toRad(Pitch)) * cos(toRad(Yaw));
-	//    front.y = sin(toRad(Pitch));
-	//    front.z = cos(toRad(Pitch)) * sin(toRad(Yaw));
-	//    Front = front.normalize();
-	//    // Also re-calculate the Right and Up vector
-	//    Right = crossVector(Front, WorldUp).normalize();
-	//    Up    = crossVector(Right, Front).normalize();
-	//}
-	
 	void Camera::SetFocusPos(Vector3 fpos)
 	{
 		Vector3 dir = (fpos - m_position).normalize();
 		if (dir == Vector3(0.f))
 			return;
 		m_front = dir;
-	
-		//Pitch = toTheta(::asinf(dir.y));
-		//if (Pitch > 89.0f)
-		//	Pitch = 89.0f;
-		//if (Pitch < -89.0f)
-		//	Pitch = -89.0f;
-
-		//if (fequal(dir.x, 0.f))
-		//{
-		//	if (fequal(dir.z, 0.f))
-		//		Yaw = 0.f;
-		//	else if (dir.z > 0.f)
-		//		Yaw = 90.f;
-		//	else
-		//		Yaw = -90.f;
-		//}
-		//else if (dir.x > 0.f)
-		//{
-		//	Yaw = toTheta(::atanf(dir.z / dir.x));
-		//}
-		//else
-		//{
-		//	if (dir.z >= 0.f)
-		//		Yaw = 180.f + toTheta(::atanf(dir.z / dir.x));
-		//	else
-		//		Yaw = -180.f + toTheta(::atanf(dir.z / dir.x));
-		//}
-	
 	}
 
 	void Camera::moveUp(float dis)
@@ -109,6 +68,25 @@ namespace myEngine
 	void Camera::moveRight(float dis)
 	{
 		m_position += _getRight() * dis;
+	}
+
+	void Camera::moveFront(float dis)
+	{
+		m_position += m_front * dis;
+	}
+
+	void Camera::rotateRight(float theta)
+	{
+		Quaternion _r;
+		_r.setToRotateAboutAxis(_getUp(), -theta);
+		_r.rotateVec3(m_front, m_front);
+	}
+
+	void Camera::rotateUp(float theta)
+	{
+		Quaternion _r;
+		_r.setToRotateAboutAxis(_getRight(), theta);
+		_r.rotateVec3(m_front, m_front);
 	}
 
 	Vector3 Camera::_getRight() const

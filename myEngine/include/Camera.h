@@ -45,9 +45,16 @@ namespace myEngine
 		//move
 		void moveUp(float dis);
 		void moveDown(float dis) { moveUp(-dis); }
-
 		void moveRight(float dis);
 		void moveLeft(float dis) { moveRight(-dis); }
+		void moveFront(float dis);
+		void moveBack(float dis) { moveFront(-dis); }
+
+		//rotate
+		void rotateRight(float theta);
+		void rotateLeft(float theta) { rotateRight(-theta); }
+		void rotateUp(float theta);
+		void rotateDown(float theta) { rotateUp(-theta); }
 
 	private:
 		Vector3 _getRight() const;
