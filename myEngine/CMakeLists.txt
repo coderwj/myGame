@@ -8,11 +8,13 @@ project(myEngine)
 
 add_subdirectory(lib/tinyxml2)
 add_subdirectory(lib/imgui)
+add_subdirectory(lib/bgfx)
 
 include_directories(./include)
 include_directories(./lib/glm/glm)
 include_directories(./lib/tinyxml2)
 include_directories(./lib/imgui)
+include_directories(./lib/bgfx/include)
 
 if(APPLE)
 	include_directories(./lib/glew/mac/include)
@@ -63,7 +65,6 @@ if(APPLE)
 			imgui)
 		add_dependencies(myEngine imgui tinyxml2)
 	else()
-		add_subdirectory(lib/ozz-animation)
 		message("myEngine---------------choose mac -------")
 		FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
 		message("--------find OPENGL_LIBRARY--->" ${OPENGL_LIBRARY})
@@ -82,13 +83,12 @@ if(APPLE)
 			${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/mac/lib/libGLEW.a
 			${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/mac/lib/libassimp.dylib
 			imgui
-			ozz_animation)
-		add_dependencies(myEngine imgui tinyxml2 ozz_animation)
+			bgfx)
+		add_dependencies(myEngine imgui tinyxml2 bgfx)
 	endif()
 endif()
 
 if(WIN32)
-	add_subdirectory(lib/ozz-animation)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/common)
 
 	target_link_libraries(myEngine
@@ -99,7 +99,6 @@ if(WIN32)
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/${WINDOWS_PLATTYPE}/debug/libfbxsdk.lib
 		imgui
-		ozz_animation)
-	add_dependencies(myEngine imgui tinyxml2 ozz_animation)
+		bgfx)
+	add_dependencies(myEngine imgui tinyxml2 bgfx)
 endif()
-
