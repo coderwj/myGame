@@ -8,13 +8,13 @@ project(myEngine)
 
 add_subdirectory(lib/tinyxml2)
 add_subdirectory(lib/imgui)
-add_subdirectory(lib/bgfx)
+add_subdirectory(lib/bgfx.cmake)
 
 include_directories(./include)
 include_directories(./lib/glm/glm)
 include_directories(./lib/tinyxml2)
 include_directories(./lib/imgui)
-include_directories(./lib/bgfx/include)
+include_directories(./lib/bgfx.cmake/include)
 
 if(APPLE)
 	include_directories(./lib/glew/mac/include)

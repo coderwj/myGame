@@ -3,105 +3,107 @@
 
 #include <cstdio>
 
-
-bool HelperFunc::convToWinPath(char * path)
+namespace myEngine
 {
-	const unsigned int MAX_LEN = 2048;
-	char temppath[MAX_LEN] = { '\0' };
-	eml::strcpy(temppath, MAX_LEN, path);
-
-	char * prepath = temppath;
-	for (size_t i = 0; i < MAX_LEN; i++)
+	bool HelperFunc::convToWinPath(char * path)
 	{
-		if (*prepath == '/')
+		const unsigned int MAX_LEN = 2048;
+		char temppath[MAX_LEN] = { '\0' };
+		myEngine::strcpy(temppath, MAX_LEN, path);
+	
+		char * prepath = temppath;
+		for (size_t i = 0; i < MAX_LEN; i++)
 		{
-			*path = '\\';
-			path++;
-			*path = '\\';
-		}
-		else
-		{
-			*path = *prepath;
-			if (*prepath == '\0')
+			if (*prepath == '/')
 			{
-				return true;
+				*path = '\\';
+				path++;
+				*path = '\\';
 			}
+			else
+			{
+				*path = *prepath;
+				if (*prepath == '\0')
+				{
+					return true;
+				}
+			}
+			prepath++;
+			path++;
 		}
-		prepath++;
-		path++;
-	}
-	eml::strcpy(path, MAX_LEN, temppath);
-	return false;
-}
-
-size_t HelperFunc::getFileSize(const char *fileName)
-{
-#ifdef WIN32
-	FILE * fp = NULL;
-	int r =	::fopen_s(&fp, fileName, "rb");
-	if (0 != r)
-	{
-		return -1;
-	}
-#else
-	FILE * fp = ::fopen(fileName, "rb");
-	if (NULL == fp)
-	{
-		return -1;
-	}
-#endif
-
-	::fseek(fp, 0, SEEK_END);
-	size_t size = static_cast<size_t>(ftell(fp));
-	::fseek(fp, 0, SEEK_SET);
-	::fclose(fp);
-
-	return size;
-}
-
-bool HelperFunc::LoadFromFile(const char* const fileName, char* const buff, unsigned int buff_size)
-{
-
-#ifdef WIN32
-	FILE * fp = NULL;
-	int r = ::fopen_s(&fp, fileName, "rb");
-	if (0 != r)
-	{
+		myEngine::strcpy(path, MAX_LEN, temppath);
 		return false;
 	}
-#else
-	FILE * fp = ::fopen(fileName, "rb");
-	if (NULL == fp)
+	
+	size_t HelperFunc::getFileSize(const char *fileName)
 	{
-		return false;
+	#ifdef WIN32
+		FILE * fp = NULL;
+		int r =	::fopen_s(&fp, fileName, "rb");
+		if (0 != r)
+		{
+			return -1;
+		}
+	#else
+		FILE * fp = ::fopen(fileName, "rb");
+		if (NULL == fp)
+		{
+			return -1;
+		}
+	#endif
+	
+		::fseek(fp, 0, SEEK_END);
+		size_t size = static_cast<size_t>(ftell(fp));
+		::fseek(fp, 0, SEEK_SET);
+		::fclose(fp);
+	
+		return size;
 	}
-#endif
-
-	::fread(buff, 1, buff_size, fp);
-	::fclose(fp);
-
-	buff[buff_size - 1] = 0;
-	return true;
-}
-
-bool HelperFunc::WriteToFile(const char* const fileName, char* const buff)
-{
-#ifdef WIN32
-	FILE * fp = NULL;
-	int r = ::fopen_s(&fp, fileName, "rb");
-	if (0 != r)
+	
+	bool HelperFunc::LoadFromFile(const char* const fileName, char* const buff, unsigned int buff_size)
 	{
-		return false;
+	
+	#ifdef WIN32
+		FILE * fp = NULL;
+		int r = ::fopen_s(&fp, fileName, "rb");
+		if (0 != r)
+		{
+			return false;
+		}
+	#else
+		FILE * fp = ::fopen(fileName, "rb");
+		if (NULL == fp)
+		{
+			return false;
+		}
+	#endif
+	
+		::fread(buff, 1, buff_size, fp);
+		::fclose(fp);
+	
+		buff[buff_size - 1] = 0;
+		return true;
 	}
-#else
-	FILE * fp = ::fopen(fileName, "rb");
-	if (NULL == fp)
+	
+	bool HelperFunc::WriteToFile(const char* const fileName, char* const buff)
 	{
-		return false;
+	#ifdef WIN32
+		FILE * fp = NULL;
+		int r = ::fopen_s(&fp, fileName, "rb");
+		if (0 != r)
+		{
+			return false;
+		}
+	#else
+		FILE * fp = ::fopen(fileName, "rb");
+		if (NULL == fp)
+		{
+			return false;
+		}
+	#endif
+		::fprintf(fp, "%s", buff);
+		::fclose(fp);
+	
+		return true;
 	}
-#endif
-	::fprintf(fp, "%s", buff);
-	::fclose(fp);
-
-	return true;
 }

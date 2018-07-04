@@ -1,7 +1,7 @@
 #ifndef __STRING_DEF_H__
 #define __STRING_DEF_H__
 
-namespace eml
+namespace myEngine
 {
 
 #define strtohex(s) ::sretoul(s, NULL, 16)
@@ -12,6 +12,6 @@ void strncpy(char* dest, const int dest_size, const char* const src, const int c
 
 int sprintf(char* buff, const int buff_len, const char* format, ...);
 
-}// namespace eml
+}// namespace myEngine
 
 #endif //__STRING_DEF_H__

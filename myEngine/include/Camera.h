@@ -4,88 +4,67 @@
 #include "MyEngineCore.h"
 #include <vector>
 
-enum CameraMove {
-    FORWARD,
-    BACKWARD,
-    LEFT,
-    RIGHT,
-	ROTATELEFT,
-	ROTATERIGHT,
-	ROTATEUP,
-	ROTATEDOWN
-};
-
-// Default camera values
-const GLfloat YAW        = -90.0f;
-const GLfloat PITCH      =  0.0f;
-const GLfloat SPEED      =  2.f;
-const GLfloat ROTATE_SPEED = 45.f;
-const GLfloat SENSITIVTY =  0.1f;
-
-class Camera
+namespace myEngine
 {
-public:
-    // Camera Attributes
-    Vector3 Position;
-    Vector3 Front;
-    Vector3 Up;
-    Vector3 Right;
-    Vector3 WorldUp;
 
-    // Eular Angles
-    GLfloat Yaw;
-    GLfloat Pitch;
 
-    // Camera options
-    GLfloat MovementSpeed;
-	GLfloat RotateSpeed;
-    GLfloat MouseSensitivity;
+	class Camera
+	{
+	public:
 
-    Camera(Vector3 position = Vector3(0.0f, 0.0f, 0.0f),
-           Vector3 up = Vector3(0.0f, 1.0f, 0.0f),
-           GLfloat yaw = YAW,
-           GLfloat pitch = PITCH);
+		Camera();
+		Camera(const Vector3& pos, const Vector3& focusPos);
+	
+	    Matrix4 GetViewMatrix() const;
+		Matrix4 GetProjectMatrix() const;
 
-    Camera(GLfloat posX, GLfloat posY, GLfloat posZ,
-           GLfloat upX, GLfloat upY, GLfloat upZ,
-           GLfloat yaw, GLfloat pitch);
+		Vector3 getPosition() const { return m_position; }
+		void setPosition(Vector3 val) { m_position = val; }
 
-    Matrix4 GetViewMatrix() const;
-	Matrix4 GetProjectMatrix() const;
+		Vector3 getFront() const { return m_front; }
+		void setFront(Vector3 val) { m_front = val; }
 
-    void ProcessKeyboard(CameraMove direction, GLfloat deltaTime);
+		void SetFocusPos(Vector3 pos);
+	
+		void setNearClip(float c) { m_nearClip = c; }
+		float getNearClip() const { return m_nearClip; }
+	
+		void setFarClip(float c) { m_farClip = c; }
+		float getFarClip() const { return m_farClip; }
+	
+		void setFov(float f) { m_fov = f; }
+		float getFov() const { return m_fov; }
+	
+		void setAspect(float a) { m_aspect = a; }
+		float getAspect() const { return m_aspect; }
+	
+		void setViewPortWidth(float w) { m_viewProtWidth = w; }
+		float getViewPortWidth() const { return m_viewProtWidth; }
 
-    void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch = true);
 
-    void ProcessMouseScroll(GLfloat yoffset);
+		//move
+		void moveUp(float dis);
+		void moveDown(float dis) { moveUp(-dis); }
 
-	void SetFocusPos(Vector3 pos);
+		void moveRight(float dis);
+		void moveLeft(float dis) { moveRight(-dis); }
 
-	void setNearClip(float c) { m_nearClip = c; }
-	float getNearClip() const { return m_nearClip; }
+	private:
+		Vector3 _getRight() const;
+		Vector3 _getUp() const;
 
-	void setFarClip(float c) { m_farClip = c; }
-	float getFarClip() const { return m_farClip; }
+	private:
 
-	void setFov(float f) { m_fov = f; }
-	float getFov() const { return m_fov; }
+		Vector3 m_position;
+		Vector3 m_front;
 
-	void setAspect(float a) { m_aspect = a; }
-	float getAspect() const { return m_aspect; }
-
-	void setViewPortWidth(float w) { m_viewProtWidth = w; }
-	float getViewPortWidth() const { return m_viewProtWidth; }
-
-private:
-    // Calculates the front vector from the Camera's (updated) Eular Angles
-    void updateCameraVectors();
-
-	float	m_nearClip;
-	float	m_farClip;
-
-	float	m_fov;
-
-	float	m_aspect;			// viewProtWidth / viewProtHeight
-	float	m_viewProtWidth;	// viewProtWidth
-};
+		float   m_rotate; // rotate, default 0, rad, from -Pi to Pi.
+	
+		float	m_nearClip;
+		float	m_farClip;
+		float	m_fov;
+		float	m_aspect;			// viewProtWidth / viewProtHeight
+		float	m_viewProtWidth;	// viewProtWidth
+	};
+}
 #endif

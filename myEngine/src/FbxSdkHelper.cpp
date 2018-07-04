@@ -3,6 +3,8 @@
 #include "StringDef.h"
 #include "HelperFunc.h"
 
+using namespace myEngine;
+
 /* Tab character ("\t") counter */
 int numTabs = 0;
 
@@ -13,7 +15,7 @@ int numTabs = 0;
  */
 void PrintTabs(char * buff) {
     for(int i = 0; i < numTabs; i++)
-        eml::sprintf(buff, BUFF_SIZE, "%s\t", buff);
+        myEngine::sprintf(buff, BUFF_SIZE, "%s\t", buff);
 }
 
 /**
@@ -55,7 +57,7 @@ void PrintAttribute(FbxNodeAttribute* pAttribute, char* buff) {
     FbxString attrName = pAttribute->GetName();
     PrintTabs(buff);
     // Note: to retrieve the character array of a FbxString, use its Buffer() method.
-    eml::sprintf(buff, BUFF_SIZE, "%sname:%s,%s\n", buff, typeName.Buffer(), attrName.Buffer());
+    myEngine::sprintf(buff, BUFF_SIZE, "%sname:%s,%s\n", buff, typeName.Buffer(), attrName.Buffer());
 }
 
 /**
@@ -69,7 +71,7 @@ void PrintNode(FbxNode* pNode, char* buff) {
     FbxDouble3 scaling = pNode->LclScaling.Get();
 
     // Print the contents of the node.
-    eml::sprintf(buff, BUFF_SIZE,"%s%s:%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
+    myEngine::sprintf(buff, BUFF_SIZE,"%s%s:%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
 		buff,
         nodeName,
         translation[0], translation[1], translation[2],
@@ -88,7 +90,7 @@ void PrintNode(FbxNode* pNode, char* buff) {
 
     numTabs--;
     PrintTabs(buff);
-	eml::sprintf(buff, BUFF_SIZE, "%s\n", buff);
+	myEngine::sprintf(buff, BUFF_SIZE, "%s\n", buff);
 }
 
 void printFbxFileData(const char* fileName)
@@ -107,8 +109,8 @@ void printFbxFileData(const char* fileName)
 
     // Use the first argument as the filename for the importer.
     if(!lImporter->Initialize(fileName, -1, lSdkManager->GetIOSettings())) {
-        eml::sprintf(buff, BUFF_SIZE, "%sCall to FbxImporter::Initialize() failed.\n", buff);
-		eml::sprintf(buff, BUFF_SIZE, "%sError returned: %s\n\n", buff, lImporter->GetStatus().GetErrorString());
+        myEngine::sprintf(buff, BUFF_SIZE, "%sCall to FbxImporter::Initialize() failed.\n", buff);
+		myEngine::sprintf(buff, BUFF_SIZE, "%sError returned: %s\n\n", buff, lImporter->GetStatus().GetErrorString());
         exit(-1);
     }
 

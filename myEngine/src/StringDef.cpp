@@ -3,7 +3,7 @@
 #include <cstdarg>
 #include <stdio.h>
 
-namespace eml
+namespace myEngine
 {
 
 #define strtohex(s) ::sretoul(s, NULL, 16)
@@ -45,4 +45,4 @@ int sprintf(char* buff, const int buff_len, const char* format, ...)
 	return r;
 }
 
-}// namespace eml
+}// namespace myEngine

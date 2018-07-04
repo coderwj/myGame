@@ -6,6 +6,7 @@
 
 #include "Vector3.h"
 #include "Matrix4.h"
+#include "Quaternion.h"
 #include "MathUtil.h"
 
 #include "HelperFunc.h"
