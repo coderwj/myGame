@@ -1,3 +1,6 @@
 [submodule "myEngine/lib/ozz-animation"]
 	path = myEngine/lib/ozz-animation
 	url = https://coderwj@github.com/guillaumeblanc/ozz-animation.git
+[submodule "myEngine/lib/bgfx.cmake"]
+	path = myEngine/lib/bgfx.cmake
+	url = https://github.com/coderwj/bgfx.cmake
