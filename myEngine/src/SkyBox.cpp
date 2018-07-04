@@ -1,4 +1,5 @@
 #include "SkyBox.h"
+#include "Engine.h"
 
 //#ifndef STB_IMAGE_IMPLEMENTATION
 //#define STB_IMAGE_IMPLEMENTATION
@@ -59,6 +60,8 @@ namespace myEngine
 		-1.0f, -1.0f,  1.0f,
 		1.0f, -1.0f,  1.0f
 	};
+
+	const char* fileExName = ".png";
 	
 	unsigned int skyboxVAO, skyboxVBO;
 	unsigned int cubemapTexture;
@@ -117,22 +120,19 @@ namespace myEngine
 	
 	bool SkyBox::init(const char*  fileName)
 	{
-	
-		// Cubemap (Skybox)
-		string skybox_path = Config::game_res_path + "skybox/";
-		string skybox_name = Config::GetConfigStr("skybox_name");
-		string skybox_type = Config::GetConfigStr("skybox_type");
+
+		string skybox_path = game_res_path + "skybox/";
 		vector<string> faces;
-		faces.push_back(skybox_path + skybox_name + "r" + skybox_type);
-		faces.push_back(skybox_path + skybox_name + "l" + skybox_type);
-		faces.push_back(skybox_path + skybox_name + "u" + skybox_type);
-		faces.push_back(skybox_path + skybox_name + "d" + skybox_type);
-		faces.push_back(skybox_path + skybox_name + "b" + skybox_type);
-		faces.push_back(skybox_path + skybox_name + "f" + skybox_type);
+		faces.push_back(skybox_path + fileName + "r" + fileExName);
+		faces.push_back(skybox_path + fileName + "l" + fileExName);
+		faces.push_back(skybox_path + fileName + "u" + fileExName);
+		faces.push_back(skybox_path + fileName + "d" + fileExName);
+		faces.push_back(skybox_path + fileName + "b" + fileExName);
+		faces.push_back(skybox_path + fileName + "f" + fileExName);
 		cubemapTexture = loadCubemap(faces);
 	
-		string vs_path = Config::engine_res_path + "shader/" + "skybox.vs";
-		string fs_path = Config::engine_res_path + "shader/" + "skybox.fs";
+		string vs_path = engine_res_path + "shader/" + "skybox.vs";
+		string fs_path = engine_res_path + "shader/" + "skybox.fs";
 		m_shader = new Shader(vs_path.c_str(), fs_path.c_str());
 	
 		m_scale = static_cast<float>(::atoi(Config::GetConfigStr("skybox_scale").c_str()));

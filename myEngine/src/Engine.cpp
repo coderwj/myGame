@@ -5,17 +5,6 @@ namespace myEngine
 {
 	Engine*  Engine::e = nullptr;
 
-#ifdef WIN32
-	const string engine_res_path = "../../../../../myEngine/res/";
-	const string game_res_path = "../../../../../res/";
-#else
-	const string engine_res_path = "../../../../../../myEngine/res/";
-	const string game_res_path = "../../../../../../res/";
-#endif
-	const string model_path = game_res_path + "models/";
-	const string scene_path = game_res_path + "scenes/";
-	const string lua_path = game_res_path + "luafiles/";
-
 	Engine::Engine()
 	:m_maincCamera(nullptr)
 	{
