@@ -41,6 +41,8 @@ namespace myGame
 
 		void resetCameraPos();
 	
+		myEngine::Camera* getCamera() const { return m_camera; }
+		void setCamera(myEngine::Camera* val) { m_camera = val; }
 	private:
 		myEngine::Camera* m_camera;
 	

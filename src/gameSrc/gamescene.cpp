@@ -1,22 +1,17 @@
-
-#include <string>
-#include <vector>
-#include <cmath>
-#define _USE_MATH_DEFINES
-
 #include "GameScene.h"
-#include "SkyBox.h"
 
-#include "Character.h"
-#include "Camera.h"
 #include "luaClientPort.h"
-
+#include "Character.h"
+#include "CameraOption.h"
 #include "Config.h"
+
+#include "tinyxml2.h"
+#include "FbxSdkHelper.h"
+
+#include "SkyBox.h"
+#include "Camera.h"
 #include "Shader.h"
 #include "Model.h"
-#include "tinyxml2.h"
-
-#include "FbxSdkHelper.h"
 
 extern "C"
 {
@@ -26,6 +21,10 @@ extern "C"
 };
 #include "lua_tinker.h"
 
+#include <string>
+#include <vector>
+#include <cmath>
+#define _USE_MATH_DEFINES
 #include <thread>
 #include <sstream>
 
@@ -53,25 +52,24 @@ namespace myGame
 		{
 			return true;
 		}
-	
 	    string fbxFile = Config::model_path + "character2/Maskboy.FBX";
 	    printFbxFileData(fbxFile.c_str());
 	
 		m_skyBox = new SkyBox;
-		m_skyBox->init("");
+		m_skyBox->init("2/darkcity_");
 	
-	    string modelName = "scene_3";
-	    loadScene(modelName.c_str());
+	    string sceneName = "scene_3";
+	    loadScene(sceneName.c_str());
 	    m_mainCharacter = Character::Create("model_3");
 	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
 	
 	    Character * character = Character::Create("model_4");
 	    character->setPosition(Vector3(18.0f, 1.0f, 11.0f));
 	    m_characters.push_back(character);
-	    if(m_mainCharacter == NULL)
+	    if(nullptr == m_mainCharacter)
 	        return false;
-	
-		m_camera = new Camera;
+
+		m_cameraOption = new CameraOption();
 		resetCameraPos();
 	    //glDeleteVertexArrays(1, &vao);
 	    //glDeleteBuffers(1, &vbo);

@@ -1,6 +1,6 @@
 #include "Character.h"
 
-#include "GameScene.h"
+#include "Engine.h"
 #include "Camera.h"
 #include "Model.h"
 
@@ -114,10 +114,10 @@ namespace myGame
 	void Character::render()
 	{
 	    m_shader->use();
-	    GameScene * gamescene = GameScene::getInstance();
-	    if(!gamescene)
+		Engine * pEngine = Engine::getInstance();
+	    if(nullptr == pEngine)
 	        return;
-	    Camera * camera = gamescene->getCamera();
+	    Camera * camera = pEngine->getMaincCamera();
 	    if(!camera)
 	        return;
 		Matrix4 projection = camera->GetProjectMatrix();
@@ -140,7 +140,7 @@ namespace myGame
 	    m_shader->setVec3("Ka", Vector3(0.2f, 0.2f, 0.2f));
 	    m_shader->setVec3("Kd", Vector3(1.0f, 1.0f, 1.0f));
 	    m_shader->setVec3("Ks", Vector3(1.0f, 1.0f, 1.0f));
-	    m_shader->setVec3("view_pos", camera->Position);
+	    m_shader->setVec3("view_pos", camera->getPosition());
 	
 	    m_model->Draw(*m_shader);
 	    m_shader->disuse();

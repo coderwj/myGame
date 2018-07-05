@@ -67,12 +67,16 @@ namespace myGame
 	
 	void CameraOption::processMouseScroll(float yoffset)
 	{
+		if (nullptr == m_camera)
+			return;
 		float velocity = m_moveSpeed * yoffset * 0.3f;
 		m_camera->moveFront(velocity);
 	}
 
 	void CameraOption::resetCameraPos()
 	{
+		if (nullptr == m_camera)
+			return;
 		GameScene* pGameScene = GameScene::getInstance();
 		if (nullptr == pGameScene)
 			return;

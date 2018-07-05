@@ -1,15 +1,15 @@
 #ifndef __CHARACTER_H__
 #define __CHARACTER_H__
 
-#include "MyEngineCore.h"
+#include "Vector3.h"
 #include <string>
 using namespace std;
+using namespace myEngine;
 
 namespace myEngine
 {
 	class Shader;
 	class Model;
-	class Vector3;
 }
 
 namespace myGame
@@ -31,8 +31,8 @@ namespace myGame
 		Vector3 m_orientation;// ori in world
 		string m_modelName;
 	
-		myEngine::Model * m_model;
-		myEngine::Shader * m_shader;
+		Model * m_model;
+		Shader * m_shader;
 	
 		float m_scale;
 		float m_theta;

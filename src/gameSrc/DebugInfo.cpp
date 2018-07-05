@@ -1,13 +1,12 @@
 #include "DebugInfo.h"
-#include "Engine.h"
-#include "Camera.h"
+#include "GameScene.h"
+#include "CameraOption.h"
 
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "imgui_impl_glfw_gl3.h"
 
 using namespace ImGui;
-using namespace myEngine;
 
 namespace myGame
 {
@@ -22,13 +21,13 @@ namespace myGame
 	
 	bool DebugInfo::init()
 	{
-		Engine* pEngine = Engine::getInstance();
-		if (NULL != pEngine)
+		GameScene* pGameScene = GameScene::getInstance();
+		if (NULL != pGameScene)
 		{
-			Camera* pCamera = pEngine->getMaincCamera();
-			if (NULL != pCamera)
+			CameraOption* pCameraOperation = pGameScene->getCameraOption();
+			if (NULL != pCameraOperation)
 			{
-				m_cameraSpeed = pCamera->;
+				m_cameraSpeed = pCameraOperation->getMoveSpeed();
 			}
 		}
 		return true;
@@ -40,10 +39,10 @@ namespace myGame
 		GameScene* pGameScene = GameScene::getInstance();
 		if (NULL != pGameScene)
 		{
-			Camera* pCamera = pGameScene->getCamera();
-			if (NULL != pCamera)
+			CameraOption* pCameraOperation = pGameScene->getCameraOption();
+			if (NULL != pCameraOperation)
 			{
-				pCamera->MovementSpeed = m_cameraSpeed;
+				pCameraOperation->setMoveSpeed(m_cameraSpeed);
 			}
 		}
 	}
@@ -55,9 +54,13 @@ namespace myGame
 		if (ImGui::ButtonEx("Reset Camera", ImVec2(100.f, 20.f), ImGuiButtonFlags_PressedOnClick))
 		{
 			GameScene* pGameScene = GameScene::getInstance();
-			if (pGameScene)
+			if (NULL != pGameScene)
 			{
-				pGameScene->resetCameraPos();
+				CameraOption* pCameraOperation = pGameScene->getCameraOption();
+				if (NULL != pCameraOperation)
+				{
+					pCameraOperation->resetCameraPos();
+				}
 			}
 		}
 		static float start = m_cameraSpeed;

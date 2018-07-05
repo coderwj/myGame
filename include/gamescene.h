@@ -20,6 +20,7 @@ namespace myEngine
 namespace myGame
 {
 	class Character;
+	class CameraOption;
 	
 	struct FogPara{
 		Vector3 color;
@@ -33,6 +34,7 @@ namespace myGame
 		static GameScene*	gs;
 	
 		Character*			m_mainCharacter;
+		CameraOption*		m_cameraOption;
 	
 		SkyBox*				m_skyBox;
 		Model*				m_model;	//scene model
@@ -52,10 +54,11 @@ namespace myGame
 		struct FogPara		m_fogpara;
 	
 		GameScene():
-			m_mainCharacter(NULL),
+			m_mainCharacter(nullptr),
+			m_cameraOption(nullptr),
 			m_scale(1.0f),
 			m_theta(0.0f),
-	        m_state(NULL),
+	        m_state(nullptr),
 			m_nowTime(0)
 		{
 			m_rotateVec = Vector3(0.0f, 1.0f, 0.0f);
@@ -97,6 +100,8 @@ namespace myGame
 		Character*	getMainCharacter() { return m_mainCharacter; }
 		float		getDeltaTime() { return m_deltaTime; }
 
+		myGame::CameraOption* getCameraOption() const { return m_cameraOption; }
+		void setCameraOption(myGame::CameraOption* val) { m_cameraOption = val; }
 	};
 }
 
