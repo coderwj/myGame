@@ -1,13 +1,9 @@
 
 #include <string>
 #include <vector>
-#include <map>
-#include <fstream>
-#include <iostream>
 #include <cmath>
 #define _USE_MATH_DEFINES
 
-#include "MyEngineCore.h"
 #include "GameScene.h"
 #include "SkyBox.h"
 
@@ -64,8 +60,8 @@ namespace myGame
 		m_skyBox = new SkyBox;
 		m_skyBox->init("");
 	
-	    string modelname = "scene_3";
-	    loadScene(modelname);
+	    string modelName = "scene_3";
+	    loadScene(modelName.c_str());
 	    m_mainCharacter = Character::Create("model_3");
 	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
 	
@@ -94,7 +90,7 @@ namespace myGame
 	        delete(m_camera);
 	        m_camera = NULL;
 	    }
-	    for (std::vector<Character *>::iterator it = m_characters.begin(); it != m_characters.end();)
+	    for (vector<Character *>::iterator it = m_characters.begin(); it != m_characters.end();)
 	    {
 	        if(*it)
 	        {
@@ -225,7 +221,7 @@ namespace myGame
 			glBindVertexArray(0);
 			return;
 		}
-	    renderScene();
+	    _renderScene();
 	    if(m_mainCharacter)
 	    {
 	        m_mainCharacter->render();
@@ -239,7 +235,7 @@ namespace myGame
 	    }
 	}
 	
-	void GameScene::renderScene()
+	void GameScene::_renderScene()
 	{
 		m_skyBox->render();
 	
@@ -276,7 +272,7 @@ namespace myGame
 	    m_nowTime += delta;
 	}
 	
-	void GameScene::loadScene(string scenename)
+	void GameScene::loadScene(const char* sceneName)
 	{
 	    string model_str = "";
 	    string material_name = "";
@@ -351,7 +347,7 @@ namespace myGame
 		//glCheckError();
 	}
 	
-	void GameScene::changeScene(string scenename)
+	void GameScene::changeScene(const char* sceneName)
 	{
 		if (m_shader)
 		{
@@ -363,14 +359,7 @@ namespace myGame
 			delete m_model;
 			m_model = NULL;
 		}
-		loadScene(scenename);
+		loadScene(sceneName);
 	}
-	
-	void GameScene::resetCameraPos()
-	{
-		Vector3 characterPos = m_mainCharacter->getPosition();
-		Vector3 cameraPos = characterPos + Vector3(1.0f, 1.0f, 3.0f);
-		m_camera->Position = cameraPos;
-		m_camera->SetFocusPos(characterPos);
-	}
+
 }

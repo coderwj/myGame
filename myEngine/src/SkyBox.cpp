@@ -103,7 +103,7 @@ namespace myEngine
 	
 	
 	SkyBox::SkyBox():
-	m_scale(100.0f),
+	m_scale(50.0f),
 	m_theta(0.0f)
 	{
 	    m_position = Vector3(0.0f);
@@ -135,9 +135,6 @@ namespace myEngine
 		string fs_path = engine_res_path + "shader/" + "skybox.fs";
 		m_shader = new Shader(vs_path.c_str(), fs_path.c_str());
 	
-		m_scale = static_cast<float>(::atoi(Config::GetConfigStr("skybox_scale").c_str()));
-	
-	
 		vector<float> vertices;
 	
 		for (int i = 0; i < skyboxVerticeNum; i++)
@@ -145,9 +142,9 @@ namespace myEngine
 			float x = skyboxVertices[i * 3 + 0];
 			float y = skyboxVertices[i * 3 + 1];
 			float z = skyboxVertices[i * 3 + 2];
-			vertices.push_back(x * m_scale);
-			vertices.push_back(y * m_scale);
-			vertices.push_back(z * m_scale);
+			vertices.push_back(x * setScale());
+			vertices.push_back(y * setScale());
+			vertices.push_back(z * setScale());
 			float u = skyboxVertices[i * 3 + 0];
 			float v = skyboxVertices[i * 3 + 1];
 			float w = skyboxVertices[i * 3 + 2];
@@ -171,15 +168,17 @@ namespace myEngine
 	
 	void SkyBox::render()
 	{
+		if (nullptr == m_shader)
+			return;
 	    m_shader->use();
-	    GameScene * gamescene = GameScene::getInstance();
-	    if(!gamescene)
+		Engine* pEngine = Engine::getInstance();
+		if (nullptr == pEngine)
+			return;
+	    Camera * camera = pEngine->getMaincCamera();
+	    if(nullptr == camera)
 	        return;
-	    Camera * camera = gamescene->getCamera();
-	    if(!camera)
-	        return;
-		Matrix4 projection = camera->GetProjectMatrix();
 	    Matrix4 view = camera->GetViewMatrix();
+		Matrix4 projection = camera->GetProjectMatrix();
 	
 	    Matrix4 scaleM;
 	    scaleM.initWithScale(Vector3(1.f));

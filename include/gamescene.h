@@ -1,10 +1,11 @@
-#ifndef __GAMESCENE_H__
-#define __GAMESCENE_H__
+#pragma once
 
-#include "MyEngineCore.h"
+#include "Vector3.h"
+
 #include <string>
 #include <vector>
-using namespace std;
+
+using namespace myEngine;
 
 struct lua_State;
 
@@ -13,15 +14,15 @@ namespace myEngine
 	class Camera;
 	class Model;
 	class Shader;
+	class SkyBox;
 }
 
 namespace myGame
 {
 	class Character;
-	class SkyBox;
 	
 	struct FogPara{
-		myEngine::Vector3 color;
+		Vector3 color;
 		float	start;
 		float	end;
 		float	intensity;
@@ -29,32 +30,29 @@ namespace myGame
 	
 	class GameScene{
 	private:
-		static GameScene * gs;
+		static GameScene*	gs;
 	
-		Character * m_mainCharacter;
-		Camera * m_camera;
+		Character*			m_mainCharacter;
 	
-		SkyBox* m_skyBox;
+		SkyBox*				m_skyBox;
+		Model*				m_model;	//scene model
+		Shader*				m_shader;
 	
-		myEngine::Model * m_model;
-		myEngine::Shader * m_shader;
+		float				m_scale;
+		float				m_theta;
+		Vector3				m_rotateVec;
 	
-		float m_scale;
-		float m_theta;
-		myEngine::Vector3 m_rotateVec;
+		std::vector<Character*> m_characters;
 	
-		std::vector<Character *> m_characters;
+		struct lua_State*	m_state;
 	
-		struct lua_State * m_state;
+		float				m_deltaTime;
+		float				m_nowTime;
 	
-		float m_deltaTime;
-		float m_nowTime;
-	
-		struct FogPara m_fogpara;
+		struct FogPara		m_fogpara;
 	
 		GameScene():
 			m_mainCharacter(NULL),
-			m_camera(NULL),
 			m_scale(1.0f),
 			m_theta(0.0f),
 	        m_state(NULL),
@@ -68,7 +66,11 @@ namespace myGame
 		}
 	
 		~GameScene(){}
+
 		void onDestroy();
+
+		void _renderScene();
+
 	public:
 		static GameScene * getInstance(){
 			if(gs == NULL)
@@ -85,26 +87,16 @@ namespace myGame
 			}
 		}
 	
-		bool init();
+		bool		init();
+		void		render();
+		void		tick(float delta);
 	
-		void render();
-	
-		void renderScene();
-	
-		void tick(float delta);
-	
-		myEngine::Camera * getCamera() { return m_camera; }
-	
-		Character * getMainCharacter() { return m_mainCharacter; }
-	
-		void loadScene(string scenename);
-	
-		void changeScene(string scenename);
-	
-		void resetCameraPos();
-	
-		float getDeltaTime() { return m_deltaTime; }
+		void		loadScene(const char* sceneName);
+		void		changeScene(const char* sceneName);
+
+		Character*	getMainCharacter() { return m_mainCharacter; }
+		float		getDeltaTime() { return m_deltaTime; }
+
 	};
 }
 
-#endif //__GAMESCENE_H__

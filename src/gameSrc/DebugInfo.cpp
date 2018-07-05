@@ -1,5 +1,5 @@
 #include "DebugInfo.h"
-#include "GameScene.h"
+#include "Engine.h"
 #include "Camera.h"
 
 #include "imgui.h"
@@ -7,6 +7,7 @@
 #include "imgui_impl_glfw_gl3.h"
 
 using namespace ImGui;
+using namespace myEngine;
 
 namespace myGame
 {
@@ -21,13 +22,13 @@ namespace myGame
 	
 	bool DebugInfo::init()
 	{
-		GameScene* pGameScene = GameScene::getInstance();
-		if (NULL != pGameScene)
+		Engine* pEngine = Engine::getInstance();
+		if (NULL != pEngine)
 		{
-			Camera* pCamera = pGameScene->getCamera();
+			Camera* pCamera = pEngine->getMaincCamera();
 			if (NULL != pCamera)
 			{
-				m_cameraSpeed = pCamera->MovementSpeed;
+				m_cameraSpeed = pCamera->;
 			}
 		}
 		return true;

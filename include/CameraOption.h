@@ -38,6 +38,8 @@ namespace myGame
 	
 		float getMouseSensitivity() const { return m_mouseSensitivity; }
 		void setMouseSensitivity(float val) { m_mouseSensitivity = val; }
+
+		void resetCameraPos();
 	
 	private:
 		myEngine::Camera* m_camera;

@@ -1,6 +1,8 @@
 #include "CameraOption.h"
 
 #include "Camera.h"
+#include "gamescene.h"
+#include "Character.h"
 
 using namespace myEngine;
 
@@ -67,6 +69,18 @@ namespace myGame
 	{
 		float velocity = m_moveSpeed * yoffset * 0.3f;
 		m_camera->moveFront(velocity);
+	}
+
+	void CameraOption::resetCameraPos()
+	{
+		GameScene* pGameScene = GameScene::getInstance();
+		if (nullptr == pGameScene)
+			return;
+		Character* pMainCharacter = pGameScene->getMainCharacter();
+		Vector3 characterPos = pMainCharacter->getPosition();
+		Vector3 cameraPos = characterPos + Vector3(1.0f, 1.0f, 3.0f);
+		m_camera->setPosition(cameraPos);
+		m_camera->SetFocusPos(characterPos);
 	}
 }
 
