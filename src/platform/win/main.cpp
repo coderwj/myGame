@@ -4,9 +4,7 @@
 #include <iostream>
 
 #include "Config.h"
-#include "Gamescene.h"
-#include "Camera.h"
-#include "DebugInfo.h"
+#include "GameClient.h"
 
 #include "gltools.h"
 
@@ -20,6 +18,10 @@
     #include <unistd.h>
     #define sleepFunction(t) usleep(t)
 #endif
+
+#include <assert.h>
+
+using namespace myGame;
 
 static GLFWwindow * window = NULL;
 static int width = 960;
@@ -139,6 +141,10 @@ void processInput(GLFWwindow *window)
 }
 
 int main(){
+
+	GameClient* pGameClient = GameClient::getInstance();
+	assert(NULL != pGameClient);
+	pGameClient->init();
     if(!initGlfw())
     {
         std::cout << "initGlfw error!" << std::endl;
@@ -153,8 +159,6 @@ int main(){
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetKeyCallback(window, key_callback);
 
-    Config::InitConfigMap();
-
     ImGui_ImplGlfwGL3_Init(window, false);
 
     GameScene * pGameScene = GameScene::getInstance();
@@ -168,18 +172,6 @@ int main(){
         std::cout << "GameScene Init error!" << std::endl;
         return 0;
     }
-
-	DebugInfo * pDebugInfo = DebugInfo::getInstance();
-	if (NULL == pDebugInfo)
-	{
-		std::cout << "DebugInfo Create error!" << std::endl;
-		return 0;
-	}
-	if (!pDebugInfo->init())
-	{
-		std::cout << "DebugInfo Init error!" << std::endl;
-		return 0;
-	}
 
     while(!glfwWindowShouldClose(window))
     {

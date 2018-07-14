@@ -1,5 +1,6 @@
 #include "GameClient.h"
 
+#include "DebugInfo.h"
 #include "luaClientPort.h"
 #include "Character.h"
 #include "CameraOption.h"
@@ -8,6 +9,7 @@
 #include "tinyxml2.h"
 #include "FbxSdkHelper.h"
 
+#include "Engine.h"
 #include "SkyBox.h"
 #include "Camera.h"
 #include "Shader.h"
@@ -27,6 +29,7 @@ extern "C"
 #define _USE_MATH_DEFINES
 #include <thread>
 #include <sstream>
+#include <assert.h>
 
 using namespace std;
 using namespace myEngine;
@@ -38,6 +41,16 @@ namespace myGame
 	
 	
 	bool GameClient::init(){
+
+		Engine* pEngine = Engine::getInstance();
+		assert(nullptr != pEngine);
+		pEngine->init();
+
+		Config::InitConfigMap();
+
+		DebugInfo * pDebugInfo = DebugInfo::getInstance();
+		assert(nullptr != pDebugInfo);
+		pDebugInfo->init();
 	
 		m_state = luaL_newstate();
 		luaopen_base(m_state);
