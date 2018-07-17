@@ -39,9 +39,11 @@ static void error_callback(int error, const char* description)
 
 void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
-    GameScene * gamescene = GameScene::getInstance();
-    if(!gamescene)
-        return;
+    GameClient * pGameClient = GameClient::getInstance();
+	if (nullptr != pGameClient)
+	{
+		pGameClient->processMouseScroll(static_cast<float>(yoffset));
+	}
     Camera * camera = gamescene->getCamera();
     if(!camera)
         return;

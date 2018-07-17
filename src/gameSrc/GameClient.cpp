@@ -37,7 +37,38 @@ using namespace myEngine;
 
 namespace myGame
 {
+	//static data.
 	GameClient * GameClient::m_pGameClient = NULL;
+
+	//static functions.
+	GameClient * GameClient::getInstance()
+	{
+		if (m_pGameClient == NULL)
+			m_pGameClient = new GameClient();
+		return m_pGameClient;
+	}
+
+	void GameClient::destroyInstance()
+	{
+		if (m_pGameClient)
+		{
+			m_pGameClient->onDestroy();
+			delete(m_pGameClient);
+			m_pGameClient = NULL;
+		}
+	}
+
+	GameClient::GameClient() :
+		m_mainCharacter(nullptr),
+		m_cameraOption(nullptr),
+		m_state(nullptr),
+		m_nowTime(0)
+	{
+	}
+
+	GameClient::~GameClient()
+	{
+	}
 	
 	
 	bool GameClient::init(){
@@ -89,6 +120,7 @@ namespace myGame
 	
 	    return true;
 	}
+
 	void GameClient::onDestroy()
 	{
 	    if(m_mainCharacter)
