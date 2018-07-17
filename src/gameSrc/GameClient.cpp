@@ -69,6 +69,32 @@ namespace myGame
 	GameClient::~GameClient()
 	{
 	}
+
+	void GameClient::onDestroy()
+	{
+		if (m_mainCharacter)
+		{
+			delete(m_mainCharacter);
+			m_mainCharacter = NULL;
+		}
+		if (m_camera)
+		{
+			delete(m_camera);
+			m_camera = NULL;
+		}
+		for (vector<Character *>::iterator it = m_characters.begin(); it != m_characters.end();)
+		{
+			if (*it)
+			{
+				delete(*it);
+				it = m_characters.erase(it);
+			}
+			else
+			{
+				it++;
+			}
+		}
+	}
 	
 	
 	bool GameClient::init(){
@@ -121,37 +147,17 @@ namespace myGame
 	    return true;
 	}
 
-	void GameClient::onDestroy()
-	{
-	    if(m_mainCharacter)
-	    {
-	        delete(m_mainCharacter);
-	        m_mainCharacter = NULL;
-	    }
-	    if(m_camera)
-	    {
-	        delete(m_camera);
-	        m_camera = NULL;
-	    }
-	    for (vector<Character *>::iterator it = m_characters.begin(); it != m_characters.end();)
-	    {
-	        if(*it)
-	        {
-	            delete(*it);
-	            it = m_characters.erase(it);
-	        }
-	        else
-	        {
-	            it++;
-	        }
-	    }
-	}
-	
 	void GameClient::tick(float delta)
 	{
 		m_deltaTime = delta;
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
-	    m_nowTime += delta;
+		m_nowTime += delta;
+	}
+
+	void GameClient::processMouseScroll(float offset) const
+	{
+		if (nullptr != m_cameraOption)
+			m_cameraOption->processMouseScroll(offset);
 	}
 	
 

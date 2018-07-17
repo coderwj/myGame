@@ -1,5 +1,4 @@
-﻿#include "glew.h"
-#include "glfw3.h"
+﻿#include "glfw3.h"
 
 #include <iostream>
 
@@ -105,15 +104,6 @@ bool initGlfw()
     return true;
 }
 
-bool initGlew()
-{
-    if(glewInit() != GLEW_OK) {
-        std::cerr << "failed to init GLEW" << std::endl;
-        return false;
-    }
-    return true;
-}
-
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -150,11 +140,6 @@ int main(){
     if(!initGlfw())
     {
         std::cout << "initGlfw error!" << std::endl;
-        return 0;
-    }
-    if(!initGlew())
-    {
-        std::cout << "initGlew error!" << std::endl;
         return 0;
     }
 

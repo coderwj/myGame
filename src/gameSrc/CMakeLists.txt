@@ -6,11 +6,7 @@ message("--->Cmake GameSrc--->")
 # Set projectname
 project(GameSrc)
 
-file(GLOB_RECURSE HEAD_FILES *.h *.inl)
-file(GLOB_RECURSE SOURCE_FILES *.cpp *.cc *.c)
-
-include_directories(../../include)
-include_directories(../../myEngine/include)
+include_directories(../../myEngine/src)
 include_directories(../../myEngine/lib/glm/glm)
 include_directories(../../myEngine/lib/tinyxml2)
 include_directories(../../myEngine/lib/imgui)
@@ -18,30 +14,12 @@ include_directories(../../dependencies/Lua53/src)
 include_directories(../../dependencies/LuaTinker)
 include_directories(../../dependencies/tolua)
 
-if(APPLE)
-	include_directories(../../myEngine/lib/glew/mac/include)
-	include_directories(../../myEngine/lib/glfw/mac/include)
-
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../myEngine/lib/glew/mac/lib)
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../myEngine/lib/glfw/mac/lib)
-endif()
-
-if(WIN32)
-	include_directories(../../myEngine/lib/glew/win32/include)
-	include_directories(../../myEngine/lib/glfw/win32/include)
-
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../myEngine/lib/glew/win32/lib)
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../myEngine/lib/glfw/win32/lib)
-endif()
-
-
 FILE(GLOB SRC_1 "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
-FILE(GLOB_RECURSE HEAD_GAMESRC ${CMAKE_CURRENT_SOURCE_DIR}/../../include/*.h )
+FILE(GLOB_RECURSE HEAD_GAMESRC ${CMAKE_CURRENT_SOURCE_DIR}/*.h )
 
 add_library(GameSrc STATIC ${SRC_1} ${HEAD_GAMESRC})
 
 SET(LIBRARIES myEngine)
-
 target_link_libraries(GameSrc ${LIBRARIES} tinyxml2 LuaTinker Lua53 tolua)
 
 add_dependencies(GameSrc myEngine tinyxml2 LuaTinker Lua53 tolua)

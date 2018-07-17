@@ -1,5 +1,15 @@
 #include "Material.h"
+#include "Material.h"
 
-Material::Material()
+namespace myEngine
 {
+	Material::Material()
+	{
+	}
+
+	Material::~Material()
+	{
+
+	}
+
 }

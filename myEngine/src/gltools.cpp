@@ -1,4 +1,3 @@
-#include "gltools.h"
 #include "StringDef.h"
 #include <iostream>
 
@@ -17,7 +16,7 @@ GLenum glCheckError_(const char *file, int line)
             case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
             case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
             case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
-            case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
+            //case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
         }
 		myEngine::sprintf(info, sizeof(info),"GL ERROR--> reason: \"%s\", file:%s, line:%d", error.c_str(), file, line);
 		std::cout << info << std::endl;

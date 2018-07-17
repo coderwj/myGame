@@ -34,11 +34,13 @@ namespace myGame
 		bool					init					();
 		void					tick					(float delta);
 
-		Character*				getMainCharacter		() { return m_mainCharacter; }
-		float					getDeltaTime			() { return m_deltaTime; }
+		Character*				getMainCharacter		() const { return m_mainCharacter; }
+		float					getDeltaTime			() const { return m_deltaTime; }
 
 		myGame::CameraOption*	getCameraOption			() const { return m_cameraOption; }
 		void					setCameraOption			(myGame::CameraOption* val) { m_cameraOption = val; }
+
+		void					processMouseScroll		(float offset) const;
 
 	private:
 		GameClient();
