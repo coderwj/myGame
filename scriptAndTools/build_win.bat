@@ -1,10 +1,10 @@
-rd ../build/win /q /s
-mkdir ../build/win
+rd ..\build\win /q /s
+mkdir ..\build\win
 
-cd ./tolua
+cd .\tolua
 call build.bat
 cd ..
 
-cd ../build/win
-cmake ../../
-cd ../../scriptAndTools
+cd ..\build\win
+cmake ..\..\
+cd ..\..\scriptAndTools
