@@ -1,3 +1,3 @@
-cd ../build/win
-cmake ../../
-cd ../../scriptAndTools
+cd ..\build\win
+cmake ..\..\
+cd ..\..\scriptAndTools
