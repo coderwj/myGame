@@ -7,7 +7,6 @@ message("--->Cmake GameSrc--->")
 project(GameSrc)
 
 include_directories(../../myEngine/src)
-include_directories(../../myEngine/lib/glm/glm)
 include_directories(../../myEngine/lib/tinyxml2)
 include_directories(../../myEngine/lib/imgui)
 include_directories(../../dependencies/Lua53/src)

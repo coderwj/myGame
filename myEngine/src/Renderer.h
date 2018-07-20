@@ -9,26 +9,19 @@ namespace myEngine
 	
 	class Renderer
 	{
-	private:
-		static Renderer * r;
-		std::vector<RenderObject*> m_RenderObjects;
 	public:
-		static Renderer * getInstance()
-		{
-			if(r == NULL)
-				r = new Renderer();
-			return r;
-		}
-		static void destroyInstance(){
-			if(r)
-			{
-				delete(r);
-				r = NULL;
-			}
-		}
+		static Renderer * getInstance();
+
+		static void destroyInstance();
 	
 		bool init();
 	
 		void render();
+
+		void setViewPort(int width, int height);
+
+	private:
+		static Renderer * r;
+		std::vector<RenderObject*> m_RenderObjects;
 	};
 }

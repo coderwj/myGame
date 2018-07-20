@@ -31,61 +31,29 @@ float lastFrame = 0.0f;
 
 static int FPS = 30;
 
-static void error_callback(int error, const char* description)
+void onFramebufferResize(GLFWwindow* window, int width, int height)
 {
-    fputs(description, stderr);
+    glViewport(0, 0, width, height);
+	GameClient * pGameClient = GameClient::getInstance();
+	if (nullptr != pGameClient)
+	{
+		pGameClient->onResize(width, height);
+	}
 }
 
 void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
-    GameClient * pGameClient = GameClient::getInstance();
+	GameClient * pGameClient = GameClient::getInstance();
 	if (nullptr != pGameClient)
 	{
-		pGameClient->processMouseScroll(static_cast<float>(yoffset));
+		pGameClient->onMouseScroll(static_cast<float>(yoffset));
 	}
-    Camera * camera = gamescene->getCamera();
-    if(!camera)
-        return;
-    camera->ProcessMouseScroll(GLfloat(yoffset));
-}
-
-void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods)
-{
-    if (action == GLFW_PRESS)
-    {
-        if (key == GLFW_KEY_A)
-        {
-        }
-        if (key == GLFW_KEY_D)
-        {
-        }
-    }
-    else if(action == GLFW_RELEASE)
-    {
-    }
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-	GameScene * gamescene = GameScene::getInstance();
-	if (!gamescene)
-		return;
-	Camera * camera = gamescene->getCamera();
-	if (!camera)
-		return;
-	camera->setAspect(static_cast<float>(width) / static_cast<float>(height));
-	camera->setViewPortWidth(static_cast<float>(width));
 }
 
 bool initGlfw()
 {
-    if(glfwInit() == GL_FALSE) {
-        std::cerr << "failed to init GLFW" << std::endl;
+    if(glfwInit() == GL_FALSE)
         return false;
-    }
-
-    glfwSetErrorCallback(error_callback);
 
     // select opengl version
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -100,7 +68,10 @@ bool initGlfw()
         return false;
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    glfwSetFramebufferSizeCallback(window, onFramebufferResize);
+	glfwSetScrollCallback(window, scroll_callback);
+
     return true;
 }
 
@@ -139,12 +110,8 @@ int main(){
 	pGameClient->init();
     if(!initGlfw())
     {
-        std::cout << "initGlfw error!" << std::endl;
         return 0;
     }
-
-    glfwSetScrollCallback(window, scroll_callback);
-    glfwSetKeyCallback(window, key_callback);
 
     ImGui_ImplGlfwGL3_Init(window, false);
 

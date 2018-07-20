@@ -10,20 +10,12 @@ add_subdirectory(lib/tinyxml2)
 add_subdirectory(lib/imgui)
 add_subdirectory(lib/bgfx.cmake)
 
-#include_directories(./lib/glm/glm)
 include_directories(./lib/tinyxml2)
 include_directories(./lib/imgui)
 include_directories(./lib/bgfx.cmake/include)
 
-if(APPLE)
-	include_directories(./lib/assimp/mac/include)
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/mac/lib)
-endif()
-
+#fbxsdk
 if(WIN32)
-	include_directories(./lib/assimp/win32/include)
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib)
-
 	include_directories(./lib/fbxsdk/win32/include)
 	set(WINDOWS_PLATTYPE .)
 	if(CMAKE_SIZEOF_VOID_P EQUAL 4)
@@ -34,7 +26,6 @@ if(WIN32)
 		link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/x64/debug)
 		# message("${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/x64/${CMAKE_BUILD_TYPE}")
 	endif()
-	message("WINDOWS_PLATTYPE----------------->${WINDOWS_PLATTYPE}")
 endif()
 
 
@@ -45,12 +36,8 @@ add_library(myEngine STATIC ${HEAD_ENGINE} ${SRC_ENGINE})
 #SET_TARGET_PROPERTIES(myEngine PROPERTIES LINKER_LANGUAGE CPP)
 
 if(APPLE)
-
 	if(IOS)
 		message("myEngine---------------choose ios -------")
-		target_link_libraries(myEngine
-			${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/mac/lib/libassimp.dylib
-			imgui)
 		add_dependencies(myEngine imgui tinyxml2)
 	else()
 		message("myEngine---------------choose mac -------")
@@ -67,7 +54,7 @@ if(APPLE)
 		message("--------find COREVIDEO_LIBRARY--->" ${COREVIDEO_LIBRARY})
 
 		target_link_libraries(myEngine ${OPENGL_LIBRARY} ${COCOA_LIBRARY} ${IOKIT_LIBRARY} ${COREVIDEO_LIBRARY}
-			${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/mac/lib/libassimp.dylib
+			tinyxml2
 			imgui
 			bgfx)
 		add_dependencies(myEngine imgui tinyxml2 bgfx)
@@ -79,8 +66,8 @@ if(WIN32)
 
 	target_link_libraries(myEngine
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/common/OpenGL32.Lib
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/win32/lib/assimp.lib
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/${WINDOWS_PLATTYPE}/debug/libfbxsdk.lib
+		tinyxml2
 		imgui
 		bgfx)
 	add_dependencies(myEngine imgui tinyxml2 bgfx)

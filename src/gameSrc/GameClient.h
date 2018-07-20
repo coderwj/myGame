@@ -40,7 +40,8 @@ namespace myGame
 		myGame::CameraOption*	getCameraOption			() const { return m_cameraOption; }
 		void					setCameraOption			(myGame::CameraOption* val) { m_cameraOption = val; }
 
-		void					processMouseScroll		(float offset) const;
+		void					onResize				(int width, int height);
+		void					onMouseScroll			(float offset) const;
 
 	private:
 		GameClient();

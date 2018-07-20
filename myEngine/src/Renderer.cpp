@@ -3,6 +3,19 @@
 
 namespace myEngine
 {
+	Renderer * Renderer::getInstance()
+	{
+		if (r == NULL)
+			r = new Renderer();
+		return r;
+	}
+	void Renderer::destroyInstance() {
+		if (r)
+		{
+			delete(r);
+			r = NULL;
+		}
+	}
 	bool Renderer::init()
 	{
 		return false;
@@ -14,5 +27,9 @@ namespace myEngine
 		{
 			m_RenderObjects[i]->draw();
 		}
+	}
+	void Renderer::setViewPort(int width, int height)
+	{
+		glViewport(0, 0, width, height);
 	}
 }

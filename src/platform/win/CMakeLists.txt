@@ -6,7 +6,6 @@ message("--->Cmake Main--->")
 include_directories(../../../src/gameSrc)
 include_directories(../../../myEngine/src)
 
-include_directories(../../../myEngine/lib/glm/glm)
 include_directories(../../../myEngine/lib/imgui)
 
 if(APPLE)

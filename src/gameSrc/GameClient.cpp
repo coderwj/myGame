@@ -154,7 +154,16 @@ namespace myGame
 		m_nowTime += delta;
 	}
 
-	void GameClient::processMouseScroll(float offset) const
+	void GameClient::onResize(int width, int height)
+	{
+		Engine* pEngine = Engine::getInstance();
+		if (nullptr != pEngine)
+		{
+			pEngine->onResize(width, height);
+		}
+	}
+
+	void GameClient::onMouseScroll(float offset) const
 	{
 		if (nullptr != m_cameraOption)
 			m_cameraOption->processMouseScroll(offset);

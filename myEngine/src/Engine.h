@@ -6,6 +6,7 @@ using namespace std;
 namespace myEngine
 {
 	class Camera;
+	class Renderer;
 
 #ifdef WIN32
 	const string engine_res_path = "../../../../../myEngine/res/";
@@ -20,30 +21,15 @@ namespace myEngine
 
 	class Engine
 	{
-	private:
-		static Engine* e;
-
-		Engine();
-		~Engine();
-
-		Camera* m_maincCamera;
 	public:
-		static Engine * getInstance()
-		{
-			if (nullptr == e)
-				e = new Engine();
-			return e;
-		}
-		static void destroyInstance(){
-			if(e)
-			{
-				delete(e);
-				e = nullptr;
-			}
-		}
+		static Engine * getInstance();
+
+		static void destroyInstance();
 
 		void onCreate();
 		void onDestroy();
+
+		void onResize(int width, int height);
 	
 		bool init();
 		void tick(float delta);
@@ -52,5 +38,16 @@ namespace myEngine
 
 		myEngine::Camera* getMaincCamera() const { return m_maincCamera; }
 		void setMaincCamera(myEngine::Camera* val) { m_maincCamera = val; }
+
+	private:
+		static Engine* e;
+
+		Engine();
+		~Engine();
+
+		Camera* m_maincCamera;
+
+		Renderer* m_renderer;
 	};
+
 }
