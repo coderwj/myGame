@@ -1,32 +1,13 @@
 #include "GameScene.h"
 
-#include "luaClientPort.h"
-#include "Character.h"
-#include "CameraOption.h"
 #include "Config.h"
-
 #include "tinyxml2.h"
-#include "FbxSdkHelper.h"
 
 #include "SkyBox.h"
 #include "Camera.h"
-#include "Shader.h"
 #include "Model.h"
 
-extern "C"
-{
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-};
-#include "lua_tinker.h"
-
 #include <string>
-#include <vector>
-#include <cmath>
-#define _USE_MATH_DEFINES
-#include <thread>
-#include <sstream>
 
 using namespace std;
 using namespace myEngine;
@@ -34,24 +15,28 @@ using namespace myEngine;
 
 namespace myGame
 {
-	GameScene * GameScene::gs = NULL;
+	GameScene * GameScene::m_pGameScene = NULL;
 	
 	
-	bool GameScene::init(){
-	
-		m_state = luaL_newstate();
-		luaopen_base(m_state);
-		luaL_openlibs(m_state);
-		tolua__open(m_state);
-		string luafile = Config::lua_path + "dofile.lua";
-		lua_tinker::dofile(m_state, luafile.c_str());
-	
-		lua_tinker::call<void>(m_state, "LuaGameMgr", "InitGame");
-	
-		if (Config::GetIsShaderTest())
+	GameScene * GameScene::getInstance()
+	{
+		if (m_pGameScene == NULL)
+			m_pGameScene = new GameScene();
+		return m_pGameScene;
+	}
+
+	void GameScene::destroyInstance()
+	{
+		if (m_pGameScene)
 		{
-			return true;
+			m_pGameScene->onDestroy();
+			delete(m_pGameScene);
+			m_pGameScene = NULL;
 		}
+	}
+
+	bool GameScene::init(){
+
 	    string fbxFile = Config::model_path + "character2/Maskboy.FBX";
 	    printFbxFileData(fbxFile.c_str());
 	
@@ -68,169 +53,34 @@ namespace myGame
 	    m_characters.push_back(character);
 	    if(nullptr == m_mainCharacter)
 	        return false;
-
-		m_cameraOption = new CameraOption();
-		resetCameraPos();
-	    //glDeleteVertexArrays(1, &vao);
-	    //glDeleteBuffers(1, &vbo);
 	
 	    return true;
 	}
+	GameScene::GameScene() :
+		m_skyBox(nullptr),
+		m_model(nullptr),
+		m_scale(1.0f),
+		m_theta(0.0f)
+	{
+		m_rotateVec = Vector3(0.0f, 1.0f, 0.0f);
+		m_fogpara.color = Vector3(1.0f, 1.0f, 1.0f);
+		m_fogpara.start = 10.f;
+		m_fogpara.end = 100.f;
+		m_fogpara.intensity = 1.f;
+	}
+
+	GameScene::~GameScene()
+	{
+
+	}
+
 	void GameScene::onDestroy()
 	{
-	    if(m_mainCharacter)
-	    {
-	        delete(m_mainCharacter);
-	        m_mainCharacter = NULL;
-	    }
-	    if(m_camera)
-	    {
-	        delete(m_camera);
-	        m_camera = NULL;
-	    }
-	    for (vector<Character *>::iterator it = m_characters.begin(); it != m_characters.end();)
-	    {
-	        if(*it)
-	        {
-	            delete(*it);
-	            it = m_characters.erase(it);
-	        }
-	        else
-	        {
-	            it++;
-	        }
-	    }
 	}
 	
 	void GameScene::render()
 	{
-	    glEnable(GL_DEPTH_TEST);
-		if (Config::GetIsShaderTest())
-		{
-			static bool hasInit = false;
-			/*static float vertices[48] = {
-				-320.0f, -240.0f, 0.0f,        //pos
-				0.0f,    0.0f,    1.0f,        //normal
-				0.0f,    0.0f,    0.0f,        //textcoord
-				255.0f,  0.0f,    0.0f,        //color
-	
-	
-				320.0f,  -240.0f, 0.0f,        //pos
-				0.0f,    0.0f,    1.0f,        //normal
-				0.0f,    0.0f,    0.0f,        //textcoord
-				255.0f,  0.0f,    0.0f,        //color
-	
-				320.0f,  240.0f,  0.0f,        //pos
-				0.0f,    0.0f,    1.0f,        //normal
-				0.0f,    0.0f,    0.0f,        //textcoord
-				255.0f,  0.0f,    0.0f,        //color
-	
-				-320.0f, 240.0f,  0.0f,        //pos
-				0.0f,    0.0f,    1.0f,        //normal
-				0.0f,    0.0f,    0.0f,        //textcoord
-				255.0f,  0.0f,    0.0f        //color
-			};*/
-			static float vertices[48] = {
-				-0.9f, -0.9f, 0.0f,        //pos
-				0.0f,    0.0f,    1.0f,        //normal
-				0.0f,    0.0f,    0.0f,        //textcoord
-				255.0f,  0.0f,    0.0f,        //color
-	
-	
-				0.9f,  -0.9f, 0.0f,        //pos
-				0.0f,    0.0f,    1.0f,        //normal
-				0.0f,    0.0f,    0.0f,        //textcoord
-				255.0f,  0.0f,    0.0f,        //color
-	
-				0.9f,  0.9f,  0.0f,        //pos
-				0.0f,    0.0f,    1.0f,        //normal
-				0.0f,    0.0f,    0.0f,        //textcoord
-				0.0f,  255.0f,    0.0f,        //color
-	
-				-0.9f, 0.9f,  0.0f,        //pos
-				0.0f,    0.0f,    1.0f,        //normal
-				0.0f,    0.0f,    0.0f,        //textcoord
-				0.0f,  255.0f,    0.0f        //color
-			};
-			static unsigned int indices[6] = {
-				0, 1, 2,
-			    2, 3, 0
-			};
-			static unsigned int VAO, VBO, EBO;
-			if (!hasInit)
-			{
-				hasInit = true;
-				glGenVertexArrays(1, &VAO);
-				glGenBuffers(1, &VBO);
-				glGenBuffers(1, &EBO);
-	
-				glBindVertexArray(VAO);
-	
-				glBindBuffer(GL_ARRAY_BUFFER, VBO);
-				glBufferData(GL_ARRAY_BUFFER, 48 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-	
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-	
-				glEnableVertexAttribArray(0);
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 12, (void*)0);
-	
-				glEnableVertexAttribArray(1);
-				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 12, (void*)(3 * sizeof(float)));
-	
-				glEnableVertexAttribArray(2);
-				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 12, (void*)(6 * sizeof(float)));
-	
-				glEnableVertexAttribArray(3);
-				glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 12, (void*)(9 * sizeof(float)));
-	
-				glBindVertexArray(0);
-			}
-			string temp_vs_path = Config::engine_res_path + "shader/" + "test.vs";
-			string temp_fs_path = Config::engine_res_path + "shader/" + "test.fs";
-			static Shader * testShader = new Shader(temp_vs_path.c_str(), temp_fs_path.c_str());
-	
-			testShader->use();
-	
-			GameScene * gamescene = GameScene::getInstance();
-			if (!gamescene)
-				return;
-			Camera * camera = gamescene->getCamera();
-			if (!camera)
-				return;
-			Matrix4 projection = camera->GetProjectMatrix();
-			Matrix4 view;
-			view.initWithLookAt(Vector3(0.0f, 0.0f, -1.0f), Vector3(0.0f), Vector3(0.0f, 1.0f, 0.0f));
-	
-			Matrix4 scaleM;
-			scaleM.initWithScale(Vector3(1.0f));
-			Matrix4 rotateM;
-			rotateM.initWithRotate(Vector3(0.0f, 1.0f, 0.0f), 0.0f);
-			Matrix4 transM;
-			transM.initWithTranslate(Vector3(0.0f));
-	
-			Matrix4 model = scaleM * rotateM * transM;
-			testShader->setMat4("model", model);
-			testShader->setMat4("view", view);
-			testShader->setMat4("projection", projection);
-	        testShader->setFloat("time", m_nowTime);
-			glBindVertexArray(VAO);
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
-			return;
-		}
-	    _renderScene();
-	    if(m_mainCharacter)
-	    {
-	        m_mainCharacter->render();
-	    }
-	    for (std::vector<Character *>::iterator it = m_characters.begin(); it != m_characters.end(); it++)
-	    {
-	        if(*it)
-	        {
-	            (*it)->render();
-	        }
-	    }
+		_renderScene();
 	}
 	
 	void GameScene::_renderScene()

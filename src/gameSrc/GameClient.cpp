@@ -8,7 +8,7 @@
 #include <sstream>
 #include <assert.h>
 
-
+#include "gamescene.h"
 #include "DebugInfo.h"
 #include "luaClientPort.h"
 #include "Character.h"
@@ -114,34 +114,29 @@ namespace myGame
 	
 	bool GameClient::init(){
 
+		//init client config.
+		Config::InitConfigMap();
+
+		//init Engine.
 		Engine* pEngine = Engine::getInstance();
 		assert(nullptr != pEngine);
 		pEngine->init();
 
-		Config::InitConfigMap();
-
-		DebugInfo * pDebugInfo = DebugInfo::getInstance();
-		assert(nullptr != pDebugInfo);
-		pDebugInfo->init();
+		//DebugInfo * pDebugInfo = DebugInfo::getInstance();
+		//assert(nullptr != pDebugInfo);
+		//pDebugInfo->init();
 	
+		//init lua.
 		m_state = luaL_newstate();
 		luaopen_base(m_state);
 		luaL_openlibs(m_state);
 		tolua__open(m_state);
 		string luafile = Config::lua_path + "dofile.lua";
 		lua_tinker::dofile(m_state, luafile.c_str());
-	
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "InitGame");
-	
-		if (Config::GetIsShaderTest())
-		{
-			return true;
-		}
-	    string fbxFile = Config::model_path + "character2/Maskboy.FBX";
-	    printFbxFileData(fbxFile.c_str());
-	
-		m_skyBox = new SkyBox;
-		m_skyBox->init("2/darkcity_");
+
+		//string fbxFile = Config::model_path + "character2/Maskboy.FBX";
+		//printFbxFileData(fbxFile.c_str());
 	
 	    string sceneName = "scene_3";
 	    loadScene(sceneName.c_str());
@@ -174,6 +169,8 @@ namespace myGame
 		m_deltaTime = delta;
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
 		m_nowTime += delta;
+
+		m_ga
 
 
 		//end tick, get time.

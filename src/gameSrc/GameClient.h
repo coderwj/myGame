@@ -19,6 +19,7 @@ namespace myEngine
 
 namespace myGame
 {
+	class GameScene;
 	class Character;
 	class CameraOption;
 	
@@ -54,6 +55,7 @@ namespace myGame
 	private:
 		static GameClient*	m_pGameClient;
 
+		GameScene*			m_gameScene;
 		Character*			m_mainCharacter;
 		CameraOption*		m_cameraOption;
 
