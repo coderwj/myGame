@@ -1,35 +1,18 @@
-﻿#include "glfw3.h"
-
-#include <iostream>
-
-#include "Config.h"
-#include "GameClient.h"
-
-#include "gltools.h"
-
-#include "imgui.h"
-#include "imgui_impl_opengl3.h"
-
-#ifdef WIN32
-    #include <Windows.h>
-    #define sleepFunction(t) Sleep(t)
-#else
-    #include <unistd.h>
-    #define sleepFunction(t) usleep(t)
-#endif
-
+﻿#include <iostream>
+#include <Windows.h>
+#include <windowsx.h>
 #include <assert.h>
+
+#include "GameClient.h"
 
 using namespace myGame;
 
-static GLFWwindow * window = NULL;
-static int width = 960;
-static int height = 540;
+static GameClient * g_client = NULL;
 
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
+static int g_window_width = 960;
+static int g_window_height = 540;
 
-static int FPS = 30;
+extern HWND g_window = NULL;
 
 void onFramebufferResize(GLFWwindow* window, int width, int height)
 {
@@ -130,10 +113,6 @@ int main(){
     while(!glfwWindowShouldClose(window))
     {
 
-        float currentFrame = (float)glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-
         processInput(window);
 
         pGameScene->tick(deltaTime);
@@ -151,17 +130,6 @@ int main(){
 
         // check for errors
         glCheckError();
-
-        double runTime = glfwGetTime() - currentFrame;
-
-		if (runTime < 1.0 / FPS)
-		{
-			unsigned long ms = static_cast<unsigned long>((1.0 / FPS - runTime) * 1000);
-			sleepFunction(ms);
-		}
     }
-    ImGui_ImplGlfwGL3_Shutdown();
-    glfwDestroyWindow(window);
-    glfwTerminate();
     return 0;
 }

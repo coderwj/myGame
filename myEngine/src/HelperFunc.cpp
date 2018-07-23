@@ -1,7 +1,9 @@
 #include "HelperFunc.h"
-#include "StringDef.h"
 
 #include <cstdio>
+#include <chrono>
+
+#include "StringDef.h"
 
 namespace myEngine
 {
@@ -105,5 +107,13 @@ namespace myEngine
 		::fclose(fp);
 	
 		return true;
+	}
+
+	long long HelperFunc::GetCurrentTimeMs()
+	{
+		std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::system_clock::now().time_since_epoch()
+			);
+		return ms.count();
 	}
 }

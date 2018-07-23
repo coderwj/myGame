@@ -1,5 +1,14 @@
 #include "GameClient.h"
 
+#include <string>
+#include <vector>
+#include <cmath>
+#define _USE_MATH_DEFINES
+#include <thread>
+#include <sstream>
+#include <assert.h>
+
+
 #include "DebugInfo.h"
 #include "luaClientPort.h"
 #include "Character.h"
@@ -14,6 +23,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Model.h"
+#include "HelperFunc.h"
 
 extern "C"
 {
@@ -23,16 +33,20 @@ extern "C"
 };
 #include "lua_tinker.h"
 
-#include <string>
-#include <vector>
-#include <cmath>
-#define _USE_MATH_DEFINES
-#include <thread>
-#include <sstream>
-#include <assert.h>
+
+#ifdef WIN32
+#include <Windows.h>
+#define sleepFunction(t) Sleep(t)
+#else
+#include <unistd.h>
+#define sleepFunction(t) usleep(t)
+#endif
 
 using namespace std;
 using namespace myEngine;
+
+long long g_deltaTime = 0;
+long long g_lastFrame = 0;
 
 
 namespace myGame
@@ -62,7 +76,8 @@ namespace myGame
 		m_mainCharacter(nullptr),
 		m_cameraOption(nullptr),
 		m_state(nullptr),
-		m_nowTime(0)
+		m_nowTime(0),
+		m_fps(30)
 	{
 	}
 
@@ -149,9 +164,26 @@ namespace myGame
 
 	void GameClient::tick(float delta)
 	{
+
+		//begin tick, get time.
+		long long currentFrame = HelperFunc::GetCurrentTimeMs();
+		g_deltaTime = currentFrame - g_lastFrame;
+		g_lastFrame = currentFrame;
+
+
 		m_deltaTime = delta;
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
 		m_nowTime += delta;
+
+
+		//end tick, get time.
+		long long runTime = HelperFunc::GetCurrentTimeMs() - g_lastFrame;
+		if (runTime < static_cast<long long>(1000 / getFps()))
+		{
+			long long sleepTime = static_cast<long long>(1000 / getFps()) - runTime;
+			sleepFunction(sleepTime);
+		}
+
 	}
 
 	void GameClient::onResize(int width, int height)
@@ -167,6 +199,16 @@ namespace myGame
 	{
 		if (nullptr != m_cameraOption)
 			m_cameraOption->processMouseScroll(offset);
+	}
+
+	int GameClient::getFps() const
+	{
+		return m_fps;
+	}
+
+	void GameClient::setFps(int val)
+	{
+		m_fps = val;
 	}
 	
 

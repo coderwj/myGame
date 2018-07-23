@@ -13,6 +13,8 @@ namespace myEngine
 		static bool LoadFromFile(const char* const fileName, char* const buff, unsigned int buff_size);
 	
 		static bool WriteToFile(const char* const fileName, char* const buff);
+
+		static long long GetCurrentTimeMs();
 	
 	};
 }

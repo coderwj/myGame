@@ -43,6 +43,9 @@ namespace myGame
 		void					onResize				(int width, int height);
 		void					onMouseScroll			(float offset) const;
 
+		int						getFps					() const;
+		void					setFps					(int val);
+
 	private:
 		GameClient();
 		~GameClient();
@@ -60,6 +63,8 @@ namespace myGame
 
 		float				m_deltaTime;
 		float				m_nowTime;
+
+		int					m_fps;
 
 	};
 }
