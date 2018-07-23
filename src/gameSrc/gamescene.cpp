@@ -36,9 +36,6 @@ namespace myGame
 	}
 
 	bool GameScene::init(){
-
-	    string fbxFile = Config::model_path + "character2/Maskboy.FBX";
-	    printFbxFileData(fbxFile.c_str());
 	
 		m_skyBox = new SkyBox;
 		m_skyBox->init("2/darkcity_");

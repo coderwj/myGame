@@ -12,17 +12,77 @@ static GameClient * g_client = NULL;
 static int g_window_width = 960;
 static int g_window_height = 540;
 
+static bool g_mouse_left_down = false;
+static bool g_mouse_right_down = false;
+
 extern HWND g_window = NULL;
 
-void onFramebufferResize(GLFWwindow* window, int width, int height)
+void checkScreenSize()
 {
-    glViewport(0, 0, width, height);
-	GameClient * pGameClient = GameClient::getInstance();
-	if (nullptr != pGameClient)
+
+	RECT window_rect;
+	GetClientRect(g_window, &window_rect);
+	
+	int width = window_rect.right - window_rect.left;
+	int height = window_rect.bottom - window_rect.top;
+
+	if (width == 0 || height == 0)
+		return;
+	if (width != g_window_width || height != g_window_height)
 	{
-		pGameClient->onResize(width, height);
+		if (nullptr != g_client)
+			g_client->onResize(width, height);
 	}
 }
+
+static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+}
+
+int __stdcall WinMain(_In_ HINSTANCE h, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
+{
+	//char name[512];
+	//GetModuleFileName(NULL, name, sizeof(name));
+	////TODO, set name
+	//SetCurrentDirectory(name);
+
+	HINSTANCE hInstance = GetModuleHandle(NULL);
+
+	HWND hWnd = NULL;
+	char appName[] = "myGameWin32";
+
+	WNDCLASS cs = { 0 };
+	cs.cbClsExtra = 0;
+	cs.cbWndExtra = 0;
+	cs.hbrBackground = (HBRUSH)(COLOR_WINDOW + 2);
+	cs.hCursor = LoadCursor(NULL, IDC_ARROW);
+	cs.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	cs.hInstance = hInstance;
+	cs.lpfnWndProc = (WNDPROC)WndProc;
+	cs.lpszClassName = appName;
+	cs.lpszMenuName = NULL;
+	cs.style = CS_VREDRAW | CS_HREDRAW;
+	RegisterClass(&cs);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
@@ -91,24 +151,6 @@ int main(){
 	GameClient* pGameClient = GameClient::getInstance();
 	assert(NULL != pGameClient);
 	pGameClient->init();
-    if(!initGlfw())
-    {
-        return 0;
-    }
-
-    ImGui_ImplGlfwGL3_Init(window, false);
-
-    GameScene * pGameScene = GameScene::getInstance();
-    if(pGameScene == NULL)
-    {
-        std::cout << "GameScene Create error!" << std::endl;
-        return 0;
-    }
-    if(!pGameScene->init())
-    {
-        std::cout << "GameScene Init error!" << std::endl;
-        return 0;
-    }
 
     while(!glfwWindowShouldClose(window))
     {
@@ -116,17 +158,6 @@ int main(){
         processInput(window);
 
         pGameScene->tick(deltaTime);
-		pDebugInfo->tick(deltaTime);
-
-
-		pGameScene->render();
-		pDebugInfo->render();
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-
-        // check for errors
-        glCheckError();
     }
     return 0;
 }

@@ -30,6 +30,12 @@ namespace myEngine
 		{
 			m_RenderObjects[i]->draw();
 		}
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+
+		// check for errors
+		glCheckError();
 	}
 	void Renderer::setViewPort(int width, int height)
 	{

@@ -73,6 +73,7 @@ namespace myGame
 	}
 
 	GameClient::GameClient() :
+		m_gameScene(nullptr),
 		m_mainCharacter(nullptr),
 		m_cameraOption(nullptr),
 		m_state(nullptr),
@@ -87,16 +88,20 @@ namespace myGame
 
 	void GameClient::onDestroy()
 	{
+		m_gameScene = nullptr;
+
 		if (m_mainCharacter)
 		{
 			delete(m_mainCharacter);
-			m_mainCharacter = NULL;
+			m_mainCharacter = nullptr;
 		}
-		if (m_camera)
+		if (m_cameraOption)
 		{
-			delete(m_camera);
-			m_camera = NULL;
+			delete(m_cameraOption);
+			m_cameraOption = nullptr;
 		}
+		m_state = nullptr;
+
 		for (vector<Character *>::iterator it = m_characters.begin(); it != m_characters.end();)
 		{
 			if (*it)
@@ -137,23 +142,22 @@ namespace myGame
 
 		//string fbxFile = Config::model_path + "character2/Maskboy.FBX";
 		//printFbxFileData(fbxFile.c_str());
-	
-	    string sceneName = "scene_3";
-	    loadScene(sceneName.c_str());
+
+		m_gameScene = GameScene::getInstance();
+		m_gameScene->init();
+
+		m_gameScene->loadScene("scene_3");
+
 	    m_mainCharacter = Character::Create("model_3");
 	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
 	
 	    Character * character = Character::Create("model_4");
 	    character->setPosition(Vector3(18.0f, 1.0f, 11.0f));
-	    m_characters.push_back(character);
-	    if(nullptr == m_mainCharacter)
-	        return false;
 
+	    m_characters.push_back(character);
 		m_cameraOption = new CameraOption();
-		resetCameraPos();
-	    //glDeleteVertexArrays(1, &vao);
-	    //glDeleteBuffers(1, &vbo);
-	
+		m_cameraOption->resetCameraPos();
+
 	    return true;
 	}
 
@@ -170,7 +174,7 @@ namespace myGame
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
 		m_nowTime += delta;
 
-		m_ga
+		m_gameScene->tick();
 
 
 		//end tick, get time.

@@ -58,6 +58,7 @@ namespace myEngine
 
 	bool Engine::init()
 	{
+		m_renderer->init();
 		return true;
 	}
 	
@@ -67,6 +68,6 @@ namespace myEngine
 	}
 	void Engine::render()
 	{
-
+		m_renderer->render();
 	}
 }
