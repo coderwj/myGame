@@ -45,10 +45,6 @@ extern "C"
 using namespace std;
 using namespace myEngine;
 
-long long g_deltaTime = 0;
-long long g_lastFrame = 0;
-
-
 namespace myGame
 {
 	//static data.
@@ -161,30 +157,66 @@ namespace myGame
 	    return true;
 	}
 
-	void GameClient::tick(float delta)
+	void GameClient::tick()
 	{
+		if (m_nowTime == 0)
+			m_nowTime = HelperFunc::GetCurrentTimeMs();
 
 		//begin tick, get time.
-		long long currentFrame = HelperFunc::GetCurrentTimeMs();
-		g_deltaTime = currentFrame - g_lastFrame;
-		g_lastFrame = currentFrame;
+		long long new_time = HelperFunc::GetCurrentTimeMs();
 
+		m_deltaTime = new_time - m_nowTime;
+		m_nowTime = new_time;
 
-		m_deltaTime = delta;
-		lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
-		m_nowTime += delta;
-
-		m_gameScene->tick();
-
+		_tick(m_deltaTime);
 
 		//end tick, get time.
-		long long runTime = HelperFunc::GetCurrentTimeMs() - g_lastFrame;
+		long long runTime = HelperFunc::GetCurrentTimeMs() - m_nowTime;
 		if (runTime < static_cast<long long>(1000 / getFps()))
 		{
 			long long sleepTime = static_cast<long long>(1000 / getFps()) - runTime;
 			sleepFunction(sleepTime);
 		}
+	}
 
+	void GameClient::_tick(int delta)
+	{
+		lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
+
+		m_gameScene->tick(delta);
+
+	}
+
+	void GameClient::handleCharInput(int key)
+	{
+
+	}
+
+	void GameClient::handleKeyDown(int key)
+	{
+
+	}
+
+	void GameClient::handleKeyUp(int key)
+	{
+
+	}
+
+	void GameClient::handleMouseWheel(bool wheel_down, int scroll_delta, int x, int y)
+	{
+
+	}
+
+	void GameClient::handleTouchBegin(int x, int y)
+	{
+	}
+
+	void GameClient::handleTouchMove(int x, int y)
+	{
+	}
+
+	void GameClient::handleTouchEnd(int x, int y)
+	{
 	}
 
 	void GameClient::onResize(int width, int height)

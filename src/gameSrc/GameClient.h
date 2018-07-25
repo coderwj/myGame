@@ -33,7 +33,15 @@ namespace myGame
 	public:
 		//member functions.
 		bool					init					();
-		void					tick					(float delta);
+		void					tick					();
+
+		void					handleCharInput			(int key);
+		void					handleKeyDown			(int key);
+		void					handleKeyUp				(int key);
+		void					handleMouseWheel		(bool wheel_down, int scroll_delta, int x, int y);
+		void					handleTouchBegin		(int x, int y);
+		void					handleTouchMove			(int x, int y);
+		void					handleTouchEnd			(int x, int y);
 
 		Character*				getMainCharacter		() const { return m_mainCharacter; }
 		float					getDeltaTime			() const { return m_deltaTime; }
@@ -52,6 +60,8 @@ namespace myGame
 		~GameClient();
 		void					onDestroy				();
 
+		void					_tick					(int delta); //real tick(delta ms)
+
 	private:
 		static GameClient*	m_pGameClient;
 
@@ -63,8 +73,8 @@ namespace myGame
 
 		struct lua_State*	m_state;
 
-		float				m_deltaTime;
-		float				m_nowTime;
+		long long			m_deltaTime;
+		long long			m_nowTime;
 
 		int					m_fps;
 
