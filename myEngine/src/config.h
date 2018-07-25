@@ -6,7 +6,7 @@
 
 using namespace std;
 
-namespace myGame
+namespace myEngine
 {
 	class Config
 	{

@@ -182,7 +182,6 @@ namespace myGame
 	void GameClient::_tick(int delta)
 	{
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
-
 		m_gameScene->tick(delta);
 
 	}

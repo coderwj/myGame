@@ -1,23 +1,15 @@
 #include "Config.h"
 #include "tinyxml2.h"
 
-namespace myGame
+namespace myEngine
 {
-	#ifdef WIN32
-	    const string Config::engine_res_path = "../../../../../myEngine/res/";
-	    const string Config::game_res_path = "../../../../../res/";
-	    const string Config::model_path = Config::game_res_path + "models/";
-	    const string Config::scene_path = Config::game_res_path + "scenes/";
-	    const string Config::lua_path = Config::game_res_path + "luafiles/";
-	#else
-	    const string Config::engine_res_path = "../../../../../../myEngine/res/";
-	    const string Config::game_res_path = "../../../../../../res/";
-	    const string Config::model_path = Config::game_res_path + "models/";
-	    const string Config::scene_path = Config::game_res_path + "scenes/";
-	    const string Config::lua_path = Config::game_res_path + "luafiles/";
-	#endif
-	
 	const string Config::INVALID_STR = "";
+
+	const string Config::engine_res_path = "../../myEngine/res/";
+	const string Config::game_res_path = "../../res/";
+	const string Config::model_path = Config::game_res_path + "models/";
+	const string Config::scene_path = Config::game_res_path + "scenes/";
+	const string Config::lua_path = Config::game_res_path + "luafiles/";
 	
 	const unordered_map<string, string> Config::configMap = unordered_map<string, string>();
 	

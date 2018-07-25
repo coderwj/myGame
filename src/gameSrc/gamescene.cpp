@@ -112,9 +112,7 @@ namespace myGame
 	
 	void GameScene::tick(float delta)
 	{
-		m_deltaTime = delta;
-		lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
-	    m_nowTime += delta;
+
 	}
 	
 	void GameScene::loadScene(const char* sceneName)
