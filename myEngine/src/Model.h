@@ -12,11 +12,6 @@
 
 using namespace std;
 
-struct aiNode;
-struct aiScene;
-struct aiMesh;
-struct aiMaterial;
-
 namespace myEngine
 {
 	class Model

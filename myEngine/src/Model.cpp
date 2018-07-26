@@ -1,3 +1,10 @@
+#include "Model.h"
+
+#ifndef TINYGLTF_IMPLEMENTATION
+#define TINYGLTF_IMPLEMENTATION
+#endif // TINYGLTF_IMPLEMENTATION
+#include "tiny_gltf.h"
+
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #endif // STB_IMAGE_IMPLEMENTATION
@@ -5,12 +12,6 @@ extern "C"
 {
 #include "stb_image.h"
 }
-
-#include "Model.h"
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
-
 
 namespace myEngine
 {
@@ -87,12 +88,16 @@ namespace myEngine
 	
 	void Model::loadModel(const string &path)
 	{
-		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-		if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-		{
-			cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
-			return;
+		tinygltf::Model model;
+		tinygltf::TinyGLTF gltf_ctx;
+		std::string err;
+		bool ret = false;
+		std::cout << "Reading ASCII glTF" << std::endl;
+		ret = gltf_ctx.LoadASCIIFromFile(&model, &err, path);
+		if (!ret) {
+			printf("Failed to parse glTF\n");
+			if (!err.empty())
+				printf("Err: %s\n", err.c_str());
 		}
 		m_directory = path.substr(0, path.find_last_of('/'));
 	
