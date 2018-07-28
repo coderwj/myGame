@@ -26,6 +26,15 @@ namespace myEngine
 	{
 		loadModel(path);
 	}
+
+	Model::~Model()
+	{
+		delete m_gltf_model;
+		m_gltf_model = nullptr;
+
+		delete m_render_object;
+		m_render_object = nullptr;
+	}
 	
 	void Model::loadModel(const string &path)
 	{

@@ -8,12 +8,13 @@
 #include <sstream>
 #include <iostream>
 
+#include "../../brtshaderc/brtshaderc.h"
+
 namespace myEngine
 {
 	class Shader
 	{
 	public:
-	    unsigned int ID;
 	
 	    Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
 	    {
@@ -61,6 +62,42 @@ namespace myEngine
 	
 	        unsigned int vertex, fragment;
 	        // vertex shader
+			if (defines)
+				_defines = defines;
+
+			// Compile shaders using brtshaderc library
+			const bgfx::Memory* memVsh = shaderc::compileShader(shaderc::ST_VERTEX, vshPath, defines, varyingFile.c_str());
+			const bgfx::Memory* memFsh = shaderc::compileShader(shaderc::ST_FRAGMENT, fshPath, defines, varyingFile.c_str());
+
+			if (!memVsh)
+			{
+				GP_WARN("Error while compiling vertex shader %s.", vshPath);
+				return false;
+			}
+
+			if (!memFsh)
+			{
+				GP_WARN("Error while compiling fragment shader %s.", fshPath);
+				return false;
+			}
+
+			// Create shaders.
+			_vsh = bgfx::createShader(memVsh);
+			_fsh = bgfx::createShader(memFsh);
+
+			// Create bgfx program.
+			_program = bgfx::createProgram(_vsh, _fsh, true);
+
+			if (!bgfx::isValid(_program))
+			{
+				GP_WARN("Error while creating bgfx program with shaders [%s], [%s], [%s].", vshPath, fshPath, defines);
+				return false;
+			}
+
+			// Query uniforms from shaders.
+			getUniformsFromShader(_vsh);
+			getUniformsFromShader(_fsh);
+
 	        vertex = glCreateShader(GL_VERTEX_SHADER);
 	        glShaderSource(vertex, 1, &vShaderCode, NULL);
 	        glCompileShader(vertex);
@@ -173,30 +210,8 @@ namespace myEngine
 	    }
 	
 	private:
-	
-	    void checkCompileErrors(GLuint shader, std::string type)
-		{
-			GLint success;
-			GLchar infoLog[1024];
-			if(type != "PROGRAM")
-			{
-				glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-				if(!success)
-				{
-					glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-	                std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-				}
-			}
-			else
-			{
-				glGetProgramiv(shader, GL_LINK_STATUS, &success);
-				if(!success)
-				{
-					glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-	                std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-				}
-			}
-		}
+		bgfx::ProgramHandle m_program;
+		bgfx::UniformHandle m_uniform;
 	};
 }
 

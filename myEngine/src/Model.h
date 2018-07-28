@@ -24,6 +24,7 @@ namespace myEngine
 	{
 	public:	
 		Model(const std::string &path);
+		~Model();
 	
 		void Draw(Shader &shader);
 	
