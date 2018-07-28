@@ -8,8 +8,6 @@
 #include <sstream>
 #include <iostream>
 
-#include "../../brtshaderc/brtshaderc.h"
-
 namespace myEngine
 {
 	class Shader
@@ -61,13 +59,9 @@ namespace myEngine
 	        const char * fShaderCode = fragmentCode.c_str();
 	
 	        unsigned int vertex, fragment;
-	        // vertex shader
-			if (defines)
-				_defines = defines;
 
-			// Compile shaders using brtshaderc library
-			const bgfx::Memory* memVsh = shaderc::compileShader(shaderc::ST_VERTEX, vshPath, defines, varyingFile.c_str());
-			const bgfx::Memory* memFsh = shaderc::compileShader(shaderc::ST_FRAGMENT, fshPath, defines, varyingFile.c_str());
+			const bgfx::Memory* memVsh = bgfx::createShader();
+			const bgfx::Memory* memFsh = bgfx::createShader();
 
 			if (!memVsh)
 			{
