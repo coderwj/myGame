@@ -1,5 +1,7 @@
 #include "RenderObject.h"
 
+#include "bgfx/bgfx.h"
+
 namespace myEngine
 {
 	RenderObject::RenderObject()
@@ -16,6 +18,6 @@ namespace myEngine
 	
 	void RenderObject::draw()
 	{
-	
+
 	}
 }

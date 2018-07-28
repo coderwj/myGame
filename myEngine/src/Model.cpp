@@ -1,5 +1,7 @@
 #include "Model.h"
 
+#include "RenderObject.h"
+
 #ifndef TINYGLTF_IMPLEMENTATION
 #define TINYGLTF_IMPLEMENTATION
 #endif // TINYGLTF_IMPLEMENTATION
@@ -20,6 +22,7 @@ namespace myEngine
 {
 	Model::Model(const std::string &path)
 	:m_gltf_model(nullptr)
+	,m_render_object(nullptr)
 	{
 		loadModel(path);
 	}
@@ -37,6 +40,7 @@ namespace myEngine
 				printf("Err: %s\n", err.c_str());
 		}
 
+		m_render_object = new RenderObject();
 		copyTexture();
 	}
 

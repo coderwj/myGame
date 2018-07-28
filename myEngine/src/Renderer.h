@@ -20,8 +20,19 @@ namespace myEngine
 
 		void setViewPort(int width, int height);
 
+		void clearDepth() const;
+		void clearColor() const;
+		void clear() const;
+
 	private:
+
+		Renderer();
+		~Renderer();
+
 		static Renderer * r;
 		std::vector<RenderObject*> m_RenderObjects;
+
+		int m_viewport_width;
+		int m_viewport_height;
 	};
 }
