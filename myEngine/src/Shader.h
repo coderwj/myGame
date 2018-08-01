@@ -8,6 +8,9 @@
 #include <sstream>
 #include <iostream>
 
+#include "bx/readerwriter.h"
+#include "bgfx/bgfx.h"
+
 namespace myEngine
 {
 	class Shader
@@ -56,24 +59,34 @@ namespace myEngine
 	            std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 	        }
 	        const char* vShaderCode = vertexCode.c_str();
-	        const char * fShaderCode = fragmentCode.c_str();
+	        const char* fShaderCode = fragmentCode.c_str();
 	
 	        unsigned int vertex, fragment;
 
-			const bgfx::Memory* memVsh = bgfx::createShader();
-			const bgfx::Memory* memFsh = bgfx::createShader();
+			const bgfx::Memory* memVs = bgfx::makeRef(vShaderCode, vertexCode.size());
+			const bgfx::Memory* memFs = bgfx::makeRef(fShaderCode, fragmentCode.size());
 
-			if (!memVsh)
+			bgfx::ShaderHandle memVsh = bgfx::createShader(memVs);
+			bgfx::ShaderHandle memFsh = bgfx::createShader(memFs);
+
+			if (isValid(memVsh))
 			{
-				GP_WARN("Error while compiling vertex shader %s.", vshPath);
-				return false;
+				std::cout << "Error while compiling vertex shader: " << vertexPath <<std::endl;
+				return;
 			}
 
-			if (!memFsh)
+			if (isValid(memFsh))
 			{
-				GP_WARN("Error while compiling fragment shader %s.", fshPath);
-				return false;
+				std::cout << "Error while compiling fragment shader: " << fragmentPath << std::endl;
+				return;
 			}
+
+			_program = bgfx::createProgram(
+				bgfx::createEmbeddedShader(s_embeddedShaders, type, "vs_imgui_image")
+				, bgfx::createEmbeddedShader(s_embeddedShaders, type, "fs_imgui_image")
+				, true
+			);
+
 
 			// Create shaders.
 			_vsh = bgfx::createShader(memVsh);
