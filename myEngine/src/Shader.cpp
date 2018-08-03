@@ -48,8 +48,6 @@ namespace myEngine
 		const char* vShaderCode = vertexCode.c_str();
 		const char* fShaderCode = fragmentCode.c_str();
 
-		unsigned int vertex, fragment;
-
 		const bgfx::Memory* memVs = bgfx::copy(vShaderCode, vertexCode.size());
 		const bgfx::Memory* memFs = bgfx::copy(fShaderCode, fragmentCode.size());
 
@@ -80,8 +78,15 @@ namespace myEngine
 
 		// Query uniforms from shaders.
 		m_uniform.resize(UNIFORM_MAX_NUM);
-		uint16_t num = bgfx::getShaderUniforms(m_vertex_shader, &m_uniform[0], UNIFORM_MAX_NUM);
-		bgfx::getShaderUniforms(m_fragment_shader, &m_uniform[num], UNIFORM_MAX_NUM - num);
+		uint16_t num1 = bgfx::getShaderUniforms(m_vertex_shader, &m_uniform[0], UNIFORM_MAX_NUM);
+		uint16_t num2 = bgfx::getShaderUniforms(m_fragment_shader, &m_uniform[num1], UNIFORM_MAX_NUM - num1);
+		m_uniform.resize(num1 + num2);
+		for (std::vector<bgfx::UniformHandle>::iterator it = m_uniform.begin(); it != m_uniform.end(); it++)
+		{
+			bgfx::UniformInfo info;
+			bgfx::getUniformInfo((*it), info);
+			m_uniform_idx.insert_or_assign(std::string(info.name), it->idx);
+		}
 	}
 	Shader::~Shader()
 	{
@@ -93,41 +98,25 @@ namespace myEngine
 			bgfx::destroy(m_vertex_shader);
 	}
 
-	void Shader::use()
+	void Shader::setUniform(const std::string &name , const void* values) const
 	{
-		glUseProgram(ID);
+		bgfx::UniformHandle _handle = _getUniformByName(name);
+		bgfx::setUniform(_handle, values);
 	}
 
-	void Shader::disuse()
+	void Shader::setUniform(const std::string &name, const void* values, unsigned int count) const
 	{
-		glUseProgram(NULL);
+		bgfx::UniformHandle _handle = _getUniformByName(name);
+		bgfx::setUniform(_handle, values, count);
 	}
 
-	void Shader::setBool(const std::string &name, bool value) const
+	bgfx::UniformHandle Shader::_getUniformByName(const std::string & name) const
 	{
-		glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
-	}
+		std::map<std::string, int>::const_iterator it = m_uniform_idx.find(name);
+		if (it != m_uniform_idx.end() && it->second < static_cast<int>(m_uniform.size()))
+			return m_uniform[it->second];
 
-	void Shader::setInt(const std::string &name, int value) const
-	{
-		glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
-	}
-
-
-
-	void Shader::setUniform(float value)
-	{
-		bgfx::setUniform(_handle, &value);
-	}
-
-	void Shader::setValue(const float* values, unsigned int count)
-	{
-		bgfx::setUniform(_handle, &values[0], count);
-	}
-
-	void Shader::setMat4(const std::string &name, const Matrix4 &mat) const
-	{
-		glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &(mat.m11));
+		return bgfx::UniformHandle(BGFX_INVALID_HANDLE);
 	}
 
 }
