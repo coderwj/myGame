@@ -74,30 +74,7 @@ namespace myEngine
 	{
 		m_skyBox->render();
 
-		// use the shader program
-		m_shader->use();
-		Matrix4 projection = m_camera->GetProjectMatrix();
-		Matrix4 view = m_camera->GetViewMatrix();
-
-		Matrix4 scaleM;
-		scaleM.initWithScale(Vector3(m_scale));
-		Matrix4 rotateM;
-		rotateM.initWithRotate(m_rotateVec, m_theta);
-		Matrix4 transM;
-		transM.initWithTranslate(Vector3(0.0f));
-
-		Matrix4 model = scaleM * rotateM * transM;
-
-
-		m_shader->setMat4("model", model);
-		m_shader->setMat4("view", view);
-		m_shader->setMat4("projection", projection);
-		m_shader->setVec3("cameraWorldPos", m_camera->Position);
-		m_shader->setVec3("fogcolor", m_fogpara.color);
-		m_shader->setVec3("fogpara", m_fogpara.start, m_fogpara.end, m_fogpara.intensity);
-
-		m_model->Draw(*m_shader);
-		m_shader->disuse();
+		m_model->Draw();
 	}
 
 	void Scene::tick(float delta)
