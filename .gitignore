@@ -1,4 +1,6 @@
 /build/mac
 /build/win
+/lib/debug
+/lib/release
 /src/gameSrc/luaClientPort.cpp
 log.txt
