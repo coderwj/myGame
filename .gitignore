@@ -2,5 +2,7 @@
 /build/win
 /lib/debug
 /lib/release
+/bin/debug
+/bin/release
 /src/gameSrc/luaClientPort.cpp
 log.txt
