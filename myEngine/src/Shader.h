@@ -14,22 +14,21 @@ namespace myEngine
 	public:
 	
 		Shader(const char* vertexPath, const char* fragmentPath);
-	
 		~Shader();
 
-		void setUniform(const std::string &name, const void* values) const;
+		void    setUniform(const std::string &name, const void* values) const;
 
-		void setUniform(const std::string &name, const void* values, unsigned int count) const;
+		void    setUniform(const std::string &name, const void* values, unsigned int count) const;
 	private:
-		bgfx::UniformHandle _getUniformByName(const std::string& name) const;
+		bgfx::UniformHandle                 _getUniformByName       (const std::string& name) const;
 
-		bgfx::ShaderHandle m_vertex_shader;
-		bgfx::ShaderHandle m_fragment_shader;
-		bgfx::ProgramHandle m_program;
-		std::vector<bgfx::UniformHandle> m_uniform;
-		std::map<std::string, int> m_uniform_idx;
+		bgfx::ShaderHandle                  m_vertex_shader;
+		bgfx::ShaderHandle                  m_fragment_shader;
+		bgfx::ProgramHandle                 m_program;
+		std::vector<bgfx::UniformHandle>    m_uniform;
+		std::map<std::string, int>          m_uniform_idx;
 
-		static int UNIFORM_MAX_NUM;
+		static int                          UNIFORM_MAX_NUM;
 	};
 }
 

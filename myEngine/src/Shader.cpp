@@ -85,7 +85,7 @@ namespace myEngine
 		{
 			bgfx::UniformInfo info;
 			bgfx::getUniformInfo((*it), info);
-			m_uniform_idx.insert_or_assign(std::string(info.name), it->idx);
+			m_uniform_idx[std::string(info.name)] = it->idx;
 		}
 	}
 	Shader::~Shader()
