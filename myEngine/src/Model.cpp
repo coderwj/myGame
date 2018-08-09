@@ -22,7 +22,6 @@ namespace myEngine
 {
 	Model::Model(const std::string &path)
 	:m_gltf_model(nullptr)
-	,m_render_object(nullptr)
 	{
 		loadModel(path);
 	}
@@ -32,8 +31,12 @@ namespace myEngine
 		delete m_gltf_model;
 		m_gltf_model = nullptr;
 
-		delete m_render_object;
-		m_render_object = nullptr;
+		std::vector<RenderObject*>::iterator it = m_render_objects.begin();
+		for (; it != m_render_objects.end(); it++)
+		{
+			delete (*it);
+		}
+		m_render_objects.clear();
 	}
 	
 	void Model::loadModel(const string &path)
@@ -56,8 +59,14 @@ namespace myEngine
 			std::vector<tinygltf::Primitive>::iterator it2 = (*it).primitives.begin();
 			for (; it2 != (*it).primitives.end(); it2++)
 			{
-				m_render_object = new RenderObject();
+				RenderObject* pRenderObject = new RenderObject();
+				std::map<std::string, int>::iterator itAttr = (*it2).attributes.begin();
+				for (; itAttr != (*it2).attributes.end(); itAttr++)
+				{
 
+				}
+				pRenderObject->init();
+				m_render_objects.push_back(pRenderObject);
 			}
 		}
 	}

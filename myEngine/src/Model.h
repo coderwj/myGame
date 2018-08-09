@@ -37,7 +37,7 @@ namespace myEngine
 	private:
 		tinygltf::Model* m_gltf_model;
 		std::vector<bgfx::TextureHandle> textrue_handles;
-		RenderObject* m_render_object;
+		std::vector<RenderObject*> m_render_objects;
 	};
 }
 

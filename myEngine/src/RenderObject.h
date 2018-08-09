@@ -1,4 +1,5 @@
 #pragma once
+#include "bgfx/bgfx.h"
 
 namespace myEngine
 {
@@ -8,11 +9,13 @@ namespace myEngine
 	{
 	private:
 		Material*	m_material;
-		void*		m_vertexBuffer;
+		bgfx::VertexBufferHandle	m_vbh;
+		bgfx::IndexBufferHandle		m_ibh;
 	public:
 		RenderObject();
 		~RenderObject();
 	
+		void init(void * v_buf, int v_buf_size, void * i_buf, int i_buf_size);
 		void draw();
 	};
 }
