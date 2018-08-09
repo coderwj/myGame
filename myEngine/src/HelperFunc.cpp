@@ -37,7 +37,7 @@ namespace myEngine
 		return false;
 	}
 	
-	size_t HelperFunc::getFileSize(const char *fileName)
+	int HelperFunc::getFileSize(const char *fileName)
 	{
 	#ifdef WIN32
 		FILE * fp = NULL;

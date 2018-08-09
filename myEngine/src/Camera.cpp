@@ -1,7 +1,8 @@
 #include "Camera.h"
 
-#include "MyEngineCore.h"
 #include <vector>
+
+#include "Quaternion.h"
 
 //frustum
 const float NEAR_CLIP = 0.1f;

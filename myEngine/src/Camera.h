@@ -1,8 +1,10 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
-#include "MyEngineCore.h"
 #include <vector>
+
+#include "Vector3.h"
+#include "Matrix4.h"
 
 namespace myEngine
 {
@@ -19,7 +21,7 @@ namespace myEngine
 		Matrix4 GetProjectMatrix() const;
 
 		Vector3 getPosition() const { return m_position; }
-		void setPosition(Vector3 val) { m_position = val; }
+		void setPosition(const Vector3& val) { m_position = val; }
 
 		Vector3 getFront() const { return m_front; }
 		void setFront(Vector3 val) { m_front = val; }

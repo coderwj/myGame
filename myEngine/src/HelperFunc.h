@@ -8,7 +8,7 @@ namespace myEngine
 	public:
 		static bool convToWinPath(char * path);
 	
-		static size_t getFileSize(const char *fileName);
+		static int getFileSize(const char *fileName);
 	
 		static bool LoadFromFile(const char* const fileName, char* const buff, unsigned int buff_size);
 	
