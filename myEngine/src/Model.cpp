@@ -60,12 +60,7 @@ namespace myEngine
 			for (; it2 != (*it).primitives.end(); it2++)
 			{
 				RenderObject* pRenderObject = new RenderObject();
-				std::map<std::string, int>::iterator itAttr = (*it2).attributes.begin();
-				for (; itAttr != (*it2).attributes.end(); itAttr++)
-				{
-
-				}
-				pRenderObject->init();
+				pRenderObject->init(*it2, m_gltf_model);
 				m_render_objects.push_back(pRenderObject);
 			}
 		}

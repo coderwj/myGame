@@ -1,5 +1,6 @@
 #pragma once
 #include "bgfx/bgfx.h"
+#include "tiny_gltf.h"
 
 namespace myEngine
 {
@@ -14,8 +15,11 @@ namespace myEngine
 	public:
 		RenderObject();
 		~RenderObject();
+
+		static bgfx::AttribType::Enum	mapAttributeComponentType(int gltf_attr_comp_type);
+		static bgfx::Attrib::Enum		mapAttributeType(const std::string& attr_str);
 	
-		void init(void * v_buf, int v_buf_size, void * i_buf, int i_buf_size);
+		void init(const tinygltf::Primitive& primitive, const tinygltf::Model* model);
 		void draw();
 	};
 }
