@@ -216,6 +216,8 @@ namespace myEngine
 		glBindVertexArray(0);
 
 		glActiveTexture(GL_TEXTURE0);
+
+		bgfx::submit(0,)
 	}
 
 };

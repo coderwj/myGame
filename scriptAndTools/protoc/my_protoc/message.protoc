@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package myGame.Player;
+
+message CGetPersonInfo{
+	int64 id = 1;
+}
+
+message SGetPersonInfo{
+	int64 id = 1;
+	string name = 2;
+	enum Sex{
+		BOY = 0;
+		GIRL = 1;
+	}
+	Sex sex = 3;
+}
