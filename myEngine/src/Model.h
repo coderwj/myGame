@@ -1,11 +1,6 @@
 #ifndef __MODEL_H__
 #define __MODEL_H__
 
-#include "MyEngineCore.h"
-
-#include "Mesh.h"
-#include "Shader.h"
-
 #include <string>
 #include <iostream>
 #include <vector>

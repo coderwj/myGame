@@ -1,5 +1,6 @@
 #pragma once
 #include "bgfx/bgfx.h"
+#define TINYGLTF_NO_STB_IMAGE_WRITE
 #include "tiny_gltf.h"
 
 namespace myEngine
