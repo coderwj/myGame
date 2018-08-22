@@ -26,14 +26,12 @@ namespace myEngine
 		Model(const std::string &path);
 		~Model();
 	
-		void Draw(Shader &shader);
+		void draw();
 	
 	private:
 		void loadModel(const std::string &path);
 
 		void copyTexture();
-	
-		unsigned int TextureFromFile(const char * path, const std::string &directory, bool gamma = false);
 	private:
 		tinygltf::Model* m_gltf_model;
 		std::vector<bgfx::TextureHandle> textrue_handles;
