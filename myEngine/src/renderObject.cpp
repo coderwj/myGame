@@ -66,21 +66,48 @@ namespace myEngine
 		else
 			return bgfx::Attrib::Count;
 	}
+
+	bool RenderObject::_cmpByValue(const std::pair<std::string, int>& p1, const std::pair<std::string, int>& p2)
+	{
+		return p1.second < p2.second;
+	}
 	
 	void RenderObject::init(const tinygltf::Primitive& primitive, const tinygltf::Model* model)
 	{
+		std::vector<std::pair<std::string, int>> attributes_in_order(primitive.attributes.begin(), primitive.attributes.end());
+		std::sort(attributes_in_order.begin(), attributes_in_order.end(), RenderObject::_cmpByValue);
+
 		bgfx::VertexDecl _dec;
 		_dec.begin();
-		std::map<std::string, int>::const_iterator it = primitive.attributes.begin();
-		for (; it != primitive.attributes.end(); it++)
+		std::vector<std::pair<std::string, int>>::const_iterator it = attributes_in_order.begin();
+		for (; it != attributes_in_order.end(); it++)
 		{
 				int _index = it->second;
 				tinygltf::Accessor _acc = model->accessors[_index];
 				_dec.add(mapAttributeType(it->first), tinygltf::GetTypeSizeInBytes(_acc.type), mapAttributeComponentType(_acc.componentType));
 		}
 		_dec.end();
-		m_vbh = bgfx::createVertexBuffer(bgfx::copy(v_buf, v_size), _dec);
-		m_ibh = bgfx::createIndexBuffer(bgfx::copy(ibuf, sizeof(uint16_t) * k));
+
+		int buffer_id = -1;
+		it = attributes_in_order.begin();
+		for (; it != attributes_in_order.end(); it++)
+		{
+			int buffer_view_id = it->second;
+			//assert(buffer_view_id >= 0);
+			//assert(buffer_view_id < model->bufferViews.size());
+			const tinygltf::BufferView& buffer_view = model->bufferViews.at(buffer_view_id);
+			if (buffer_id == -1)
+				buffer_id = buffer_view.buffer;
+			assert(buffer_id == buffer_view.buffer);
+		}
+		const void* buffer_data = static_cast<const void*>(model->buffers[buffer_id].data.data());
+		int buffer_size = model->buffers[buffer_id].data.size();
+		m_vbh = bgfx::createVertexBuffer(bgfx::copy(buffer_data, buffer_size), _dec);
+
+		int index_buffer_view_id = primitive.indices;
+		const void* index_buffer_data = static_cast<const void*>(model->buffers[index_buffer_view_id].data.data());
+		int index_buffer_size = model->buffers[index_buffer_view_id].data.size();
+		m_ibh = bgfx::createIndexBuffer(bgfx::copy(index_buffer_data, index_buffer_size));
 	}
 
 	void RenderObject::draw()
