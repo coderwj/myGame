@@ -82,25 +82,24 @@ namespace myEngine
 		std::vector<std::pair<std::string, int>>::const_iterator it = attributes_in_order.begin();
 		for (; it != attributes_in_order.end(); it++)
 		{
-				int _index = it->second;
-				tinygltf::Accessor _acc = model->accessors[_index];
-				_dec.add(mapAttributeType(it->first), tinygltf::GetTypeSizeInBytes(_acc.type), mapAttributeComponentType(_acc.componentType));
+			int _index = it->second;
+			const tinygltf::Accessor& _accessor = model->accessors[_index];
+			_dec.add(mapAttributeType(it->first), tinygltf::GetTypeSizeInBytes(_accessor.type), mapAttributeComponentType(_accessor.componentType));
 		}
 		_dec.end();
 
-		int buffer_id = -1;
-		it = attributes_in_order.begin();
-		for (; it != attributes_in_order.end(); it++)
+		unsigned char buffer_data[]
+		for (it = attributes_in_order.begin(); it != attributes_in_order.end(); it++)
 		{
-			int buffer_view_id = it->second;
-			//assert(buffer_view_id >= 0);
-			//assert(buffer_view_id < model->bufferViews.size());
-			const tinygltf::BufferView& buffer_view = model->bufferViews.at(buffer_view_id);
-			if (buffer_id == -1)
-				buffer_id = buffer_view.buffer;
-			assert(buffer_id == buffer_view.buffer);
+			int _index = it->second;
+			const tinygltf::Accessor& _accessor = model->accessors[_index];
+			const tinygltf::BufferView& _bufferView = model->bufferViews[_accessor.bufferView];
+
+			const std::vector<unsigned char>& _buffer = model->buffers[_bufferView.buffer].data;
+
+			const void* buffer_data = static_cast<const void*>(model->buffers[_bufferView.buffer].data.data());
+			_bufferView.buffer
 		}
-		const void* buffer_data = static_cast<const void*>(model->buffers[buffer_id].data.data());
 		int buffer_size = model->buffers[buffer_id].data.size();
 		m_vbh = bgfx::createVertexBuffer(bgfx::copy(buffer_data, buffer_size), _dec);
 
@@ -114,7 +113,7 @@ namespace myEngine
 	{
 		bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_DEPTH_TEST_EQUAL);
 		bgfx::setIndexBuffer(m_ibh);
-		bgfx::setVertexBuffer(0, m_vbh);
+		bgfx::setVertexBuffer(0, m_vbh, ,);
 		bgfx::submit(0, m_program);
 
 
