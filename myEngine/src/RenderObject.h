@@ -14,7 +14,7 @@ namespace myEngine
 		bgfx::VertexBufferHandle	m_vbh;
 		bgfx::IndexBufferHandle		m_ibh;
 
-		bool _cmpByValue(const std::pair<std::string, int>& p1, const std::pair<std::string, int>& p2);
+		static bool _cmpByValue(const std::pair<std::string, int>& p1, const std::pair<std::string, int>& p2);
 	public:
 		RenderObject();
 		~RenderObject();
