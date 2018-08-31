@@ -77,6 +77,8 @@ namespace myEngine
 		std::vector<std::pair<std::string, int>> attributes_in_order(primitive.attributes.begin(), primitive.attributes.end());
 		std::sort(attributes_in_order.begin(), attributes_in_order.end(), RenderObject::_cmpByValue);
 
+
+		int vertexNum = 0;
 		bgfx::VertexDecl _dec;
 		_dec.begin();
 		std::vector<std::pair<std::string, int>>::const_iterator it = attributes_in_order.begin();
@@ -85,10 +87,29 @@ namespace myEngine
 			int _index = it->second;
 			const tinygltf::Accessor& _accessor = model->accessors[_index];
 			_dec.add(mapAttributeType(it->first), tinygltf::GetTypeSizeInBytes(_accessor.type), mapAttributeComponentType(_accessor.componentType));
+			if (mapAttributeType(it->first) == bgfx::Attrib::Position)
+				vertexNum = _accessor.count;
 		}
 		_dec.end();
 
-		unsigned char buffer_data[]
+		const int stride = _dec.getStride();
+		const int buffer_size = vertexNum * stride;
+		unsigned char* buffer_data = new unsigned char[buffer_size];
+		for (int i = 0; i < vertexNum; i++)
+		{
+			for (it = attributes_in_order.begin(); it != attributes_in_order.end(); it++)
+			{
+				int _index = it->second;
+				const tinygltf::Accessor& _accessor = model->accessors[_index];
+				const tinygltf::BufferView& _bufferView = model->bufferViews[_accessor.bufferView];
+
+				const std::vector<unsigned char>& _buffer = model->buffers[_bufferView.buffer].data;
+
+				const void* buffer_data = static_cast<const void*>(model->buffers[_bufferView.buffer].data.data());
+				_bufferView.buffer
+			}
+		}
+
 		for (it = attributes_in_order.begin(); it != attributes_in_order.end(); it++)
 		{
 			int _index = it->second;
