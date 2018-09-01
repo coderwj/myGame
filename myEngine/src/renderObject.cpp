@@ -73,58 +73,81 @@ namespace myEngine
 	{
 		return p1.second < p2.second;
 	}
-	
-	void RenderObject::init(const tinygltf::Primitive& primitive, const tinygltf::Model* model)
+
+	void RenderObject::_createVertexBuffer(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
 	{
-		std::vector<std::pair<std::string, int> > attributes_in_order(primitive.attributes.begin(), primitive.attributes.end());
-		std::sort(attributes_in_order.begin(), attributes_in_order.end(), RenderObject::_cmpByValue);
+		// sort attributes
+		std::vector<std::pair<std::string, int> > _attributes(primitive.attributes.begin(), primitive.attributes.end());
+		std::sort(_attributes.begin(), _attributes.end(), RenderObject::_cmpByValue);
 
 
-		int vertexNum = 0;
+		// create vertex buffer
+		int _vertexNum = 0;
 		bgfx::VertexDecl _dec;
 		_dec.begin();
-		std::vector<std::pair<std::string, int> >::const_iterator it = attributes_in_order.begin();
-		for (; it != attributes_in_order.end(); it++)
+		std::vector<std::pair<std::string, int> >::const_iterator it = _attributes.begin();
+		for (; it != _attributes.end(); it++)
 		{
 			int _index = it->second;
-			const tinygltf::Accessor& _accessor = model->accessors[_index];
+			const tinygltf::Accessor& _accessor = model.accessors[_index];
 			_dec.add(mapAttributeType(it->first), tinygltf::GetTypeSizeInBytes(_accessor.type), mapAttributeComponentType(_accessor.componentType));
 			if (mapAttributeType(it->first) == bgfx::Attrib::Position)
-				vertexNum = _accessor.count;
+				_vertexNum = _accessor.count;
 		}
 		_dec.end();
 
-		const int stride = _dec.getStride();
-		const int buffer_size = vertexNum * stride;
-        char* buffer_data = new char[buffer_size];
-		for (int i = 0; i < vertexNum; i++)
+		const int _vertexSize = _dec.getStride();
+		char* buffer_data = new char[_vertexNum * _vertexSize];
+		for (int i = 0; i < _vertexNum; i++)
 		{
-			for (it = attributes_in_order.begin(); it != attributes_in_order.end(); it++)
+			for (it = _attributes.begin(); it != _attributes.end(); it++)
 			{
-				int _index = it->second;
-				const tinygltf::Accessor& _accessor = model->accessors[_index];
-				const tinygltf::BufferView& _bufferView = model->bufferViews[_accessor.bufferView];
-				const std::vector<unsigned char>& _buffer = model->buffers[_bufferView.buffer].data;
-				const unsigned char* gltf_buffer_data = _buffer.data();
-                
-                uint16_t offset = _dec.getOffset(mapAttributeType(it->first));
-                uint16_t size = tinygltf::GetTypeSizeInBytes(_accessor.type);
-                myEngine::strcpy(&buffer_data[i * stride + offset], size, reinterpret_cast<const char*>(&gltf_buffer_data[_bufferView.byteOffset + _accessor.byteOffset + size * i]));
+				const tinygltf::Accessor&	 _accessor = model.accessors[it->second];
+				const tinygltf::BufferView& _bufferView = model.bufferViews[_accessor.bufferView];
+				const tinygltf::Buffer&		_buffer = model.buffers[_bufferView.buffer];
+
+				int _attr_offset = _dec.getOffset(mapAttributeType(it->first));
+				int _attr_size = _accessor.ByteStride(_bufferView);
+
+				const char* _from = reinterpret_cast<const char*>(&_buffer.data.data()[_bufferView.byteOffset + _accessor.byteOffset + _attr_size * i]);
+				char*		_to = &buffer_data[i * _vertexSize + _attr_offset];
+
+				myEngine::strcpy(_to, _attr_size, _from);
 			}
 		}
-		m_vbh = bgfx::createVertexBuffer(bgfx::copy(buffer_data, buffer_size), _dec);
+		m_vbh = bgfx::createVertexBuffer(bgfx::copy(buffer_data, _vertexNum * _vertexSize), _dec);
+		delete[] buffer_data;
+	}
 
-		int index_buffer_view_id = primitive.indices;
-		const void* index_buffer_data = static_cast<const void*>(model->buffers[index_buffer_view_id].data.data());
-		int index_buffer_size = model->buffers[index_buffer_view_id].data.size();
+	void RenderObject::_createIndexBuffer(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
+	{
+		// create index buffer
+		const tinygltf::Accessor&	_accessor = model.accessors[primitive.indices];
+		const tinygltf::BufferView& _bufferView = model.bufferViews[_accessor.bufferView];
+		const tinygltf::Buffer&		_buffer = model.buffers[_bufferView.buffer];
+
+		const char* index_buffer_data = reinterpret_cast<const char*>(&_buffer.data.data()[_bufferView.byteOffset + _accessor.byteOffset]);
+		int			index_buffer_size = _accessor.count * _accessor.ByteStride(_bufferView);
 		m_ibh = bgfx::createIndexBuffer(bgfx::copy(index_buffer_data, index_buffer_size));
+	}
+
+	void RenderObject::_createProgram(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
+	{
+		m_program = 
+	}
+	
+	void RenderObject::init(const tinygltf::Primitive& primitive, const tinygltf::Model& model)
+	{
+		_createVertexBuffer(primitive, model);
+		_createIndexBuffer(primitive, model);
+		_createProgram(primitive, model);
 	}
 
 	void RenderObject::draw()
 	{
 		bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_DEPTH_TEST_EQUAL);
 		bgfx::setIndexBuffer(m_ibh);
-		bgfx::setVertexBuffer(0, m_vbh, ,);
+		bgfx::setVertexBuffer(0, m_vbh);
 		bgfx::submit(0, m_program);
 
 

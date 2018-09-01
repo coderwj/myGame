@@ -61,7 +61,7 @@ namespace myEngine
 			for (; it2 != (*it).primitives.end(); it2++)
 			{
 				RenderObject* pRenderObject = new RenderObject();
-				pRenderObject->init(*it2, m_gltf_model);
+				pRenderObject->init(*it2, *m_gltf_model);
 				m_render_objects.push_back(pRenderObject);
 			}
 		}
