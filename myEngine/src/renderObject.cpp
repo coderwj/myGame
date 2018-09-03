@@ -21,6 +21,8 @@ namespace myEngine
 			bgfx::destroy(m_vbh);
 		if (bgfx::isValid(m_ibh))
 			bgfx::destroy(m_ibh);
+		if (m_material)
+			delete m_material;
 	}
 
 	bgfx::AttribType::Enum RenderObject::mapAttributeComponentType(int gltf_attr_comp_type)
@@ -134,7 +136,8 @@ namespace myEngine
 
 	void RenderObject::_createProgram(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
 	{
-		bgfx::ShaderHandle _shader_handle = bgfx::createShader();
+		m_material = new Material;
+		m_material->setProgram("pbr_gltf.vs", "pbr_gltf.fs");
 	}
 	
 	void RenderObject::init(const tinygltf::Primitive& primitive, const tinygltf::Model& model)
