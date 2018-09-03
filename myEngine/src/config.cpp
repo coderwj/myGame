@@ -6,6 +6,7 @@ namespace myEngine
 	const string Config::INVALID_STR = "";
 
 	const string Config::engine_res_path = "../../myEngine/res/";
+	const string Config::shader_bin_path = engine_res_path + "shaderbin/";
 	const string Config::game_res_path = "../../res/";
 	const string Config::model_path = Config::game_res_path + "models/";
 	const string Config::scene_path = Config::game_res_path + "scenes/";

@@ -1,6 +1,7 @@
 #include "RenderObject.h"
 
 #include "StringDef.h"
+#include "Material.h"
 
 #include "bgfx/bgfx.h"
 
@@ -133,7 +134,7 @@ namespace myEngine
 
 	void RenderObject::_createProgram(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
 	{
-		m_program = 
+		bgfx::ShaderHandle _shader_handle = bgfx::createShader();
 	}
 	
 	void RenderObject::init(const tinygltf::Primitive& primitive, const tinygltf::Model& model)
@@ -148,7 +149,7 @@ namespace myEngine
 		bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_DEPTH_TEST_EQUAL);
 		bgfx::setIndexBuffer(m_ibh);
 		bgfx::setVertexBuffer(0, m_vbh);
-		bgfx::submit(0, m_program);
+		bgfx::submit(0, m_material->getProgram());
 
 
 
