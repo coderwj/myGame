@@ -66,10 +66,10 @@ namespace myEngine
 			return bgfx::Attrib::Position;
 		else if (attr_str == "NORMAL")
 			return bgfx::Attrib::Normal;
-		else if (attr_str == "NORMAL")
-			return bgfx::Attrib::Normal;
-		else if (attr_str == "NORMAL")
-			return bgfx::Attrib::Normal;
+		else if (attr_str == "TANGENT")
+			return bgfx::Attrib::Tangent;
+		else if (attr_str == "TEXCOORD_0")
+			return bgfx::Attrib::TexCoord0;
 		else if (attr_str == "NORMAL")
 			return bgfx::Attrib::Normal;
 		else

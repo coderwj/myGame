@@ -25,7 +25,7 @@ namespace myEngine
 		HelperFunc::LoadFromFile(vs_path.c_str(), vs_bin, vs_bin_size);
 		const bgfx::Memory* _vs_men = bgfx::makeRef(vs_bin, vs_bin_size);
 		bgfx::ShaderHandle m_vertex_shader = bgfx::createShader(_vs_men);
-		if (isValid(m_vertex_shader))
+		if (!bgfx::isValid(m_vertex_shader))
 		{
 			std::cout << "Error while compiling vertex shader: " << vs_path << std::endl;
 			return;
@@ -37,7 +37,7 @@ namespace myEngine
 		HelperFunc::LoadFromFile(fs_path.c_str(), fs_bin, fs_bin_size);
 		const bgfx::Memory* _fs_men = bgfx::makeRef(fs_bin, fs_bin_size);
 		bgfx::ShaderHandle _fsh = bgfx::createShader(_fs_men);
-		if (isValid(m_fragment_shader))
+		if (!bgfx::isValid(m_fragment_shader))
 		{
 			std::cout << "Error while compiling fragment shader: " << fs_path << std::endl;
 			return;

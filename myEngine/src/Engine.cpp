@@ -9,6 +9,7 @@ namespace myEngine
 
 	Engine::Engine()
 	:m_maincCamera(nullptr)
+	,m_renderer(nullptr)
 	{
 		onCreate();
 	}
@@ -58,7 +59,10 @@ namespace myEngine
 
 	bool Engine::init()
 	{
+		m_renderer = Renderer::getInstance();
 		m_renderer->init();
+
+		m_maincCamera = new Camera();
 		return true;
 	}
 	

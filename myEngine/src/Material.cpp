@@ -5,6 +5,7 @@
 namespace myEngine
 {
 	Material::Material()
+	:m_shader(nullptr)
 	{
 	}
 
