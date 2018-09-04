@@ -25,7 +25,7 @@ namespace myGame
 		void setOrientation(Vector3 ori){m_orientation = ori;}
 		Vector3 getOrientation(){return m_orientation;}
 	
-		void render();
+		void tick(int delta);
 	private:
 		Vector3 m_position;//pos in world
 		Vector3 m_orientation;// ori in world

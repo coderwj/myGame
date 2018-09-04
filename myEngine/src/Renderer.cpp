@@ -41,7 +41,7 @@ namespace myEngine
 		bgfx::init(init);
 
 		// Enable debug text.
-		bgfx::setDebug(BGFX_DEBUG_NONE);
+		bgfx::setDebug(BGFX_DEBUG_TEXT);
 
 		clear();
 
@@ -54,6 +54,8 @@ namespace myEngine
 		{
 			m_RenderObjects[i]->draw();
 		}
+		bgfx::frame();
+		m_RenderObjects.clear();
 	}
 	void Renderer::setViewPort(int width, int height)
 	{
@@ -72,5 +74,9 @@ namespace myEngine
 	void Renderer::clear() const
 {
 		bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
+	}
+	void Renderer::pushRenderObject(RenderObject * v)
+	{
+		m_RenderObjects.push_back(v);
 	}
 }

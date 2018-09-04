@@ -103,8 +103,8 @@ namespace myGame
 	        return NULL;
 	}
 	
-	void Character::render()
+	void Character::tick(int delta)
 	{
-	    m_model->draw();
+		m_model->draw();
 	}
 }

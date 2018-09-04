@@ -24,6 +24,8 @@ namespace myEngine
 		void clearColor() const;
 		void clear() const;
 
+		void pushRenderObject(RenderObject* v);
+
 	private:
 
 		Renderer();

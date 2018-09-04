@@ -116,10 +116,10 @@ namespace myEngine
 				int _attr_offset = _dec.getOffset(mapAttributeType(it->first));
 				int _attr_size = _accessor.ByteStride(_bufferView);
 
-				const char* _from = reinterpret_cast<const char*>(&_buffer.data.data()[_bufferView.byteOffset + _accessor.byteOffset + _attr_size * i]);
+				const char* _from = reinterpret_cast<const char*>(&_buffer.data[_bufferView.byteOffset + _accessor.byteOffset + _attr_size * i]);
 				char*		_to = &buffer_data[i * _vertexSize + _attr_offset];
 
-				myEngine::strcpy(_to, _attr_size, _from);
+				::memcpy(_to, _from, _attr_size);
 			}
 		}
 		m_vbh = bgfx::createVertexBuffer(bgfx::copy(buffer_data, _vertexNum * _vertexSize), _dec);

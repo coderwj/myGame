@@ -1,6 +1,7 @@
 #include "Model.h"
 
 #include "RenderObject.h"
+#include "Renderer.h"
 
 #ifndef TINYGLTF_IMPLEMENTATION
 #define TINYGLTF_IMPLEMENTATION
@@ -74,12 +75,17 @@ namespace myEngine
 		{
 			tinygltf::Image& _image = *it;
 			_image.image;
-			const bgfx::Memory* _data = bgfx::copy(static_cast<void*>(&(_image.image)), static_cast<uint32_t>(_image.width * _image.width * 4));
+			const bgfx::Memory* _data = bgfx::copy(reinterpret_cast<char*>(&(_image.image[0])), static_cast<uint32_t>(_image.width * _image.width * _image.component));
+			bgfx::TextureFormat::Enum _format = bgfx::TextureFormat::Count;
+			if (_image.component == 3)
+				_format = bgfx::TextureFormat::RGB8;
+			else if (_image.component == 4)
+				_format = bgfx::TextureFormat::RGBA8;
 			bgfx::TextureHandle textureHandle = bgfx::createTexture2D(static_cast<uint16_t>(_image.width), 
 																	  static_cast<uint16_t>(_image.width),
 																	  false,
 																	  1,
-																	  bgfx::TextureFormat::BGRA8,
+																	  _format,
 																	  0,
 																	  _data);
 			_image.image.clear();
@@ -90,10 +96,13 @@ namespace myEngine
 
 	void Model::draw()
 	{
+		Renderer* _renderer = Renderer::getInstance();
+		if (nullptr == _renderer)
+			return;
 		std::vector<RenderObject*>::iterator it = m_render_objects.begin();
 		for (; it != m_render_objects.end(); it++)
 		{
-			(*it)->draw();
+			_renderer->pushRenderObject(*it);
 		}
 	}
 }

@@ -125,17 +125,13 @@ namespace myGame
 		lua_tinker::dofile(m_state, luafile.c_str());
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "InitGame");
 
-		//m_gameScene = GameScene::getInstance();
-		//m_gameScene->init();
-		//m_gameScene->loadScene("scene_3");
-
-	    m_mainCharacter = Character::Create("model_3");
+	    m_mainCharacter = Character::Create("model_5");
 	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
 	
-	    Character * character = Character::Create("model_4");
-	    character->setPosition(Vector3(18.0f, 1.0f, 11.0f));
+	    //Character * character = Character::Create("model_4");
+	    //character->setPosition(Vector3(18.0f, 1.0f, 11.0f));
+	    //m_characters.push_back(character);
 
-	    m_characters.push_back(character);
 		m_cameraOption = new CameraOption();
 		m_cameraOption->resetCameraPos();
 
@@ -155,6 +151,10 @@ namespace myGame
 
 		_tick(static_cast<int>(m_deltaTime));
 
+		Engine* pEngine = Engine::getInstance();
+		if (pEngine)
+			pEngine->render();
+
 		//end tick, get time.
 		long long runTime = HelperFunc::GetCurrentTimeMs() - m_nowTime;
 		if (runTime < static_cast<long long>(1000 / getFps()))
@@ -168,6 +168,10 @@ namespace myGame
 	{
 		//lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
 		//m_gameScene->tick(delta);
+		Engine* pEngine = Engine::getInstance();
+		if (pEngine)
+			pEngine->tick(delta);
+		m_mainCharacter->tick(delta);
 
 	}
 
