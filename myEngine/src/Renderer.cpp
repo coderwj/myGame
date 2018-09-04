@@ -32,10 +32,11 @@ namespace myEngine
 	bool Renderer::init()
 	{
 		bgfx::Init init;
-		init.type = bgfx::RendererType::OpenGLES;
+		//init.type = bgfx::RendererType::OpenGLES;
+		init.type = bgfx::RendererType::OpenGL;
 		init.vendorId = BGFX_PCI_ID_NONE; //auto select
-		init.resolution.width = m_viewport_width;
-		init.resolution.height = m_viewport_height;
+		//init.resolution.width = m_viewport_width;
+		//init.resolution.height = m_viewport_height;
 		init.resolution.reset = BGFX_RESET_VSYNC;
 		bgfx::init(init);
 

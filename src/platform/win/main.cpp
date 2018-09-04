@@ -5,6 +5,8 @@
 
 #include "GameClient.h"
 
+#include "bgfx/platform.h"
+
 using namespace myGame;
 
 static GameClient * g_client = NULL;
@@ -16,6 +18,14 @@ static bool g_mouse_left_down = false;
 static bool g_mouse_right_down = false;
 
 extern HWND g_window = NULL;
+
+void winSetHwnd(HWND _window)
+{
+	bgfx::PlatformData pd;
+	::memset(&pd, 0, sizeof(pd));
+	pd.nwh = _window;
+	bgfx::setPlatformData(pd);
+}
 
 void checkScreenSize()
 {
@@ -146,6 +156,8 @@ int __stdcall WinMain(_In_ HINSTANCE h, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 
 	//create window.
 	HWND hWnd = CreateWindow(appName, "myGame", WS_OVERLAPPEDWINDOW, windowLeft, windowTop, g_window_width, g_window_height, NULL, NULL, hInstance, NULL);
+
+	winSetHwnd(hWnd);
 
 	//show window.
 	ShowWindow(hWnd, SW_SHOW);
