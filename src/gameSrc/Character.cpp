@@ -31,11 +31,6 @@ namespace myGame
 	        delete(m_model);
 	        m_model = NULL;
 	    }
-	    if(m_shader)
-	    {
-	        delete(m_shader);
-	        m_shader = NULL;
-	    }
 	}
 	
 	bool Character::init(string modelName, Vector3 position, Vector3 orientation)
@@ -94,11 +89,8 @@ namespace myGame
 	        return false;
 	        //assert(true);
 	    }
-	    string vs_path = Config::engine_res_path + "shader/" + vs_name;
-	    string fs_path = Config::engine_res_path + "shader/" + fs_name;
-	
-	    m_shader = new Shader(vs_path.c_str(), fs_path.c_str());
-	
+		//Model->setShaderName(vs_name, fs_name);
+
 	    return true;
 	}
 	
@@ -113,36 +105,6 @@ namespace myGame
 	
 	void Character::render()
 	{
-	    m_shader->use();
-		Engine * pEngine = Engine::getInstance();
-	    if(nullptr == pEngine)
-	        return;
-	    Camera * camera = pEngine->getMaincCamera();
-	    if(!camera)
-	        return;
-		Matrix4 projection = camera->GetProjectMatrix();
-	    Matrix4 view = camera->GetViewMatrix();
-	
-	    Matrix4 scaleM;
-	    scaleM.initWithScale(Vector3(m_scale));
-	    Matrix4 rotateM;
-	    rotateM.initWithRotate(m_rotateVec, m_theta);
-	    Matrix4 transM;
-	    transM.initWithTranslate(m_position);
-	
-	    Matrix4 model = scaleM * rotateM * transM;
-	
-	    m_shader->setMat4("model", model);
-	    m_shader->setMat4("view", view);
-	    m_shader->setMat4("projection", projection);
-	    m_shader->setVec3("light_color", Vector3(1.0f, 1.0f, 1.0f));
-	    m_shader->setVec3("light_dir", Vector3(1.0f, 1.0f, 1.0f));
-	    m_shader->setVec3("Ka", Vector3(0.2f, 0.2f, 0.2f));
-	    m_shader->setVec3("Kd", Vector3(1.0f, 1.0f, 1.0f));
-	    m_shader->setVec3("Ks", Vector3(1.0f, 1.0f, 1.0f));
-	    m_shader->setVec3("view_pos", camera->getPosition());
-	
-	    m_model->Draw(*m_shader);
-	    m_shader->disuse();
+	    m_model->draw();
 	}
 }

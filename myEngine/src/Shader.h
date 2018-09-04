@@ -13,12 +13,17 @@ namespace myEngine
 	{
 	public:
 	
-		Shader(const char* vertexPath, const char* fragmentPath);
+		Shader(const char* vs_name, const char* fs_name);
 		~Shader();
 
 		void    setUniform(const std::string &name, const void* values) const;
-
 		void    setUniform(const std::string &name, const void* values, unsigned int count) const;
+
+		//void    setUniform(const char* name, const void* values) const { setUniform(std::string(name), values); }
+		//void    setUniform(const char* name, const void* values, unsigned int count) const { setUniform(std::string(name), values, count); }
+
+		bgfx::ProgramHandle getProgramHandle() const { return m_program; }
+
 	private:
 		bgfx::UniformHandle                 _getUniformByName       (const std::string& name) const;
 

@@ -32,7 +32,6 @@ namespace myGame
 		string m_modelName;
 	
 		Model * m_model;
-		Shader * m_shader;
 	
 		float m_scale;
 		float m_theta;

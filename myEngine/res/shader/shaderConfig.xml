@@ -15,4 +15,9 @@
     <vertexshader>scenecommon.vs</vertexshader>
     <fragmentshader>scenecommon.fs</fragmentshader>
   </material>
+  <material id="4">
+    <name>pbr_gltf</name>
+    <vertexshader>pbr_gltf_vs.bin</vertexshader>
+    <fragmentshader>pbr_gltf_fs.bin</fragmentshader>
+  </material>
 </shaderconfig>

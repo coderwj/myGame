@@ -1,7 +1,6 @@
 #include "Material.h"
 
-#include "config.h"
-#include "HelperFunc.h"
+#include "Shader.h"
 
 namespace myEngine
 {
@@ -11,36 +10,29 @@ namespace myEngine
 
 	Material::~Material()
 	{
-		bgfx::destroy(m_program_handle);
-	}
-
-	void Material::setProgram(const bgfx::ProgramHandle& _program_handle)
-	{
-		m_program_handle = _program_handle;
+		if (m_shader)
+			delete m_shader;
 	}
 
 	void Material::setProgram(const char* vs_name, const char* fs_name)
 	{
-		string vs_path = Config::shader_bin_path + vs_name;
-		int vs_bin_size = HelperFunc::getFileSize(vs_path.c_str());
-		char * vs_bin = new char[vs_bin_size];
-		HelperFunc::LoadFromFile(vs_path.c_str(), vs_bin, vs_bin_size);
-		const bgfx::Memory* _vs_men = bgfx::makeRef(vs_bin, vs_bin_size);
-		bgfx::ShaderHandle _vsh = bgfx::createShader(_vs_men);
-
-		string fs_path = Config::shader_bin_path + fs_name;
-		int fs_bin_size = HelperFunc::getFileSize(fs_path.c_str());
-		char * fs_bin = new char[fs_bin_size];
-		HelperFunc::LoadFromFile(fs_path.c_str(), fs_bin, fs_bin_size);
-		const bgfx::Memory* _fs_men = bgfx::makeRef(fs_bin, fs_bin_size);
-		bgfx::ShaderHandle _fsh = bgfx::createShader(_fs_men);
-
-		m_program_handle = bgfx::createProgram(_vsh, _fsh, true);
+		if (m_shader != NULL)
+			return;
+		m_shader = new Shader(vs_name, fs_name);
 	}
 
-	const bgfx::ProgramHandle & Material::getProgram()
+	const Shader* Material::getProgram()
 	{
-		return m_program_handle;
+		return m_shader;
 	}
+
+	void Material::setUniform(const char * name, const void * values)
+	{
+		if (m_shader)
+		{
+			m_shader->setUniform(name, values);
+		}
+	}
+
 
 }

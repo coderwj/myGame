@@ -1,7 +1,11 @@
 #include "RenderObject.h"
 
+#include "Engine.h"
 #include "StringDef.h"
 #include "Material.h"
+#include "Shader.h"
+#include "Matrix4.h"
+#include "Camera.h"
 
 #include "bgfx/bgfx.h"
 
@@ -137,7 +141,7 @@ namespace myEngine
 	void RenderObject::_createProgram(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
 	{
 		m_material = new Material;
-		m_material->setProgram("pbr_gltf.vs", "pbr_gltf.fs");
+		m_material->setProgram("pbr_gltf_vs.bin", "pbr_gltf_fs.bin");
 	}
 	
 	void RenderObject::init(const tinygltf::Primitive& primitive, const tinygltf::Model& model)
@@ -149,66 +153,31 @@ namespace myEngine
 
 	void RenderObject::draw()
 	{
+		if (nullptr == m_material)
+			return;
+		const myEngine::Shader* _shader = m_material->getProgram();
+		if (nullptr == _shader)
+			return;
+
 		bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_DEPTH_TEST_EQUAL);
+
+		
+
 		bgfx::setIndexBuffer(m_ibh);
 		bgfx::setVertexBuffer(0, m_vbh);
-		bgfx::submit(0, m_material->getProgram());
-
-
-
 
 		// use the shader program
-		m_shader->use();
-		Matrix4 projection = m_camera->GetProjectMatrix();
-		Matrix4 view = m_camera->GetViewMatrix();
+		myEngine::Camera* pCamera = myEngine::Engine::getInstance()->getMaincCamera();
 
-		Matrix4 scaleM;
-		scaleM.initWithScale(Vector3(m_scale));
-		Matrix4 rotateM;
-		rotateM.initWithRotate(m_rotateVec, m_theta);
-		Matrix4 transM;
-		transM.initWithTranslate(Vector3(0.0f));
+		Matrix4 _projection = pCamera->GetProjectMatrix();
+		Matrix4 _view = pCamera->GetViewMatrix();
+		Matrix4 _model;
+		Matrix4 u_MVPMatrix = _model * _view * _projection;
 
-		Matrix4 model = scaleM * rotateM * transM;
+		m_material->setUniform("u_MVPMatrix", static_cast<void*>(&u_MVPMatrix));
+		m_material->setUniform("u_ModelMatrix", static_cast<void*>(&_model));
+		m_material->setUniform("u_NormalMatrix", static_cast<void*>(&_model));
 
-
-		m_shader->setMat4("model", model);
-		m_shader->setMat4("view", view);
-		m_shader->setMat4("projection", projection);
-		m_shader->setVec3("cameraWorldPos", m_camera->Position);
-		m_shader->setVec3("fogcolor", m_fogpara.color);
-		m_shader->setVec3("fogpara", m_fogpara.start, m_fogpara.end, m_fogpara.intensity);
-
-		unsigned int diffuseNr = 1;
-		unsigned int specularNr = 1;
-		unsigned int normalNr = 1;
-		unsigned int heightNr = 1;
-		for (unsigned int i = 0; i < textures.size(); i++)
-		{
-			glActiveTexture(GL_TEXTURE0 + i);
-
-			stringstream ss;
-			string number;
-			string name = textures[i].type;
-			if (name == "texture_diffuse")
-				ss << diffuseNr++;
-			else if (name == "texture_specular")
-				ss << specularNr++;
-			else if (name == "texture_normal")
-				ss << normalNr++;
-			else if (name == "texture_height")
-				ss << heightNr++;
-
-			number = ss.str();
-
-			glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
-			glBindTexture(GL_TEXTURE_2D, textures[i].id);
-
-		}
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-
-		glActiveTexture(GL_TEXTURE0);
+		bgfx::submit(0, _shader->getProgramHandle());
 	}
 }

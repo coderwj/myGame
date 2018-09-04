@@ -1,12 +1,9 @@
-#ifndef __MATRIX4_H__
-#define __MATRIX4_H__
+#pragma once
 
 namespace myEngine
 {
 	class Vector3;
 	class Quaternion;
-	
-	#endif // __MATRIX_H__
 	
 	class Matrix4
 	{
@@ -23,20 +20,20 @@ namespace myEngine
 	
 	    void identity();
 	
-	    void initWithScale(const Vector3 &v);
+	    void initWithScale(const Vector3& v);
 	
-	    void initWithRotate(const Vector3 &axis, float theta);
+	    void initWithRotate(const Vector3& axis, float theta);
 	
-	    void initWithTranslate(const Vector3 &v);
+	    void initWithTranslate(const Vector3& v);
 	
-	    void initWithLookAt(const Vector3 &eye, const Vector3 &center, const Vector3 &up);
+	    void initWithLookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
 	
 	    void initWithPerspective(float fovy, float aspect, float zN, float zF);
 	
-	    Matrix4& operator = (const Matrix4 &m);
+	    Matrix4& operator = (const Matrix4& m);
 	
-	    Matrix4 operator * (const Matrix4 &m) const;
-	    Matrix4& operator *= (const Matrix4 &m);
+	    Matrix4 operator * (const Matrix4& m) const;
+	    Matrix4& operator *= (const Matrix4& m);
 	
 	};
 }

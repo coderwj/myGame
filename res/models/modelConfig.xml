@@ -32,20 +32,20 @@
   </model>
   <model id="4">
     <name>model_4</name>
-    <path>character3/Police.obj</path>
-    <material>texture</material>
-    <scale>0.01</scale>
-    <rotateTheta>-10</rotateTheta>
+    <path>cube/Cube.gltf</path>
+    <material>pbr_gltf</material>
+    <scale>1.0</scale>
+    <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
   </model>
   <model id="5">
     <name>model_5</name>
-    <path>lola/lola.obj</path>
-    <material>texture</material>
-    <scale>0.2</scale>
-    <rotateTheta>-10</rotateTheta>
+    <path>pony_cartoon/scene.gltf</path>
+    <material>pbr_gltf</material>
+    <scale>1.0</scale>
+    <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>

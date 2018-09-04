@@ -85,7 +85,7 @@ struct PBRInfo
     vec3 specularColor;           // color contribution from specular lighting
 };
 
-const float M_PI = 3.141592653589793;
+//const float M_PI = 3.141592653589793;
 const float c_MinRoughness = 0.04;
 
 vec4 SRGBtoLINEAR(vec4 srgbIn)

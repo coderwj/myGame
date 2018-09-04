@@ -1,9 +1,10 @@
 #include "Shader.h"
 
 #include <string>
-#include <fstream>
-#include <sstream>
 #include <iostream>
+
+#include "config.h"
+#include "HelperFunc.h"
 
 #include "bgfx/bgfx.h"
 
@@ -12,67 +13,41 @@ namespace myEngine
 
 	int Shader::UNIFORM_MAX_NUM = 32;
 	
-	Shader::Shader(const char* vertexPath, const char* fragmentPath)
+	Shader::Shader(const char* vs_name, const char* fs_name)
 		:m_vertex_shader(BGFX_INVALID_HANDLE)
 		, m_fragment_shader(BGFX_INVALID_HANDLE)
 		, m_program(BGFX_INVALID_HANDLE)
 	{
-		std::string vertexCode;
-		std::string fragmentCode;
 
-		std::ifstream vShaderFile;
-		std::ifstream fShaderFile;
-
-		vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-		fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-		try
-		{
-			vShaderFile.open(vertexPath);
-			fShaderFile.open(fragmentPath);
-
-			std::stringstream vShaderStream, fShaderStream;
-			vShaderStream << vShaderFile.rdbuf();
-			fShaderStream << fShaderFile.rdbuf();
-
-			vShaderFile.close();
-			fShaderFile.close();
-
-			vertexCode = vShaderStream.str();
-			fragmentCode = fShaderStream.str();
-
-		}
-		catch (std::ifstream::failure e)
-		{
-			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
-		}
-		const char* vShaderCode = vertexCode.c_str();
-		const char* fShaderCode = fragmentCode.c_str();
-
-		const bgfx::Memory* memVs = bgfx::copy(vShaderCode, vertexCode.size());
-		const bgfx::Memory* memFs = bgfx::copy(fShaderCode, fragmentCode.size());
-
-
-		// Create shaders.
-		bgfx::ShaderHandle m_vertex_shader = bgfx::createShader(memVs);
-		bgfx::ShaderHandle m_fragment_shader = bgfx::createShader(memFs);
-
+		string vs_path = Config::shader_bin_path + vs_name;
+		int vs_bin_size = HelperFunc::getFileSize(vs_path.c_str());
+		char * vs_bin = new char[vs_bin_size];
+		HelperFunc::LoadFromFile(vs_path.c_str(), vs_bin, vs_bin_size);
+		const bgfx::Memory* _vs_men = bgfx::makeRef(vs_bin, vs_bin_size);
+		bgfx::ShaderHandle m_vertex_shader = bgfx::createShader(_vs_men);
 		if (isValid(m_vertex_shader))
 		{
-			std::cout << "Error while compiling vertex shader: " << vertexPath << std::endl;
+			std::cout << "Error while compiling vertex shader: " << vs_path << std::endl;
 			return;
 		}
 
+		string fs_path = Config::shader_bin_path + fs_name;
+		int fs_bin_size = HelperFunc::getFileSize(fs_path.c_str());
+		char * fs_bin = new char[fs_bin_size];
+		HelperFunc::LoadFromFile(fs_path.c_str(), fs_bin, fs_bin_size);
+		const bgfx::Memory* _fs_men = bgfx::makeRef(fs_bin, fs_bin_size);
+		bgfx::ShaderHandle _fsh = bgfx::createShader(_fs_men);
 		if (isValid(m_fragment_shader))
 		{
-			std::cout << "Error while compiling fragment shader: " << fragmentPath << std::endl;
+			std::cout << "Error while compiling fragment shader: " << fs_path << std::endl;
 			return;
 		}
+
 		// Create bgfx program.
 		m_program = bgfx::createProgram(m_vertex_shader, m_fragment_shader, true);
-
 		if (!bgfx::isValid(m_program))
 		{
-			std::cout << "Error while creating bgfx program with shaders" << vertexPath << "," << fragmentPath << "." << std::endl;
+			std::cout << "Error while creating bgfx program with shaders" << vs_path << "," << fs_path << "." << std::endl;
 			return;
 		}
 
@@ -98,7 +73,7 @@ namespace myEngine
 			bgfx::destroy(m_vertex_shader);
 	}
 
-	void Shader::setUniform(const std::string &name , const void* values) const
+	void Shader::setUniform(const std::string &name, const void* values) const
 	{
 		bgfx::UniformHandle _handle = _getUniformByName(name);
 		bgfx::setUniform(_handle, values);

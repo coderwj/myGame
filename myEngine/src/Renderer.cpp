@@ -5,7 +5,9 @@
 
 namespace myEngine
 {
-	Renderer * Renderer::getInstance()
+	Renderer* Renderer::r = NULL;
+
+	Renderer* Renderer::getInstance()
 	{
 		if (r == NULL)
 			r = new Renderer();

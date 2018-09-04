@@ -8,21 +8,14 @@
 #include <sstream>
 #include <assert.h>
 
-#include "gamescene.h"
-#include "DebugInfo.h"
-#include "luaClientPort.h"
 #include "Character.h"
 #include "CameraOption.h"
 #include "Config.h"
 
+//#include "luaClientPort.h"
 #include "tinyxml2.h"
-#include "FbxSdkHelper.h"
 
 #include "Engine.h"
-#include "SkyBox.h"
-#include "Camera.h"
-#include "Shader.h"
-#include "Model.h"
 #include "HelperFunc.h"
 
 extern "C"
@@ -122,27 +115,19 @@ namespace myGame
 		Engine* pEngine = Engine::getInstance();
 		assert(nullptr != pEngine);
 		pEngine->init();
-
-		//DebugInfo * pDebugInfo = DebugInfo::getInstance();
-		//assert(nullptr != pDebugInfo);
-		//pDebugInfo->init();
 	
 		//init lua.
 		m_state = luaL_newstate();
 		luaopen_base(m_state);
 		luaL_openlibs(m_state);
-		tolua__open(m_state);
+		//tolua__open(m_state);
 		string luafile = Config::lua_path + "dofile.lua";
 		lua_tinker::dofile(m_state, luafile.c_str());
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "InitGame");
 
-		//string fbxFile = Config::model_path + "character2/Maskboy.FBX";
-		//printFbxFileData(fbxFile.c_str());
-
-		m_gameScene = GameScene::getInstance();
-		m_gameScene->init();
-
-		m_gameScene->loadScene("scene_3");
+		//m_gameScene = GameScene::getInstance();
+		//m_gameScene->init();
+		//m_gameScene->loadScene("scene_3");
 
 	    m_mainCharacter = Character::Create("model_3");
 	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
@@ -168,21 +153,21 @@ namespace myGame
 		m_deltaTime = new_time - m_nowTime;
 		m_nowTime = new_time;
 
-		_tick(m_deltaTime);
+		_tick(static_cast<int>(m_deltaTime));
 
 		//end tick, get time.
 		long long runTime = HelperFunc::GetCurrentTimeMs() - m_nowTime;
 		if (runTime < static_cast<long long>(1000 / getFps()))
 		{
 			long long sleepTime = static_cast<long long>(1000 / getFps()) - runTime;
-			sleepFunction(sleepTime);
+			sleepFunction(static_cast<unsigned long>(sleepTime));
 		}
 	}
 
 	void GameClient::_tick(int delta)
 	{
-		lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
-		m_gameScene->tick(delta);
+		//lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
+		//m_gameScene->tick(delta);
 
 	}
 

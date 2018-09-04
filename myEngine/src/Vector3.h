@@ -1,5 +1,4 @@
-#ifndef __VECTOR3_H__
-#define __VECTOR3_H__
+#pragma once
 
 #include <cmath>
 
@@ -135,6 +134,3 @@ namespace myEngine
 		return sqrt(dx * dx + dy * dy + dz * dz);
 	}
 }
-
-
-#endif //__VECTOR3_H__

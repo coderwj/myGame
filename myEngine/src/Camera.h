@@ -1,5 +1,4 @@
-#ifndef __CAMERA_H__
-#define __CAMERA_H__
+#pragma once
 
 #include <vector>
 
@@ -8,8 +7,6 @@
 
 namespace myEngine
 {
-
-
 	class Camera
 	{
 	public:
@@ -76,4 +73,3 @@ namespace myEngine
 		float	m_viewProtWidth;	// viewProtWidth
 	};
 }
-#endif

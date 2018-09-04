@@ -10,7 +10,7 @@ namespace myEngine
 	class Renderer
 	{
 	public:
-		static Renderer * getInstance();
+		static Renderer* getInstance();
 
 		static void destroyInstance();
 	
@@ -29,7 +29,7 @@ namespace myEngine
 		Renderer();
 		~Renderer();
 
-		static Renderer * r;
+		static Renderer* r;
 		std::vector<RenderObject*> m_RenderObjects;
 
 		int m_viewport_width;

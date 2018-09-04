@@ -2,20 +2,24 @@
 
 #include "bgfx/bgfx.h"
 
+#include <map>
+#include <string>
+
 namespace myEngine
 {
+	class Shader;
 	class Material
 	{
 	public:
 		Material();
 		~Material();
 
-		void setProgram(const bgfx::ProgramHandle& _program_handle);
-		void setProgram(const char * vs_name, const char * fs_name);
-		const bgfx::ProgramHandle& getProgram();
+		void setProgram(const char* vs_name, const char* fs_name);
+		const Shader* getProgram();
 
+		void setUniform(const char* name, const void* values);
 	private:
-		bgfx::ProgramHandle m_program_handle;
+		Shader* m_shader;
 	};
 }
 

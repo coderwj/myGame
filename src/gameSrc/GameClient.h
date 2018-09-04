@@ -44,7 +44,7 @@ namespace myGame
 		void					handleTouchEnd			(int x, int y);
 
 		Character*				getMainCharacter		() const { return m_mainCharacter; }
-		float					getDeltaTime			() const { return m_deltaTime; }
+		//float					getDeltaTime			() const { return m_deltaTime; }
 
 		myGame::CameraOption*	getCameraOption			() const { return m_cameraOption; }
 		void					setCameraOption			(myGame::CameraOption* val) { m_cameraOption = val; }

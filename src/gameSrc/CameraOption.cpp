@@ -75,7 +75,7 @@ namespace myGame
 
 	void CameraOption::resetCameraPos()
 	{
-		if (nullptr == m_camera)
+		/*if (nullptr == m_camera)
 			return;
 		GameScene* pGameScene = GameScene::getInstance();
 		if (nullptr == pGameScene)
@@ -84,7 +84,7 @@ namespace myGame
 		Vector3 characterPos = pMainCharacter->getPosition();
 		Vector3 cameraPos = characterPos + Vector3(1.0f, 1.0f, 3.0f);
 		m_camera->setPosition(cameraPos);
-		m_camera->SetFocusPos(characterPos);
+		m_camera->SetFocusPos(characterPos);*/
 	}
 }
 
