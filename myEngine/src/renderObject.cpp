@@ -12,7 +12,8 @@
 namespace myEngine
 {
 	RenderObject::RenderObject()
-	:m_material(nullptr)
+	:m_model(nullptr)
+	,m_material(nullptr)
 	,m_vbh(BGFX_INVALID_HANDLE)
 	,m_ibh(BGFX_INVALID_HANDLE)
 	{
@@ -142,6 +143,10 @@ namespace myEngine
 	{
 		m_material = new Material;
 		m_material->setProgram("pbr_gltf_vs.bin", "pbr_gltf_fs.bin");
+
+
+		const tinygltf::Material& _material = model.materials[primitive.material];
+		//if(_material.values.find("baseColorFactor") != _material.values.end())
 	}
 	
 	void RenderObject::init(const tinygltf::Primitive& primitive, const tinygltf::Model& model)
@@ -174,9 +179,14 @@ namespace myEngine
 		Matrix4 _model;
 		Matrix4 u_MVPMatrix = _model * _view * _projection;
 
-		m_material->setUniform("u_MVPMatrix", static_cast<void*>(&u_MVPMatrix));
-		m_material->setUniform("u_ModelMatrix", static_cast<void*>(&_model));
-		m_material->setUniform("u_NormalMatrix", static_cast<void*>(&_model));
+		_shader->setUniform("u_MVPMatrix", static_cast<void*>(&u_MVPMatrix));
+		_shader->setUniform("u_ModelMatrix", static_cast<void*>(&_model));
+		_shader->setUniform("u_NormalMatrix", static_cast<void*>(&_model));
+
+		float u_BaseColorFactor[4] = {1.f, 1.f, 1.f, 1.f};
+		_shader->setUniform("u_BaseColorFactor", u_BaseColorFactor);
+
+		bgfx::setTexture(0, s_texColor, m_textureColor);
 
 		bgfx::submit(0, _shader->getProgramHandle());
 	}

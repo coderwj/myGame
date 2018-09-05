@@ -27,9 +27,11 @@ namespace myEngine
 		void loadModel(const std::string &path);
 
 		void copyTexture();
+
+		bgfx::TextureHandle getTextureHandle(int index);
 	private:
 		tinygltf::Model* m_gltf_model;
-		std::vector<bgfx::TextureHandle> textrue_handles;
+		std::vector<bgfx::TextureHandle> m_textrue_handles;
 		std::vector<RenderObject*> m_render_objects;
 	};
 }

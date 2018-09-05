@@ -19,6 +19,8 @@ namespace myEngine
 		void    setUniform(const std::string &name, const void* values) const;
 		void    setUniform(const std::string &name, const void* values, unsigned int count) const;
 
+		void	setTexture(const std::string &name, const void* values) const;
+
 		//void    setUniform(const char* name, const void* values) const { setUniform(std::string(name), values); }
 		//void    setUniform(const char* name, const void* values, unsigned int count) const { setUniform(std::string(name), values, count); }
 
@@ -27,6 +29,7 @@ namespace myEngine
 	private:
 		bgfx::UniformHandle                 _getUniformByName       (const std::string& name) const;
 
+	private:
 		bgfx::ShaderHandle                  m_vertex_shader;
 		bgfx::ShaderHandle                  m_fragment_shader;
 		bgfx::ProgramHandle                 m_program;

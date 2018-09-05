@@ -90,8 +90,17 @@ namespace myEngine
 																	  _data);
 			_image.image.clear();
 			_image.image.reserve(0);
-			textrue_handles.push_back(textureHandle);
+			m_textrue_handles.push_back(textureHandle);
 		}
+	}
+
+	bgfx::TextureHandle Model::getTextureHandle(int index)
+	{
+		if (index >= 0 && index < m_textrue_handles.size())
+		{
+			return m_textrue_handles[index];
+		}
+		return BGFX_INVALID_HANDLE;
 	}
 
 	void Model::draw()

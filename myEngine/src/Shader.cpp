@@ -85,6 +85,12 @@ namespace myEngine
 		bgfx::setUniform(_handle, values, count);
 	}
 
+	void Shader::setTexture(const std::string & name, const void * values) const
+	{
+		bgfx::UniformHandle _handle = _getUniformByName(name);
+		bgfx::setTexture(0, _handle, )
+	}
+
 	bgfx::UniformHandle Shader::_getUniformByName(const std::string & name) const
 	{
 		std::map<std::string, int>::const_iterator it = m_uniform_idx.find(name);

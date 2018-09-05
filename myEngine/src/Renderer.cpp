@@ -50,6 +50,7 @@ namespace myEngine
 	
 	void Renderer::render()
 	{
+		clear();
 		for (size_t i = 0; i < m_RenderObjects.size(); i++)
 		{
 			m_RenderObjects[i]->draw();
@@ -65,15 +66,15 @@ namespace myEngine
 	}
 	void Renderer::clearDepth() const
 {
-		bgfx::setViewClear(0, BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
+		bgfx::setViewClear(0, BGFX_CLEAR_DEPTH, 0xff0000ff, 1.0f, 0);
 	}
 	void Renderer::clearColor() const
 {
-		bgfx::setViewClear(0, BGFX_CLEAR_COLOR, 0x303030ff, 1.0f, 0);
+		bgfx::setViewClear(0, BGFX_CLEAR_COLOR, 0xff0000ff, 1.0f, 0);
 	}
 	void Renderer::clear() const
 {
-		bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
+		bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0xff0000ff, 1.0f, 0);
 	}
 	void Renderer::pushRenderObject(RenderObject * v)
 	{

@@ -133,6 +133,7 @@ namespace myGame
 	    //m_characters.push_back(character);
 
 		m_cameraOption = new CameraOption();
+		m_cameraOption->setCamera(pEngine->getMaincCamera());
 		m_cameraOption->resetCameraPos();
 
 	    return true;
