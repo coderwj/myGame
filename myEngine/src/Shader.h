@@ -19,7 +19,10 @@ namespace myEngine
 		void    setUniform(const std::string &name, const void* values) const;
 		void    setUniform(const std::string &name, const void* values, unsigned int count) const;
 
-		void	setTexture(const std::string &name, const void* values) const;
+		void	setTexture(const std::string &name, const bgfx::TextureHandle& th) const;
+
+		std::vector<std::string> getAllUniformNames() const;
+		const bgfx::UniformInfo& getUniformInfo(const std::string& s) const;
 
 		//void    setUniform(const char* name, const void* values) const { setUniform(std::string(name), values); }
 		//void    setUniform(const char* name, const void* values, unsigned int count) const { setUniform(std::string(name), values, count); }
@@ -35,6 +38,7 @@ namespace myEngine
 		bgfx::ProgramHandle                 m_program;
 		std::vector<bgfx::UniformHandle>    m_uniform;
 		std::map<std::string, int>          m_uniform_idx;
+		std::map<std::string, bgfx::UniformInfo>	m_uniform_info;
 
 		static int                          UNIFORM_MAX_NUM;
 	};

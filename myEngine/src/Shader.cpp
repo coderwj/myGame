@@ -60,7 +60,10 @@ namespace myEngine
 		{
 			bgfx::UniformInfo info;
 			bgfx::getUniformInfo((*it), info);
-			m_uniform_idx[std::string(info.name)] = it - m_uniform.begin();
+			int index = it - m_uniform.begin();
+			std::string name = std::string(info.name);
+			m_uniform_idx[name] = index;
+			m_uniform_info[name] = info;
 		}
 	}
 	Shader::~Shader()
@@ -85,10 +88,31 @@ namespace myEngine
 		bgfx::setUniform(_handle, values, count);
 	}
 
-	void Shader::setTexture(const std::string & name, const void * values) const
+	void Shader::setTexture(const std::string & name, const bgfx::TextureHandle & th) const
 	{
 		bgfx::UniformHandle _handle = _getUniformByName(name);
-		bgfx::setTexture(0, _handle, )
+		bgfx::setTexture(0, _handle, th);
+	}
+
+	std::vector<std::string> Shader::getAllUniformNames() const
+	{
+		std::vector<std::string> result;
+		for (std::map<std::string, int>::const_iterator it = m_uniform_idx.begin(); it != m_uniform_idx.end(); it++)
+		{
+			result.push_back(it->first);
+		}
+		return result;
+	}
+
+	const bgfx::UniformInfo& Shader::getUniformInfo(const std::string & s) const
+	{
+		std::map<std::string, bgfx::UniformInfo>::const_iterator it = m_uniform_info.find(s);
+		if (it != m_uniform_info.end())
+		{
+			return it->second;
+		}
+		//TODO
+		return m_uniform_info.begin()->second;
 	}
 
 	bgfx::UniformHandle Shader::_getUniformByName(const std::string & name) const

@@ -171,22 +171,35 @@ namespace myEngine
 		bgfx::setIndexBuffer(m_ibh);
 		bgfx::setVertexBuffer(0, m_vbh);
 
-		// use the shader program
-		myEngine::Camera* pCamera = myEngine::Engine::getInstance()->getMaincCamera();
+		std::vector<std::string> _uniform_names = _shader->getAllUniformNames();
 
-		Matrix4 _projection = pCamera->GetProjectMatrix();
-		Matrix4 _view = pCamera->GetViewMatrix();
-		Matrix4 _model;
-		Matrix4 u_MVPMatrix = _model * _view * _projection;
+		for (std::vector<std::string>::iterator it = _uniform_names.begin(); it != _uniform_names.end(); it++)
+		{
+			bgfx::UniformInfo _info = _shader->getUniformInfo(*it);
+			if (_info.type == bgfx::UniformType::Int1) // Texture
+			{
+				bgfx::TextureHandle _th;
+				_shader->setTexture(0, _th);
+			}
+			else// if (_info.type == bgfx::UniformType::Vec4)
+			{
+				// use the shader program
+				myEngine::Camera* pCamera = myEngine::Engine::getInstance()->getMaincCamera();
 
-		_shader->setUniform("u_MVPMatrix", static_cast<void*>(&u_MVPMatrix));
-		_shader->setUniform("u_ModelMatrix", static_cast<void*>(&_model));
-		_shader->setUniform("u_NormalMatrix", static_cast<void*>(&_model));
+				Matrix4 _projection = pCamera->GetProjectMatrix();
+				Matrix4 _view = pCamera->GetViewMatrix();
+				Matrix4 _model;
+				Matrix4 u_MVPMatrix = _model * _view * _projection;
 
-		float u_BaseColorFactor[4] = {1.f, 1.f, 1.f, 1.f};
-		_shader->setUniform("u_BaseColorFactor", u_BaseColorFactor);
+				_shader->setUniform("u_MVPMatrix", static_cast<void*>(&u_MVPMatrix));
+				_shader->setUniform("u_ModelMatrix", static_cast<void*>(&_model));
+				_shader->setUniform("u_NormalMatrix", static_cast<void*>(&_model));
 
-		bgfx::setTexture(0, s_texColor, m_textureColor);
+				float u_BaseColorFactor[4] = { 1.f, 1.f, 1.f, 1.f };
+				_shader->setUniform("u_BaseColorFactor", u_BaseColorFactor);
+				_shader->setUniform(*it, value);
+			}
+		}
 
 		bgfx::submit(0, _shader->getProgramHandle());
 	}
