@@ -5,7 +5,6 @@
 #include "Material.h"
 #include "Shader.h"
 #include "Matrix4.h"
-#include "Camera.h"
 
 #include "bgfx/bgfx.h"
 
@@ -146,11 +145,14 @@ namespace myEngine
 
 
 		const tinygltf::Material& _material = model.materials[primitive.material];
+
+		m_material->initParams(_material);
 		//if(_material.values.find("baseColorFactor") != _material.values.end())
 	}
 	
-	void RenderObject::init(const tinygltf::Primitive& primitive, const tinygltf::Model& model)
+	void RenderObject::init(Model* modelptr, const tinygltf::Primitive& primitive, const tinygltf::Model& model)
 	{
+		m_model = modelptr;
 		_createVertexBuffer(primitive, model);
 		_createIndexBuffer(primitive, model);
 		_createProgram(primitive, model);
@@ -166,40 +168,10 @@ namespace myEngine
 
 		bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_DEPTH_TEST_EQUAL);
 
-		
-
 		bgfx::setIndexBuffer(m_ibh);
 		bgfx::setVertexBuffer(0, m_vbh);
 
-		std::vector<std::string> _uniform_names = _shader->getAllUniformNames();
-
-		for (std::vector<std::string>::iterator it = _uniform_names.begin(); it != _uniform_names.end(); it++)
-		{
-			bgfx::UniformInfo _info = _shader->getUniformInfo(*it);
-			if (_info.type == bgfx::UniformType::Int1) // Texture
-			{
-				bgfx::TextureHandle _th;
-				_shader->setTexture(0, _th);
-			}
-			else// if (_info.type == bgfx::UniformType::Vec4)
-			{
-				// use the shader program
-				myEngine::Camera* pCamera = myEngine::Engine::getInstance()->getMaincCamera();
-
-				Matrix4 _projection = pCamera->GetProjectMatrix();
-				Matrix4 _view = pCamera->GetViewMatrix();
-				Matrix4 _model;
-				Matrix4 u_MVPMatrix = _model * _view * _projection;
-
-				_shader->setUniform("u_MVPMatrix", static_cast<void*>(&u_MVPMatrix));
-				_shader->setUniform("u_ModelMatrix", static_cast<void*>(&_model));
-				_shader->setUniform("u_NormalMatrix", static_cast<void*>(&_model));
-
-				float u_BaseColorFactor[4] = { 1.f, 1.f, 1.f, 1.f };
-				_shader->setUniform("u_BaseColorFactor", u_BaseColorFactor);
-				_shader->setUniform(*it, value);
-			}
-		}
+		m_material->bindUniforms(m_model);
 
 		bgfx::submit(0, _shader->getProgramHandle());
 	}

@@ -17,7 +17,7 @@ namespace myEngine
 		static bgfx::AttribType::Enum	mapAttributeComponentType(int gltf_attr_comp_type);
 		static bgfx::Attrib::Enum		mapAttributeType(const std::string& attr_str);
 
-		void init(const tinygltf::Primitive& primitive, const tinygltf::Model& model);
+		void init(Model* modelptr, const tinygltf::Primitive& primitive, const tinygltf::Model& model);
 		void draw();
 
 	private:

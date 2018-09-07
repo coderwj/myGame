@@ -22,13 +22,14 @@ namespace myEngine
 		~Model();
 	
 		void draw();
+
+		bgfx::TextureHandle getTextureHandle(int index);
 	
 	private:
 		void loadModel(const std::string &path);
 
 		void copyTexture();
 
-		bgfx::TextureHandle getTextureHandle(int index);
 	private:
 		tinygltf::Model* m_gltf_model;
 		std::vector<bgfx::TextureHandle> m_textrue_handles;
