@@ -52,7 +52,7 @@ namespace myEngine
 	{
 		for (tinygltf::ParameterMap::const_iterator it = material_info.values.begin(); it != material_info.values.end(); it++)
 		{
-			if (it->first == "baseColorFactor")
+			if (it->first.compare("baseColorFactor") == 0)
 			{
 				m_baseColorFactor.clear();
 				for (int i = 0; i < 4; i++)
@@ -60,19 +60,19 @@ namespace myEngine
 					m_baseColorFactor.push_back(it->second.ColorFactor()[i]);
 				}
 			}
-			else if (it->first == "baseColorTexture")
+			else if (it->first.compare("baseColorTexture") == 0)
 			{
 				m_baseColorTextureID = it->second.TextureIndex();
 			}
-			else if (it->first == "metallicFactor")
+			else if (it->first.compare("metallicFactor") == 0)
 			{
 				m_metallicFactor = it->second.Factor();
 			}
-			else if (it->first == "metallicRoughnessTexture")
+			else if (it->first.compare("metallicRoughnessTexture") == 0)
 			{
 				m_metallicRoughnessTextureID = it->second.TextureIndex();
 			}
-			else if (it->first == "roughnessFactor")
+			else if (it->first.compare("roughnessFactor") == 0)
 			{
 				m_roughnessFactor = it->second.Factor();
 			}
@@ -81,21 +81,21 @@ namespace myEngine
 		for (tinygltf::ParameterMap::const_iterator it = material_info.additionalValues.begin(); it != material_info.additionalValues.end(); it++)
 		{
 			bool _enableEmissive = false;
-			if (it->first == "doubleSided")
+			if (it->first.compare("doubleSided") == 0)
 			{
 				m_doubleSided = it->second.bool_value;
 			}
-			else if (it->first == "emissiveFactor")
+			else if (it->first.compare("emissiveFactor") == 0)
 			{
 				_enableEmissive = true;
 				m_emissiveFactor = Vector3(it->second.ColorFactor()[0], it->second.ColorFactor()[1], it->second.ColorFactor()[2]);
 			}
-			else if (it->first == "emissiveTexture")
+			else if (it->first.compare("emissiveTexture") == 0)
 			{
 				_enableEmissive = true;
 				m_emissiveTextureID = it->second.TextureIndex();
 			}
-			else if (it->first == "normalTexture")
+			else if (it->first.compare("normalTexture") == 0)
 			{
 				m_normalTextureID = it->second.TextureIndex();
 			}
@@ -131,47 +131,47 @@ namespace myEngine
 			}
 			else// if (_info.type == bgfx::UniformType::Vec4)
 			{
-				if (*it == "u_MVPMatrix")
+				if ((*it).compare("u_MVPMatrix") == 0)
 				{
 					m_shader->setUniform(*it, static_cast<void*>(&u_MVPMatrix));
 				}
-				else if (*it == "u_ModelMatrix")
+				else if ((*it).compare("u_ModelMatrix") == 0)
 				{
 					m_shader->setUniform(*it, static_cast<void*>(&_m));
 				}
-				else if (*it == "u_NormalMatrix")
+				else if ((*it).compare("u_NormalMatrix") == 0)
 				{
 					m_shader->setUniform(*it, static_cast<void*>(&_m));
 				}
-				else if (*it == "u_Camera")
+				else if ((*it).compare("u_Camera") == 0)
 				{
 					m_shader->setUniform(*it, static_cast<void*>(&_camera_pos));
 				}
-				else if (*it == "u_LightDirection")
+				else if ((*it).compare("u_LightDirection") == 0)
 				{
 					float _lightDirection[4] = { 1.f, 1.f, 1.f, 1.f };
 					m_shader->setUniform(*it, static_cast<void*>(_lightDirection));
 				}
-				else if (*it == "u_LightColor")
+				else if ((*it).compare("u_LightColor") == 0)
 				{
 					float _lightColor[4] = { 1.f, 1.f, 1.f, 1.f };
 					m_shader->setUniform(*it, static_cast<void*>(_lightColor));
 				}
-				else if (*it == "u_NormalScale")
+				else if ((*it).compare("u_NormalScale") == 0)
 				{
 					float _normalScale[4] = { 1.f, 1.f, 1.f, 1.f };
 					m_shader->setUniform(*it, static_cast<void*>(_normalScale));
 				}
-				else if (*it == "u_EmissiveFactor")
+				else if ((*it).compare("u_EmissiveFactor") == 0)
 				{
 					float _emissiveFactor[4] = { m_emissiveFactor.x, m_emissiveFactor.y, m_emissiveFactor.z, 1.f };
 					m_shader->setUniform(*it, static_cast<void*>(&_emissiveFactor));
 				}
-				else if (*it == "u_BaseColorFactor")
+				else if ((*it).compare("u_BaseColorFactor") == 0)
 				{
 					m_shader->setUniform(*it, static_cast<void*>(&m_baseColorFactor));
 				}
-				else if (*it == "u_MetallicRoughnessValues")
+				else if ((*it).compare("u_MetallicRoughnessValues") == 0)
 				{
 					float _metallicRoughnessValues[4] = { m_metallicFactor, m_roughnessFactor, 1.f, 1.f };
 					m_shader->setUniform(*it, static_cast<void*>(_metallicRoughnessValues));
