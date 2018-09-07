@@ -133,9 +133,9 @@ namespace myEngine
 		const tinygltf::BufferView& _bufferView = model.bufferViews[_accessor.bufferView];
 		const tinygltf::Buffer&		_buffer = model.buffers[_bufferView.buffer];
 
-		const char* index_buffer_data = reinterpret_cast<const char*>(&_buffer.data.data()[_bufferView.byteOffset + _accessor.byteOffset]);
+		const char* index_buffer_data = reinterpret_cast<const char*>(&_buffer.data[_bufferView.byteOffset + _accessor.byteOffset]);
 		int			index_buffer_size = _accessor.count * _accessor.ByteStride(_bufferView);
-		m_ibh = bgfx::createIndexBuffer(bgfx::copy(index_buffer_data, index_buffer_size));
+		m_ibh = bgfx::createIndexBuffer(bgfx::copy(index_buffer_data, index_buffer_size), BGFX_BUFFER_INDEX32);
 	}
 
 	void RenderObject::_createProgram(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
@@ -166,7 +166,7 @@ namespace myEngine
 		if (nullptr == _shader)
 			return;
 
-		bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_DEPTH_TEST_EQUAL);
+		bgfx::setState(BGFX_STATE_DEFAULT);
 
 		bgfx::setIndexBuffer(m_ibh);
 		bgfx::setVertexBuffer(0, m_vbh);

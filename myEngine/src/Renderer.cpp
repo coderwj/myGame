@@ -301,7 +301,7 @@ namespace myEngine
 
 		// Enable debug text.
 		// uint32_t flag = BGFX_DEBUG_WIREFRAME | BGFX_DEBUG_TEXT | BGFX_DEBUG_PROFILER | BGFX_DEBUG_STATS;
-		uint32_t flag = BGFX_DEBUG_WIREFRAME | BGFX_DEBUG_TEXT;
+		uint32_t flag = BGFX_DEBUG_TEXT | BGFX_DEBUG_PROFILER;
 		bgfx::setDebug(flag);
 
 		clear();
@@ -320,12 +320,12 @@ namespace myEngine
 		const Matrix4& _view = _camera->GetViewMatrix();
 		bgfx::setViewTransform(0, static_cast<const void*>(&_view), static_cast<const void*>(&_projection));
 
-		bgfx::dbgTextImage(10, 15, 40, 12, s_logo, 160);
-
 		for (size_t i = 0; i < m_RenderObjects.size(); i++)
 		{
 			m_RenderObjects[i]->draw();
 		}
+		//bgfx::dbgTextImage(10, 15, 40, 12, s_logo, 160);
+
 		bgfx::frame();
 		m_RenderObjects.clear();
 	}

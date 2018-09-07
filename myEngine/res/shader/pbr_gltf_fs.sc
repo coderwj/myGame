@@ -11,8 +11,13 @@
 //     https://github.com/KhronosGroup/glTF-WebGL-PBR/#environment-maps
 // [4] "An Inexpensive BRDF Model for Physically based Rendering" by Christophe Schlick
 //     https://www.cs.virginia.edu/~jdl/bib/appearance/analytic%20models/schlick94b.pdf
-#extension GL_EXT_shader_texture_lod: enable
-#extension GL_OES_standard_derivatives : enable
+
+$input v_Position, v_UV, v_TBNX, v_TBNY, v_TBNZ, v_Normal
+
+#include "common.sh"
+
+// #extension GL_EXT_shader_texture_lod: enable
+// #extension GL_OES_standard_derivatives : enable
 
 uniform vec4 u_LightDirection;
 uniform vec4 u_LightColor;
@@ -54,17 +59,6 @@ uniform vec4 u_Camera;
 
 //precision highp float;
 
-varying vec3 v_Position;
-
-varying vec2 v_UV;
-
-#ifdef HAS_NORMALS
-#ifdef HAS_TANGENTS
-varying mat3 v_TBN;
-#else
-varying vec3 v_Normal;
-#endif
-#endif
 
 // Encapsulate the various inputs used by the various functions in the shading equation
 // We store values in this struct to simplify the integration of alternative implementations
@@ -105,18 +99,18 @@ vec4 SRGBtoLINEAR(vec4 srgbIn)
 
 // Find the normal for this fragment, pulling either from a predefined normal map
 // or from the interpolated mesh normal and tangent attributes.
-vec3 getNormal()
+vec3 getNormal(vec3 position, vec2 UV, vec3 normal, mat3 TBN)
 {
     // Retrieve the tangent space matrix
 #ifndef HAS_TANGENTS
-    vec3 pos_dx = dFdx(v_Position);
-    vec3 pos_dy = dFdy(v_Position);
-    vec3 tex_dx = dFdx(vec3(v_UV, 0.0));
-    vec3 tex_dy = dFdy(vec3(v_UV, 0.0));
-    vec3 t = (tex_dy.t * pos_dx - tex_dx.t * pos_dy) / (tex_dx.s * tex_dy.t - tex_dy.s * tex_dx.t);
+    vec3 pos_dx = dFdx(position);
+    vec3 pos_dy = dFdy(position);
+    vec3 tex_dx = dFdx(vec3(UV, 0.0));
+    vec3 tex_dy = dFdy(vec3(UV, 0.0));
+    vec3 t = (tex_dy.y * pos_dx - tex_dx.y * pos_dy) / (tex_dx.x * tex_dy.y - tex_dy.x * tex_dx.y);
 
 #ifdef HAS_NORMALS
-    vec3 ng = normalize(v_Normal);
+    vec3 ng = normalize(normal);
 #else
     vec3 ng = cross(pos_dx, pos_dy);
 #endif
@@ -125,12 +119,12 @@ vec3 getNormal()
     vec3 b = normalize(cross(ng, t));
     mat3 tbn = mat3(t, b, ng);
 #else // HAS_TANGENTS
-    mat3 tbn = v_TBN;
+    mat3 tbn = TBN;
 #endif
 
 #ifdef HAS_NORMALMAP
-    vec3 n = texture2D(u_NormalSampler, v_UV).rgb;
-    n = normalize(tbn * ((2.0 * n - 1.0) * vec3(u_NormalScale.x, u_NormalScale.x, 1.0)));
+    vec3 n = texture2D(u_NormalSampler, UV).rgb;
+    n = normalize(mul(tbn, ((2.0 * n - 1.0) * vec3(u_NormalScale.x, u_NormalScale.x, 1.0))));
 #else
     // The tbn matrix is linearly interpolated, so we need to re-normalize
     vec3 n = normalize(tbn[2].xyz);
@@ -235,8 +229,8 @@ void main()
     vec4 baseColor = u_BaseColorFactor;
 #endif
 
-    vec3 f0 = vec3(0.04);
-    vec3 diffuseColor = baseColor.rgb * (vec3(1.0) - f0);
+    vec3 f0 = vec3_splat(0.04);
+    vec3 diffuseColor = baseColor.rgb * (vec3_splat(1.0) - f0);
     diffuseColor *= 1.0 - metallic;
     vec3 specularColor = mix(f0, baseColor.rgb, metallic);
 
@@ -249,7 +243,7 @@ void main()
     vec3 specularEnvironmentR0 = specularColor.rgb;
     vec3 specularEnvironmentR90 = vec3(1.0, 1.0, 1.0) * reflectance90;
 
-    vec3 n = getNormal();                             // normal at surface point
+    vec3 n = getNormal(v_Position, v_UV, v_Normal, mat3(v_TBNX, v_TBNY, v_TBNZ));                             // normal at surface point
     vec3 v = normalize(u_Camera.xyz - v_Position);        // Vector from surface point to camera
     vec3 l = normalize(u_LightDirection.xyz);             // Vector from surface point to light
     vec3 h = normalize(l+v);                          // Half vector between both l and v
@@ -316,4 +310,5 @@ void main()
     // color = mix(color, vec3(perceptualRoughness), u_ScaleDiffBaseMR.w);
 
     gl_FragColor = vec4(pow(color,vec3(1.0/2.2)), baseColor.a);
+    gl_FragColor = gl_FragColor * 0.000001 + vec4(1.0, 0.0, 0.0, 1.0);
 }

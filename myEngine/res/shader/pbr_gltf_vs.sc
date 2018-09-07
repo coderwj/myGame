@@ -1,51 +1,33 @@
-attribute vec4 a_Position;
-#ifdef HAS_NORMALS
-attribute vec4 a_Normal;
-#endif
-#ifdef HAS_TANGENTS
-attribute vec4 a_Tangent;
-#endif
-#ifdef HAS_UV
-attribute vec2 a_UV;
-#endif
+$input a_Position, a_Normal, a_Tangent, a_UV
+$output v_Position, v_UV, v_TBNX, v_TBNY, v_TBNZ, v_Normal
 
 uniform mat4 u_MVPMatrix;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_NormalMatrix;
 
-varying vec3 v_Position;
-varying vec2 v_UV;
-
-#ifdef HAS_NORMALS
-#ifdef HAS_TANGENTS
-varying mat3 v_TBN;
-#else
-varying vec3 v_Normal;
-#endif
-#endif
-
-
 void main()
 {
-  vec4 pos = u_ModelMatrix * a_Position;
-  v_Position = vec3(pos.xyz) / pos.w;
+  vec4 pos = mul(u_ModelMatrix, vec4(a_Position, 1.0));
+  v_Position = pos.xyz / pos.w;
 
   #ifdef HAS_NORMALS
   #ifdef HAS_TANGENTS
-  vec3 normalW = normalize(vec3(u_NormalMatrix * vec4(a_Normal.xyz, 0.0)));
-  vec3 tangentW = normalize(vec3(u_ModelMatrix * vec4(a_Tangent.xyz, 0.0)));
+  vec3 normalW = normalize(mul(u_NormalMatrix, vec4(a_Normal.xyz, 0.0)).xyz);
+  vec3 tangentW = normalize(mul(u_ModelMatrix, vec4(a_Tangent.xyz, 0.0)).xyz);
   vec3 bitangentW = cross(normalW, tangentW) * a_Tangent.w;
-  v_TBN = mat3(tangentW, bitangentW, normalW);
+  v_TBNX = tangentW;
+  v_TBNY = bitangentW;
+  v_TBNZ = normalW;
   #else // HAS_TANGENTS != 1
-  v_Normal = normalize(vec3(u_ModelMatrix * vec4(a_Normal.xyz, 0.0)));
+  v_Normal = normalize(mul(u_ModelMatrix, vec4(a_Normal.xyz, 0.0)).xyz);
   #endif
   #endif
 
   #ifdef HAS_UV
   v_UV = a_UV;
   #else
-  v_UV = vec2(0.,0.);
+  v_UV = vec2(0.0, 0.0);
   #endif
 
-  gl_Position = u_MVPMatrix * a_Position; // needs w for proper perspective correction
+  gl_Position = mul(u_MVPMatrix, vec4(a_Position, 1.0)); // needs w for proper perspective correction
 }
