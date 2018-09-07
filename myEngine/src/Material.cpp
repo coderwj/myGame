@@ -1,5 +1,7 @@
 #include "Material.h"
 
+#include <iostream>
+
 #include "Engine.h"
 #include "Shader.h"
 #include "Camera.h"
@@ -57,7 +59,8 @@ namespace myEngine
 				m_baseColorFactor.clear();
 				for (int i = 0; i < 4; i++)
 				{
-					m_baseColorFactor.push_back(it->second.ColorFactor()[i]);
+					float v = static_cast<float>(it->second.ColorFactor()[i]);
+					m_baseColorFactor.push_back(v);
 				}
 			}
 			else if (it->first.compare("baseColorTexture") == 0)
@@ -66,7 +69,7 @@ namespace myEngine
 			}
 			else if (it->first.compare("metallicFactor") == 0)
 			{
-				m_metallicFactor = it->second.Factor();
+				m_metallicFactor = static_cast<float>(it->second.Factor());
 			}
 			else if (it->first.compare("metallicRoughnessTexture") == 0)
 			{
@@ -74,7 +77,11 @@ namespace myEngine
 			}
 			else if (it->first.compare("roughnessFactor") == 0)
 			{
-				m_roughnessFactor = it->second.Factor();
+				m_roughnessFactor = static_cast<float>(it->second.Factor());
+			}
+			else
+			{
+				//std::cout << "Error values!" << std::endl;
 			}
 		}
 
@@ -88,7 +95,10 @@ namespace myEngine
 			else if (it->first.compare("emissiveFactor") == 0)
 			{
 				_enableEmissive = true;
-				m_emissiveFactor = Vector3(it->second.ColorFactor()[0], it->second.ColorFactor()[1], it->second.ColorFactor()[2]);
+				float x = static_cast<float>(it->second.ColorFactor()[0]);
+				float y = static_cast<float>(it->second.ColorFactor()[1]);
+				float z = static_cast<float>(it->second.ColorFactor()[2]);
+				m_emissiveFactor = Vector3(x, y, z);
 			}
 			else if (it->first.compare("emissiveTexture") == 0)
 			{
@@ -98,6 +108,10 @@ namespace myEngine
 			else if (it->first.compare("normalTexture") == 0)
 			{
 				m_normalTextureID = it->second.TextureIndex();
+			}
+			else
+			{
+				//std::cout << "Error additionalValues!" << std::endl;
 			}
 		}
 
@@ -175,6 +189,10 @@ namespace myEngine
 				{
 					float _metallicRoughnessValues[4] = { m_metallicFactor, m_roughnessFactor, 1.f, 1.f };
 					m_shader->setUniform(*it, static_cast<void*>(_metallicRoughnessValues));
+				}
+				else
+				{
+					std::cout << "Error uniform name!" << std::endl;
 				}
 			}
 		}

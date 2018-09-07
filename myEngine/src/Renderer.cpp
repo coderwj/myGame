@@ -294,13 +294,15 @@ namespace myEngine
 		//init.type = bgfx::RendererType::OpenGLES;
 		init.type = bgfx::RendererType::OpenGL;
 		init.vendorId = BGFX_PCI_ID_NONE; //auto select
-		//init.resolution.width = m_viewport_width;
-		//init.resolution.height = m_viewport_height;
+		init.resolution.width = m_viewport_width;
+		init.resolution.height = m_viewport_height;
 		init.resolution.reset = BGFX_RESET_VSYNC;
 		bgfx::init(init);
 
 		// Enable debug text.
-		bgfx::setDebug(BGFX_DEBUG_TEXT);
+		// uint32_t flag = BGFX_DEBUG_WIREFRAME | BGFX_DEBUG_TEXT | BGFX_DEBUG_PROFILER | BGFX_DEBUG_STATS;
+		uint32_t flag = BGFX_DEBUG_WIREFRAME | BGFX_DEBUG_TEXT;
+		bgfx::setDebug(flag);
 
 		clear();
 
@@ -318,7 +320,7 @@ namespace myEngine
 		const Matrix4& _view = _camera->GetViewMatrix();
 		bgfx::setViewTransform(0, static_cast<const void*>(&_view), static_cast<const void*>(&_projection));
 
-		bgfx::dbgTextImage(20, 16, 40, 12, s_logo, 160);
+		bgfx::dbgTextImage(10, 15, 40, 12, s_logo, 160);
 
 		for (size_t i = 0; i < m_RenderObjects.size(); i++)
 		{
@@ -335,15 +337,15 @@ namespace myEngine
 	}
 	void Renderer::clearDepth() const
 {
-		bgfx::setViewClear(0, BGFX_CLEAR_DEPTH, 0xffffffff, 1.0f, 0);
+		bgfx::setViewClear(0, BGFX_CLEAR_DEPTH, 0xaaaaaaff, 1.0f, 0);
 	}
 	void Renderer::clearColor() const
 {
-		bgfx::setViewClear(0, BGFX_CLEAR_COLOR, 0xffffffff, 1.0f, 0);
+		bgfx::setViewClear(0, BGFX_CLEAR_COLOR, 0xaaaaaaff, 1.0f, 0);
 	}
 	void Renderer::clear() const
 {
-		bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0xffffffff, 1.0f, 0);
+		bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0xaaaaaaff, 1.0f, 0);
 	}
 	void Renderer::pushRenderObject(RenderObject * v)
 	{

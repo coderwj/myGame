@@ -193,7 +193,8 @@ namespace myGame
 
 	void GameClient::handleMouseWheel(bool wheel_down, int scroll_delta, int x, int y)
 	{
-
+		//if (nullptr != m_cameraOption)
+		//	m_cameraOption->processMouseScroll(scroll_delta);
 	}
 
 	void GameClient::handleTouchBegin(int x, int y)
@@ -215,12 +216,6 @@ namespace myGame
 		{
 			pEngine->onResize(width, height);
 		}
-	}
-
-	void GameClient::onMouseScroll(float offset) const
-	{
-		if (nullptr != m_cameraOption)
-			m_cameraOption->processMouseScroll(offset);
 	}
 
 	int GameClient::getFps() const

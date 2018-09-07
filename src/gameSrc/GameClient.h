@@ -50,7 +50,6 @@ namespace myGame
 		void					setCameraOption			(myGame::CameraOption* val) { m_cameraOption = val; }
 
 		void					onResize				(int width, int height);
-		void					onMouseScroll			(float offset) const;
 
 		int						getFps					() const;
 		void					setFps					(int val);
