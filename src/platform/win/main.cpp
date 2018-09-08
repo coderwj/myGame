@@ -192,6 +192,7 @@ int __stdcall WinMain(_In_ HINSTANCE h, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 			{
 				g_client = GameClient::getInstance();
 				g_client->init();
+				g_client->onResize(g_window_width, g_window_height);
 				isInited = true;
 			}
 			g_client->tick();
