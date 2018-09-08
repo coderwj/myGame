@@ -25,25 +25,25 @@ uniform vec4 u_LightColor;
 #ifdef USE_IBL
 uniform samplerCube u_DiffuseEnvSampler;
 uniform samplerCube u_SpecularEnvSampler;
-uniform sampler2D u_brdfLUT;
+SAMPLER2D(u_brdfLUT, 0);
 #endif
 
 #ifdef HAS_BASECOLORMAP
-uniform sampler2D u_BaseColorSampler;
+SAMPLER2D(u_BaseColorSampler, 1);
 #endif
 #ifdef HAS_NORMALMAP
-uniform sampler2D u_NormalSampler;
+SAMPLER2D(u_NormalSampler, 2);
 uniform vec4 u_NormalScale;
 #endif
 #ifdef HAS_EMISSIVEMAP
-uniform sampler2D u_EmissiveSampler;
+SAMPLER2D(u_EmissiveSampler, 3);
 uniform vec4 u_EmissiveFactor;
 #endif
 #ifdef HAS_METALROUGHNESSMAP
-uniform sampler2D u_MetallicRoughnessSampler;
+SAMPLER2D(u_MetallicRoughnessSampler, 4);
 #endif
 #ifdef HAS_OCCLUSIONMAP
-uniform sampler2D u_OcclusionSampler;
+SAMPLER2D(u_OcclusionSampler, 5);
 uniform vec4 u_OcclusionStrength;
 #endif
 
@@ -309,6 +309,6 @@ void main()
     // color = mix(color, vec3(metallic), u_ScaleDiffBaseMR.z);
     // color = mix(color, vec3(perceptualRoughness), u_ScaleDiffBaseMR.w);
 
-    gl_FragColor = vec4(pow(color,vec3(1.0/2.2)), baseColor.a);
+    gl_FragColor = vec4(pow(color,vec3_splat(1.0/2.2)), baseColor.a);
     gl_FragColor = gl_FragColor * 0.000001 + vec4(1.0, 0.0, 0.0, 1.0);
 }

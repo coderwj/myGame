@@ -183,7 +183,7 @@ namespace myEngine
 				}
 				else if ((*it).compare("u_BaseColorFactor") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<void*>(&m_baseColorFactor));
+					m_shader->setUniform(*it, static_cast<void*>(&m_baseColorFactor[0]));
 				}
 				else if ((*it).compare("u_MetallicRoughnessValues") == 0)
 				{

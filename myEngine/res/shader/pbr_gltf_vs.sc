@@ -1,6 +1,8 @@
 $input a_Position, a_Normal, a_Tangent, a_UV
 $output v_Position, v_UV, v_TBNX, v_TBNY, v_TBNZ, v_Normal
 
+#include "common.sh"
+
 uniform mat4 u_MVPMatrix;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_NormalMatrix;
@@ -30,4 +32,7 @@ void main()
   #endif
 
   gl_Position = mul(u_MVPMatrix, vec4(a_Position, 1.0)); // needs w for proper perspective correction
+  //gl_Position.x = clamp(gl_Position.x, 0.2, 0.8);
+  //gl_Position.y = clamp(gl_Position.y, 0.2, 0.8);
+  //gl_Position.z = clamp(gl_Position.z, 0.2, 0.8);
 }

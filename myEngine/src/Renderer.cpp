@@ -316,8 +316,8 @@ namespace myEngine
 		bgfx::setViewRect(0, 0, 0, static_cast<uint16_t>(m_viewport_width), static_cast<uint16_t>(m_viewport_height));
 
 		myEngine::Camera* _camera = myEngine::Engine::getInstance()->getMaincCamera();
-		const Matrix4& _projection = _camera->GetProjectMatrix();
 		const Matrix4& _view = _camera->GetViewMatrix();
+		const Matrix4& _projection = _camera->GetProjectMatrix();
 		bgfx::setViewTransform(0, static_cast<const void*>(&_view), static_cast<const void*>(&_projection));
 
 		for (size_t i = 0; i < m_RenderObjects.size(); i++)

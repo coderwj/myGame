@@ -14,8 +14,8 @@ const float ASPECT = 1.777778f;
 namespace myEngine
 {
 	Camera::Camera()
-	: m_position(Vector3::UNIT_Z)
-	, m_front(-Vector3::UNIT_Z)
+	: m_position(Vector3::UNIT_Y)
+	, m_front(-Vector3::UNIT_Y)
 	, m_rotate(0.f)
 	, m_nearClip(NEAR_CLIP)
 	, m_farClip(FAR_CLIP)
