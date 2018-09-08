@@ -3,6 +3,8 @@
 #include "RenderObject.h"
 #include "Camera.h"
 #include "Engine.h"
+#include "Config.h"
+#include "HelperFunc.h"
 
 #include "bgfx/bgfx.h"
 #include "bx/math.h"
@@ -261,6 +263,24 @@ static const uint8_t s_logo[4000] =
 	0x20, 0x0f, 0x20, 0x0f, 0x20, 0x0f, 0x20, 0x0f, 0x20, 0x0f, 0x20, 0x0f, 0x20, 0x0f, 0x20, 0x0f, //  . . . . . . . .
 };
 
+float vertexes[12] = {
+	1.f, 1.f, 0.f,
+	-1.f, 1.f, 0.f,
+	-1.f, -1.f, 0.f,
+	1.f, -1.f, 0.f
+};
+
+unsigned int indices[6] =
+{
+	0, 1, 2,
+	0, 2, 3
+};
+
+bgfx::VertexBufferHandle vbh;
+bgfx::IndexBufferHandle ibh;
+
+bgfx::ProgramHandle program;
+
 
 namespace myEngine
 {
@@ -292,6 +312,7 @@ namespace myEngine
 	{
 		bgfx::Init init;
 		//init.type = bgfx::RendererType::OpenGLES;
+		//init.type = bgfx::RendererType::Count;
 		init.type = bgfx::RendererType::OpenGL;
 		init.vendorId = BGFX_PCI_ID_NONE; //auto select
 		init.resolution.width = m_viewport_width;
@@ -306,24 +327,85 @@ namespace myEngine
 
 		clear();
 
-		return false;
+		bgfx::VertexDecl _dec;
+		_dec.begin();
+		_dec.add(bgfx::Attrib::Position, TINYGLTF_TYPE_VEC3, bgfx::AttribType::Float);
+		_dec.end();
+
+		vbh = bgfx::createVertexBuffer(bgfx::copy(&(vertexes[0]), 4 * sizeof(float) * 3), _dec);
+		ibh = bgfx::createIndexBuffer(bgfx::copy(&(indices[0]), 6 * sizeof(unsigned int)));
+
+
+		string vs_path = Config::shader_bin_path + "simple_vs.bin";
+		int vs_bin_size = HelperFunc::getFileSize(vs_path.c_str());
+		char * vs_bin = new char[vs_bin_size];
+		HelperFunc::LoadFromFile(vs_path.c_str(), vs_bin, vs_bin_size);
+		const bgfx::Memory* _vs_men = bgfx::makeRef(vs_bin, vs_bin_size);
+		bgfx::ShaderHandle vertex_shader = bgfx::createShader(_vs_men);
+		if (!bgfx::isValid(vertex_shader))
+		{
+			return false;
+		}
+
+		string fs_path = Config::shader_bin_path + "simple_fs.bin";
+		int fs_bin_size = HelperFunc::getFileSize(fs_path.c_str());
+		char * fs_bin = new char[fs_bin_size];
+		HelperFunc::LoadFromFile(fs_path.c_str(), fs_bin, fs_bin_size);
+		const bgfx::Memory* _fs_men = bgfx::makeRef(fs_bin, fs_bin_size);
+		bgfx::ShaderHandle fragment_shader = bgfx::createShader(_fs_men);
+		if (!bgfx::isValid(fragment_shader))
+		{
+			return false;
+		}
+
+		// Create bgfx program.
+		program = bgfx::createProgram(vertex_shader, fragment_shader, true);
+		if (!bgfx::isValid(program))
+		{
+			return false;
+		}
+
+		bgfx::frame();
+
+		return true;
 	}
 	
 	void Renderer::render()
 	{
 		clear();
 
-		bgfx::setViewRect(0, 0, 0, static_cast<uint16_t>(m_viewport_width), static_cast<uint16_t>(m_viewport_height));
+		float at[3] = { 0.0f, 0.0f,   0.0f };
+		float eye[3] = { 0.0f, 0.0f, -35.0f };
 
-		myEngine::Camera* _camera = myEngine::Engine::getInstance()->getMaincCamera();
-		const Matrix4& _view = _camera->GetViewMatrix();
-		const Matrix4& _projection = _camera->GetProjectMatrix();
-		bgfx::setViewTransform(0, static_cast<const void*>(&_view), static_cast<const void*>(&_projection));
+		float view[16];
+		bx::mtxLookAt(view, eye, at);
+		float proj[16];
+		bx::mtxProj(proj, 120.0f, float(m_viewport_width) / float(m_viewport_width), 0.1f, 500.0f, bgfx::getCaps()->homogeneousDepth);
+		bgfx::setViewTransform(0, view, proj);
 
-		for (size_t i = 0; i < m_RenderObjects.size(); i++)
+		bgfx::setViewRect(0, 0, 0, uint16_t(m_viewport_width), uint16_t(m_viewport_width));
+
+		bgfx::touch(0);
+
+		//bgfx::setViewRect(0, 0, 0, static_cast<uint16_t>(m_viewport_width), static_cast<uint16_t>(m_viewport_height));
+
+		//myEngine::Camera* _camera = myEngine::Engine::getInstance()->getMaincCamera();
+		//const Matrix4& _view = _camera->GetViewMatrix();
+		//const Matrix4& _projection = _camera->GetProjectMatrix();
+		//bgfx::setViewTransform(0, static_cast<const void*>(&_view), static_cast<const void*>(&_projection));
+
+		bgfx::setState(BGFX_STATE_DEFAULT);
+
+
+		bgfx::setVertexBuffer(0, vbh);
+		bgfx::setIndexBuffer(ibh);
+
+		bgfx::submit(0, program);
+
+		/*for (size_t i = 0; i < m_RenderObjects.size(); i++)
 		{
 			m_RenderObjects[i]->draw();
-		}
+		}*/
 		//bgfx::dbgTextImage(10, 15, 40, 12, s_logo, 160);
 
 		bgfx::frame();

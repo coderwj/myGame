@@ -8,5 +8,8 @@ shaderc -f pbr_gltf_fs.sc -o ..\shaderbin\pbr_gltf_fs.bin --define %def_f% --var
 
 
 
-shaderc -f simple_vs.sc -o ..\shaderbin\simple_vs.bin --varyingdef simple_varying.def.sc --platform windows --type vertex  -p 150 -O 3
-shaderc -f simple_fs.sc -o ..\shaderbin\simple_fs.bin --varyingdef simple_varying.def.sc --platform windows --type fragment  -p 150 -O 3
+rem shaderc -f simple_vs.sc -o ..\shaderbin\simple_vs.bin --varyingdef simple_varying.def.sc --platform windows --type vertex  -p vs_4_0 -O 3
+rem shaderc -f simple_fs.sc -o ..\shaderbin\simple_fs.bin --varyingdef simple_varying.def.sc --platform windows --type fragment  -p ps_4_0 -O 3
+
+shaderc -f simple_vs.sc -o ..\shaderbin\simple_vs.bin --varyingdef simple_varying.def.sc --platform windows --type vertex  -p 120 -O 3
+shaderc -f simple_fs.sc -o ..\shaderbin\simple_fs.bin --varyingdef simple_varying.def.sc --platform windows --type fragment  -p 120 -O 3

@@ -166,7 +166,7 @@ namespace myEngine
 		if (nullptr == _shader)
 			return;
 
-		bgfx::setState(BGFX_STATE_DEFAULT);
+		bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LESS);
 
 		bgfx::setIndexBuffer(m_ibh);
 		bgfx::setVertexBuffer(0, m_vbh);

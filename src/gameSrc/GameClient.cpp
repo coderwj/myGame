@@ -125,8 +125,8 @@ namespace myGame
 		lua_tinker::dofile(m_state, luafile.c_str());
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "InitGame");
 
-	    m_mainCharacter = Character::Create("model_5");
-	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
+	    //m_mainCharacter = Character::Create("model_5");
+	    //m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
 	
 	    //Character * character = Character::Create("model_4");
 	    //character->setPosition(Vector3(18.0f, 1.0f, 11.0f));
@@ -172,7 +172,8 @@ namespace myGame
 		Engine* pEngine = Engine::getInstance();
 		if (pEngine)
 			pEngine->tick(delta);
-		m_mainCharacter->tick(delta);
+		if (m_mainCharacter)
+			m_mainCharacter->tick(delta);
 
 	}
 
