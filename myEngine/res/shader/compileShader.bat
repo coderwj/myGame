@@ -5,3 +5,8 @@ set def_f=HAS_BASECOLORMAP;HAS_NORMALMAP;HAS_EMISSIVEMAP;HAS_METALROUGHNESSMAP
 
 shaderc -f pbr_gltf_vs.sc -o ..\shaderbin\pbr_gltf_vs.bin --define %def_v% --varyingdef pbr_gltf_varying.def.sc --platform windows --type vertex  -p 150 -O 3
 shaderc -f pbr_gltf_fs.sc -o ..\shaderbin\pbr_gltf_fs.bin --define %def_f% --varyingdef pbr_gltf_varying.def.sc --platform windows --type fragment  -p 150 -O 3
+
+
+
+shaderc -f simple_vs.sc -o ..\shaderbin\simple_vs.bin --varyingdef simple_varying.def.sc --platform windows --type vertex  -p 150 -O 3
+shaderc -f simple_fs.sc -o ..\shaderbin\simple_fs.bin --varyingdef simple_varying.def.sc --platform windows --type fragment  -p 150 -O 3

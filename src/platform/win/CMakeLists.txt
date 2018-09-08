@@ -18,7 +18,7 @@ if(WIN32)
 	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glfw/win32/lib)
 endif()
 
-add_executable(Main main.cpp)
+add_executable(Main WIN32 main.cpp)
 
 target_link_libraries(Main GameSrc myEngine)
 
