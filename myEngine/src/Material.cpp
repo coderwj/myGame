@@ -140,8 +140,32 @@ namespace myEngine
 			bgfx::UniformInfo _info = m_shader->getUniformInfo(*it);
 			if (_info.type == bgfx::UniformType::Int1) // Texture
 			{
-				bgfx::TextureHandle _th = _model->getTextureHandle(_info.num);
-				m_shader->setTexture(_info.name, _th);
+				int texture_id = -1;
+				if ((*it).compare("u_BaseColorSampler") == 0)
+				{
+					texture_id = m_baseColorTextureID;
+				}
+				else if ((*it).compare("u_MetallicRoughnessSampler") == 0)
+				{
+					texture_id = m_metallicRoughnessTextureID;
+				}
+				else if ((*it).compare("u_EmissiveSampler") == 0)
+				{
+					texture_id = m_emissiveTextureID;
+				}
+				else if ((*it).compare("u_NormalSampler") == 0)
+				{
+					texture_id = m_normalTextureID;
+				}
+				if (texture_id >= 0)
+				{
+					bgfx::TextureHandle _th = _model->getTextureHandle(texture_id);
+					m_shader->setTexture(_info.name, _th);
+				}
+				else
+				{
+
+				}
 			}
 			else// if (_info.type == bgfx::UniformType::Vec4)
 			{
