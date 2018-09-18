@@ -41,7 +41,11 @@ void checkScreenSize()
 	if (width != g_window_width || height != g_window_height)
 	{
 		if (nullptr != g_client)
+		{
 			g_client->onResize(width, height);
+			g_window_width = width;
+			g_window_height = height;
+		}
 	}
 }
 
