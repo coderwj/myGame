@@ -1,4 +1,4 @@
-$input a_Position, a_Normal, a_Tangent, a_UV
+$input a_position, a_normal, a_tangent, a_texcoord0
 $output v_Position, v_UV, v_TBNX, v_TBNY, v_TBNZ, v_Normal
 
 #include "common.sh"
@@ -9,30 +9,28 @@ uniform mat4 u_NormalMatrix;
 
 void main()
 {
-  vec4 pos = mul(u_ModelMatrix, vec4(a_Position, 1.0));
+  vec4 pos = mul(u_ModelMatrix, vec4(a_position, 1.0));
   v_Position = pos.xyz / pos.w;
 
   #ifdef HAS_NORMALS
   #ifdef HAS_TANGENTS
-  vec3 normalW = normalize(mul(u_NormalMatrix, vec4(a_Normal.xyz, 0.0)).xyz);
-  vec3 tangentW = normalize(mul(u_ModelMatrix, vec4(a_Tangent.xyz, 0.0)).xyz);
-  vec3 bitangentW = cross(normalW, tangentW) * a_Tangent.w;
+  vec3 normalW = normalize(mul(u_NormalMatrix, vec4(a_normal.xyz, 0.0)).xyz);
+  vec3 tangentW = normalize(mul(u_ModelMatrix, vec4(a_tangent.xyz, 0.0)).xyz);
+  vec3 bitangentW = cross(normalW, tangentW) * a_tangent.w;
   v_TBNX = tangentW;
   v_TBNY = bitangentW;
   v_TBNZ = normalW;
   #else // HAS_TANGENTS != 1
-  v_Normal = normalize(mul(u_ModelMatrix, vec4(a_Normal.xyz, 0.0)).xyz);
+  v_Normal = normalize(mul(u_ModelMatrix, vec4(a_normal.xyz, 0.0)).xyz);
   #endif
   #endif
 
   #ifdef HAS_UV
-  v_UV = a_UV;
+  v_UV = a_texcoord0;
   #else
   v_UV = vec2(0.0, 0.0);
   #endif
 
-  gl_Position = mul(u_MVPMatrix, vec4(a_Position, 1.0)); // needs w for proper perspective correction
-  //gl_Position.x = clamp(gl_Position.x, 0.2, 0.8);
-  //gl_Position.y = clamp(gl_Position.y, 0.2, 0.8);
-  //gl_Position.z = clamp(gl_Position.z, 0.2, 0.8);
+  gl_Position = mul(u_MVPMatrix, vec4(a_position, 1.0)); // needs w for proper perspective correction
+  
 }

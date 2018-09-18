@@ -125,12 +125,8 @@ namespace myGame
 		lua_tinker::dofile(m_state, luafile.c_str());
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "InitGame");
 
-	    //m_mainCharacter = Character::Create("model_5");
-	    //m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
-	
-	    //Character * character = Character::Create("model_4");
-	    //character->setPosition(Vector3(18.0f, 1.0f, 11.0f));
-	    //m_characters.push_back(character);
+	    m_mainCharacter = Character::Create("model_5");
+	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
 
 		m_cameraOption = new CameraOption();
 		m_cameraOption->setCamera(pEngine->getMaincCamera());
@@ -194,8 +190,8 @@ namespace myGame
 
 	void GameClient::handleMouseWheel(bool wheel_down, int scroll_delta, int x, int y)
 	{
-		//if (nullptr != m_cameraOption)
-		//	m_cameraOption->processMouseScroll(scroll_delta);
+		if (nullptr != m_cameraOption)
+			m_cameraOption->processMouseScroll(scroll_delta);
 	}
 
 	void GameClient::handleTouchBegin(int x, int y)

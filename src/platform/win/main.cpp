@@ -11,8 +11,8 @@ using namespace myGame;
 
 static GameClient * g_client = NULL;
 
-static int g_window_width = 960;
-static int g_window_height = 540;
+static int g_window_width = 1280;
+static int g_window_height = 720;
 
 static bool g_mouse_left_down = false;
 static bool g_mouse_right_down = false;
