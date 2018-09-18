@@ -13,15 +13,15 @@ namespace myEngine
 	:m_shader(nullptr)
 	,m_doubleSided(false)
 	,m_enableEmissive(false)
-	,m_emissiveFactor(Vector3(1.f))
+	,m_emissiveFactor(Vector3(0.f))
 	,m_emissiveTextureID(-1)
 	,m_normalTextureID(-1)
 	,m_baseColorTextureID(-1)
 	,m_metallicFactor(0.f)
 	,m_metallicRoughnessTextureID(-1)
-	,m_roughnessFactor(-1)
+	,m_roughnessFactor(0.f)
 	{
-		m_baseColorFactor.insert(m_baseColorFactor.end(), 4, 0);
+		m_baseColorFactor.insert(m_baseColorFactor.end(), 4, 1.f);
 	}
 
 	Material::~Material()
@@ -164,7 +164,7 @@ namespace myEngine
 				}
 				else
 				{
-
+					//std::cout << "Error texture_id!" << std::endl;
 				}
 			}
 			else// if (_info.type == bgfx::UniformType::Vec4)
