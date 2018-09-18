@@ -9,7 +9,7 @@ using namespace myEngine;
 namespace myGame
 {
 	const float SPEED = 2.f;
-	const float ROTATE_SPEED = 45.f;
+	const float ROTATE_SPEED = 0.0045f;
 	const float SENSITIVTY = 0.1f;
 	
 	CameraOption::CameraOption()

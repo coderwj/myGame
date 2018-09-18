@@ -97,12 +97,13 @@ namespace myEngine
 		_rotate.setToRotateAboutAxis(m_front, m_rotate);
 		Vector3 _realRight = _right;
 		_rotate.rotateVec3(_realRight, _right);
+		_realRight.normalize();
 		return _realRight;
 	}
 
 	Vector3 Camera::_getUp() const
 	{
-		return crossVector(_getRight(), m_front);
+		return crossVector(_getRight(), m_front).normalize();
 	}
 
 }

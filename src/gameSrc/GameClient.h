@@ -76,7 +76,10 @@ namespace myGame
 		long long			m_nowTime;
 
 		int					m_fps;
-
+		int					m_touchBeginPosX;
+		int					m_touchBeginPosY;
+		int					m_touchPosX;
+		int					m_touchPosY;
 	};
 }
 

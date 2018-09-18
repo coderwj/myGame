@@ -196,10 +196,22 @@ namespace myGame
 
 	void GameClient::handleTouchBegin(int x, int y)
 	{
+		m_touchBeginPosX = x;
+		m_touchBeginPosY = y;
+		m_touchPosX = x;
+		m_touchPosY = y;
 	}
 
 	void GameClient::handleTouchMove(int x, int y)
 	{
+		if (nullptr == m_cameraOption)
+			return;
+		int dx = x - m_touchPosX;
+		m_cameraOption->processKeyboard(CameraMoveDir::ROTATERIGHT, dx);
+		int dy = y - m_touchPosY;
+		m_cameraOption->processKeyboard(CameraMoveDir::ROTATEDOWN, dy);
+		m_touchPosX = x;
+		m_touchPosY = y;
 	}
 
 	void GameClient::handleTouchEnd(int x, int y)
