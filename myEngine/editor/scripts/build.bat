@@ -6,4 +6,4 @@ cmake ..\
 
 call explorer .
 
-cd ..\scriptAndTools
+cd ..\scripts
