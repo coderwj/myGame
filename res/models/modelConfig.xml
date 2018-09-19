@@ -12,10 +12,10 @@
   </model>
   <model id="2">
     <name>model_2</name>
-    <path>character2/Maskboy.FBX</path>
-    <material>texture</material>
-    <scale>0.1</scale>
-    <rotateTheta>30</rotateTheta>
+    <path>water_bottle/WaterBottle.gltf</path>
+    <material>pbr_gltf</material>
+    <scale>1.0</scale>
+    <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>

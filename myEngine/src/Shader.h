@@ -19,7 +19,7 @@ namespace myEngine
 		void    setUniform(const std::string &name, const void* values) const;
 		void    setUniform(const std::string &name, const void* values, unsigned int count) const;
 
-		void	setTexture(const std::string &name, const bgfx::TextureHandle& th) const;
+		void	setTexture(int stage, const std::string &name, const bgfx::TextureHandle& th) const;
 
 		std::vector<std::string> getAllUniformNames() const;
 		const bgfx::UniformInfo& getUniformInfo(const std::string& s) const;

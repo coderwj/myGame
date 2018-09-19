@@ -14,21 +14,6 @@ include_directories(./lib/tinyxml2)
 include_directories(./lib/imgui)
 include_directories(./lib/bgfx.cmake/include)
 
-#fbxsdk
-if(WIN32)
-	include_directories(./lib/fbxsdk/win32/include)
-	set(WINDOWS_PLATTYPE .)
-	if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-		set(WINDOWS_PLATTYPE x86)
-		link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/x86/debug)
-	elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set(WINDOWS_PLATTYPE x64)
-		link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/x64/debug)
-		# message("${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/x64/${CMAKE_BUILD_TYPE}")
-	endif()
-endif()
-
-
 FILE(GLOB SRC_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 FILE(GLOB_RECURSE HEAD_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h ${CMAKE_CURRENT_SOURCE_DIR}/src/*.inl)
 
@@ -62,11 +47,9 @@ if(APPLE)
 endif()
 
 if(WIN32)
-	link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/common)
+	#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/common)
 
 	target_link_libraries(myEngine
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/common/OpenGL32.Lib
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/fbxsdk/win32/lib/vs2015/${WINDOWS_PLATTYPE}/debug/libfbxsdk.lib
 		tinyxml2
 		imgui
 		bgfx)

@@ -88,10 +88,10 @@ namespace myEngine
 		bgfx::setUniform(_handle, values, count);
 	}
 
-	void Shader::setTexture(const std::string & name, const bgfx::TextureHandle & th) const
+	void Shader::setTexture(int stage, const std::string & name, const bgfx::TextureHandle & th) const
 	{
 		bgfx::UniformHandle _handle = _getUniformByName(name);
-		bgfx::setTexture(0, _handle, th);
+		bgfx::setTexture(stage, _handle, th);
 	}
 
 	std::vector<std::string> Shader::getAllUniformNames() const

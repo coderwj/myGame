@@ -129,12 +129,15 @@ namespace myEngine
 		Vector3& _camera_pos = _camera->getPosition();
 		const Matrix4& _projection = _camera->GetProjectMatrix();
 		const Matrix4& _view = _camera->GetViewMatrix();
-		Matrix4 _m;
+		Matrix4 _m_scale;
+		_m_scale.initWithScale(Vector3(0.2f));
+		Matrix4 _m = _m_scale;
 		Matrix4 u_MVPMatrix = _m * _view * _projection;
 
 
 		std::vector<std::string> _uniform_names = m_shader->getAllUniformNames();
 
+		int _stage = 0;
 		for (std::vector<std::string>::iterator it = _uniform_names.begin(); it != _uniform_names.end(); it++)
 		{
 			bgfx::UniformInfo _info = m_shader->getUniformInfo(*it);
@@ -160,7 +163,8 @@ namespace myEngine
 				if (texture_id >= 0)
 				{
 					bgfx::TextureHandle _th = _model->getTextureHandle(texture_id);
-					m_shader->setTexture(_info.name, _th);
+					m_shader->setTexture(_stage, _info.name, _th);
+					_stage++;
 				}
 				else
 				{
@@ -202,7 +206,7 @@ namespace myEngine
 				}
 				else if ((*it).compare("u_EmissiveFactor") == 0)
 				{
-					float _emissiveFactor[4] = { m_emissiveFactor.x, m_emissiveFactor.y, m_emissiveFactor.z, 1.f };
+					float _emissiveFactor[4] = { m_emissiveFactor.x, m_emissiveFactor.y, m_emissiveFactor.z, 0.f };
 					m_shader->setUniform(*it, static_cast<void*>(&_emissiveFactor));
 				}
 				else if ((*it).compare("u_BaseColorFactor") == 0)
@@ -211,7 +215,7 @@ namespace myEngine
 				}
 				else if ((*it).compare("u_MetallicRoughnessValues") == 0)
 				{
-					float _metallicRoughnessValues[4] = { m_metallicFactor, m_roughnessFactor, 1.f, 1.f };
+					float _metallicRoughnessValues[4] = { m_metallicFactor, m_roughnessFactor, 0.f, 0.f };
 					m_shader->setUniform(*it, static_cast<void*>(_metallicRoughnessValues));
 				}
 				else
