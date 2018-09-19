@@ -2,6 +2,7 @@
 
 #include "RenderObject.h"
 #include "Renderer.h"
+#include "Vector3.h"
 
 #ifndef TINYGLTF_IMPLEMENTATION
 #define TINYGLTF_IMPLEMENTATION
@@ -114,4 +115,24 @@ namespace myEngine
 			_renderer->pushRenderObject(*it);
 		}
 	}
+
+	float Model::getScale() const
+	{
+		return m_scale;
+	}
+
+	void Model::setScale(float val)
+	{
+		m_scale = val;
+	}
+
+	Matrix4 Model::getModelMatrix()
+	{
+		Matrix4 _scale_mat;
+		_scale_mat.initWithScale(Vector3(m_scale));
+		Matrix4 _rotate_mat;
+		Matrix4 _trans_mat;
+		return _scale_mat * _rotate_mat * _trans_mat;
+	}
+
 }

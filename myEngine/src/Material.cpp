@@ -124,15 +124,12 @@ namespace myEngine
 		if (nullptr == m_shader)
 			return;
 
-		// use the shader program
+		Matrix4 _mat_model = _model->getModelMatrix();
 		myEngine::Camera* _camera = myEngine::Engine::getInstance()->getMaincCamera();
 		Vector3& _camera_pos = _camera->getPosition();
-		const Matrix4& _projection = _camera->GetProjectMatrix();
-		const Matrix4& _view = _camera->GetViewMatrix();
-		Matrix4 _m_scale;
-		_m_scale.initWithScale(Vector3(0.2f));
-		Matrix4 _m = _m_scale;
-		Matrix4 u_MVPMatrix = _m * _view * _projection;
+		const Matrix4& _mat_proj = _camera->GetProjectMatrix();
+		const Matrix4& _mat_view = _camera->GetViewMatrix();
+		Matrix4 u_MVPMatrix = _mat_model * _mat_view * _mat_proj;
 
 
 		std::vector<std::string> _uniform_names = m_shader->getAllUniformNames();
@@ -179,11 +176,11 @@ namespace myEngine
 				}
 				else if ((*it).compare("u_ModelMatrix") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<void*>(&_m));
+					m_shader->setUniform(*it, static_cast<void*>(&_mat_model));
 				}
 				else if ((*it).compare("u_NormalMatrix") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<void*>(&_m));
+					m_shader->setUniform(*it, static_cast<void*>(&_mat_model));
 				}
 				else if ((*it).compare("u_Camera") == 0)
 				{

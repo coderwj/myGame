@@ -69,22 +69,16 @@ namespace myGame
 	{
 		if (nullptr == m_camera)
 			return;
-		float velocity = m_moveSpeed * yoffset * 0.3f;
+		float velocity = m_moveSpeed * yoffset * 0.01f;
 		m_camera->moveFront(velocity);
 	}
 
 	void CameraOption::resetCameraPos()
 	{
-		/*if (nullptr == m_camera)
+		if (nullptr == m_camera)
 			return;
-		GameScene* pGameScene = GameScene::getInstance();
-		if (nullptr == pGameScene)
-			return;
-		Character* pMainCharacter = pGameScene->getMainCharacter();
-		Vector3 characterPos = pMainCharacter->getPosition();
-		Vector3 cameraPos = characterPos + Vector3(1.0f, 1.0f, 3.0f);
-		m_camera->setPosition(cameraPos);
-		m_camera->SetFocusPos(characterPos);*/
+		m_camera->setPosition(Vector3(16.f, 16.f, 12.f));
+		m_camera->SetFocusPos(Vector3(0.f, 0.f, 0.f));
 	}
 }
 

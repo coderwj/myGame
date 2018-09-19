@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 
+#include "Matrix4.h"
+
 #include "bgfx/bgfx.h"
 
 namespace tinygltf
@@ -24,6 +26,12 @@ namespace myEngine
 		void draw();
 
 		bgfx::TextureHandle getTextureHandle(int index);
+
+		float getScale() const;
+
+		void setScale(float val);
+
+		Matrix4 getModelMatrix();
 	
 	private:
 		void loadModel(const std::string &path);
@@ -34,6 +42,8 @@ namespace myEngine
 		tinygltf::Model* m_gltf_model;
 		std::vector<bgfx::TextureHandle> m_textrue_handles;
 		std::vector<RenderObject*> m_render_objects;
+
+		float  m_scale;
 	};
 }
 

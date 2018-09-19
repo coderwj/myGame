@@ -135,7 +135,11 @@ namespace myEngine
 
 		const char* index_buffer_data = reinterpret_cast<const char*>(&_buffer.data[_bufferView.byteOffset + _accessor.byteOffset]);
 		int			index_buffer_size = _accessor.count * _accessor.ByteStride(_bufferView);
-		m_ibh = bgfx::createIndexBuffer(bgfx::copy(index_buffer_data, index_buffer_size), BGFX_BUFFER_INDEX32);
+
+		uint16_t _flag = BGFX_BUFFER_NONE;
+		if (_accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT)
+			_flag |= BGFX_BUFFER_INDEX32;
+		m_ibh = bgfx::createIndexBuffer(bgfx::copy(index_buffer_data, index_buffer_size), _flag);
 	}
 
 	void RenderObject::_createProgram(const tinygltf::Primitive & primitive, const tinygltf::Model & model)

@@ -63,7 +63,7 @@ namespace myEngine
 		m_renderer->init();
 
 		m_maincCamera = new Camera();
-		m_maincCamera->setPosition(Vector3(300.f, 300.f, 300.f));
+		m_maincCamera->setPosition(Vector3(0.f, 0.f, 1.f));
 		m_maincCamera->SetFocusPos(Vector3(0.f, 0.f, 0.f));
 		return true;
 	}
