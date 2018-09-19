@@ -1,3 +1,6 @@
 [submodule "myEngine/lib/bgfx.cmake"]
 	path = myEngine/lib/bgfx.cmake
 	url = https://github.com/coderwj/bgfx.cmake
+[submodule "myEngine/lib/imgui"]
+	path = myEngine/lib/imgui
+	url = https://github.com/coderwj/imgui
