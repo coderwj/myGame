@@ -7,3 +7,5 @@
 /src/gameSrc/luaClientPort.cpp
 /src/gameSrc/protocgen
 log.txt
+/myEngine/editor/build
+/myEngine/editor/bin
