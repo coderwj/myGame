@@ -97,7 +97,7 @@ namespace myEngine
 
 	bgfx::TextureHandle Model::getTextureHandle(int index)
 	{
-		if (index >= 0 && index < m_textrue_handles.size())
+		if (index >= 0 && index < static_cast<int>(m_textrue_handles.size()))
 		{
 			return m_textrue_handles[index];
 		}

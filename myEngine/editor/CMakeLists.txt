@@ -5,6 +5,8 @@ project(Editor)
 
 message("--->Cmake Editor--->")
 
+add_definitions(-D_EDITOR)
+
 include_directories(./src)
 include_directories(../src)
 include_directories(../lib/imgui)

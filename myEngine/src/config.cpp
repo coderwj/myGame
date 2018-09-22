@@ -4,10 +4,14 @@
 namespace myEngine
 {
 	const string Config::INVALID_STR = "";
-
+#ifdef _EDITOR
+	const string Config::engine_res_path = "../../../myEngine/res/";
+	const string Config::game_res_path = "../../../res/";
+#else
 	const string Config::engine_res_path = "../../myEngine/res/";
-	const string Config::shader_bin_path = engine_res_path + "shaderbin/";
 	const string Config::game_res_path = "../../res/";
+#endif // DEBUG
+	const string Config::shader_bin_path = engine_res_path + "shaderbin/";
 	const string Config::model_path = Config::game_res_path + "models/";
 	const string Config::scene_path = Config::game_res_path + "scenes/";
 	const string Config::lua_path = Config::game_res_path + "luafiles/";
