@@ -18,6 +18,8 @@
 #include "Engine.h"
 #include "HelperFunc.h"
 
+#include "imguiContext.h"
+
 
 #ifdef WIN32
 #include <Windows.h>
@@ -32,6 +34,24 @@ using namespace myEngine;
 
 namespace myGame
 {
+	struct MouseState
+	{
+		MouseState()
+			: m_mx(0)
+			, m_my(0)
+			, m_mz(0)
+			, m_button(0)
+		{
+		}
+
+		int32_t m_mx;
+		int32_t m_my;
+		int32_t m_mz;
+		uint8_t m_button;
+	};
+
+	static MouseState s_mouseState;
+
 	//static data.
 	GameClient * GameClient::m_pGameClient = NULL;
 
@@ -54,12 +74,13 @@ namespace myGame
 	}
 
 	GameClient::GameClient() :
-		m_gameScene(nullptr),
 		m_mainCharacter(nullptr),
 		m_cameraOption(nullptr),
 		m_state(nullptr),
 		m_nowTime(0),
-		m_fps(30)
+		m_fps(30),
+		m_windowWidth(0),
+		m_windowHeight(0)
 	{
 	}
 
@@ -69,8 +90,6 @@ namespace myGame
 
 	void GameClient::onDestroy()
 	{
-		m_gameScene = nullptr;
-
 		if (m_mainCharacter)
 		{
 			delete(m_mainCharacter);
@@ -95,6 +114,7 @@ namespace myGame
 				it++;
 			}
 		}
+		imguiDestroy();
 	}
 	
 	
@@ -107,6 +127,8 @@ namespace myGame
 		Engine* pEngine = Engine::getInstance();
 		assert(nullptr != pEngine);
 		pEngine->init();
+
+		imguiCreate(20, NULL);
 	
 	    m_mainCharacter = Character::Create("model_5");
 	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
@@ -131,9 +153,13 @@ namespace myGame
 
 		_tick(static_cast<int>(m_deltaTime));
 
+		imguiBeginFrame(s_mouseState.m_mx, s_mouseState.m_my, s_mouseState.m_button, s_mouseState.m_mz, m_windowWidth, m_windowHeight);
+
 		Engine* pEngine = Engine::getInstance();
 		if (pEngine)
 			pEngine->render();
+
+		imguiEndFrame();
 
 		//end tick, get time.
 		long long runTime = HelperFunc::GetCurrentTimeMs() - m_nowTime;
@@ -147,7 +173,6 @@ namespace myGame
 	void GameClient::_tick(int delta)
 	{
 		//lua_tinker::call<void>(m_state, "LuaGameMgr", "Tick", delta);
-		//m_gameScene->tick(delta);
 		Engine* pEngine = Engine::getInstance();
 		if (pEngine)
 			pEngine->tick(delta);
@@ -183,6 +208,9 @@ namespace myGame
 		m_touchBeginPosY = y;
 		m_touchPosX = x;
 		m_touchPosY = y;
+		s_mouseState.m_mx = m_touchPosX;
+		s_mouseState.m_my = m_touchPosY;
+		s_mouseState.m_button = 1;
 	}
 
 	void GameClient::handleTouchMove(int x, int y)
@@ -195,14 +223,25 @@ namespace myGame
 		m_cameraOption->processKeyboard(CameraMoveDir::ROTATEDOWN, dy);
 		m_touchPosX = x;
 		m_touchPosY = y;
+		s_mouseState.m_mx = m_touchPosX;
+		s_mouseState.m_my = m_touchPosY;
 	}
 
 	void GameClient::handleTouchEnd(int x, int y)
 	{
+		m_touchPosX = x;
+		m_touchPosY = y;
+		s_mouseState.m_mx = m_touchPosX;
+		s_mouseState.m_my = m_touchPosY;
+		s_mouseState.m_button = 0;
 	}
 
 	void GameClient::onResize(int width, int height)
 	{
+		if (m_windowWidth == width && m_windowHeight == height)
+			return;
+		m_windowWidth = width;
+		m_windowHeight = height;
 		Engine* pEngine = Engine::getInstance();
 		if (nullptr != pEngine)
 		{

@@ -24,11 +24,11 @@ namespace myGame
 		CameraOption();
 		~CameraOption();
 	
-		void processKeyboard(CameraMoveDir direction, float deltaTime);
+		void processKeyboard(CameraMoveDir direction, int delta);
 	
-		void processMouseMovement(float xoffset, float yoffset);
+		void processMouseMovement(int xoffset, int yoffset);
 	
-		void processMouseScroll(float yoffset);
+		void processMouseScroll(int yoffset);
 	
 		float getMoveSpeed() const { return m_moveSpeed; }
 		void setMoveSpeed(float val) { m_moveSpeed = val; }

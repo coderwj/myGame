@@ -19,7 +19,6 @@ namespace myEngine
 
 namespace myGame
 {
-	class GameScene;
 	class Character;
 	class CameraOption;
 	
@@ -64,7 +63,6 @@ namespace myGame
 	private:
 		static GameClient*	m_pGameClient;
 
-		GameScene*			m_gameScene;
 		Character*			m_mainCharacter;
 		CameraOption*		m_cameraOption;
 
@@ -80,6 +78,9 @@ namespace myGame
 		int					m_touchBeginPosY;
 		int					m_touchPosX;
 		int					m_touchPosY;
+
+		int					m_windowWidth;
+		int					m_windowHeight;
 	};
 }
 

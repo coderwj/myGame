@@ -68,7 +68,7 @@ namespace myEngine
 		return true;
 	}
 	
-	void Engine::tick(float delta)
+	void Engine::tick(int delta)
 	{
 
 	}

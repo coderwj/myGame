@@ -24,11 +24,11 @@ namespace myGame
 	
 	}
 	
-	void CameraOption::processKeyboard(CameraMoveDir direction, float deltaTime)
+	void CameraOption::processKeyboard(CameraMoveDir direction, int delta)
 	{
 		if (NULL == m_camera)
 			return;
-		float velocity = m_moveSpeed * deltaTime;
+		float velocity = m_moveSpeed * delta;
 		if (direction == FORWARD)
 			m_camera->moveUp(velocity);
 		else if (direction == BACKWARD)
@@ -39,7 +39,7 @@ namespace myGame
 			m_camera->moveRight(velocity * 2.f);
 		else
 		{
-			float angle = m_rotateSpeed * deltaTime;
+			float angle = m_rotateSpeed * delta;
 			if (direction == ROTATELEFT)
 			{
 				m_camera->rotateLeft(angle);
@@ -59,12 +59,12 @@ namespace myGame
 		}
 	}
 	
-	void CameraOption::processMouseMovement(float xoffset, float yoffset)
+	void CameraOption::processMouseMovement(int xoffset, int yoffset)
 	{
 
 	}
 	
-	void CameraOption::processMouseScroll(float yoffset)
+	void CameraOption::processMouseScroll(int yoffset)
 	{
 		if (nullptr == m_camera)
 			return;

@@ -21,7 +21,7 @@ namespace myEngine
 		void onResize(int width, int height);
 	
 		bool init();
-		void tick(float delta);
+		void tick(int delta);
 		void render();
 
 
