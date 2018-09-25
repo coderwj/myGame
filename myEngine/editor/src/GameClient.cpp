@@ -159,23 +159,50 @@ namespace myGame
 		if (pEngine)
 			pEngine->render();
 
+		ImGui::SetNextWindowPos(ImVec2::ImVec2(0.f, 0.f), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2::ImVec2(400.f, 720.f), ImGuiCond_FirstUseEver);
+		ImGui::Begin("Editor", NULL, ImGuiWindowFlags_MenuBar);
+
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Open..", "Ctrl+O")) { }
+				if (ImGui::MenuItem("Save", "Ctrl+S")) { }
+				if (ImGui::MenuItem("Close", "Ctrl+W")) { }
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+
+		ImGui::Begin("Editor", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+
 		ImGui::Text("FPS:  %d.", static_cast<int>(1000.f / m_deltaTime + 0.5f));
-		if (ImGui::Button("Reset Camera", ImVec2(100.f, 20.f)))
+		ImGui::Separator();
+		if (ImGui::TreeNode("Camera Option"))
 		{
-			if (NULL != m_cameraOption)
+			if (ImGui::Button("Reset", ImVec2(80.f, 20.f)))
 			{
-				m_cameraOption->resetCameraPos();
+				if (NULL != m_cameraOption)
+				{
+					m_cameraOption->resetCameraPos();
+				}
 			}
-		}
-		static float startSpeed = m_cameraOption->getMoveSpeed();
-		static float currentSpeed = startSpeed;
-		if (ImGui::SliderFloat("CameraMove Speed", &currentSpeed, startSpeed, 8.f * startSpeed, "Speed = %.6f"))
-		{
-			if (NULL != m_cameraOption)
+			static float startSpeed = m_cameraOption->getMoveSpeed();
+			static float currentSpeed = startSpeed;
+			if (ImGui::SliderFloat("Move Speed", &currentSpeed, startSpeed, 8.f * startSpeed, "Speed = %.6f"))
 			{
-				m_cameraOption->setMoveSpeed(currentSpeed);
+				if (NULL != m_cameraOption)
+				{
+					m_cameraOption->setMoveSpeed(currentSpeed);
+				}
 			}
+			ImGui::TreePop();
 		}
+		ImGui::Separator();
+		ImGui::End();
+
+		ImGui::End();
 		ImGui::Render();
 
 		imguiEndFrame();

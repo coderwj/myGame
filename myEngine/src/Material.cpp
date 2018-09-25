@@ -34,7 +34,8 @@ namespace myEngine
 	{
 		if (m_shader != NULL)
 			return;
-		m_shader = new Shader(vs_name, fs_name);
+		m_shader = new Shader();
+		m_shader->initStaticShader(vs_name, fs_name);
 	}
 
 	const Shader* Material::getProgram()

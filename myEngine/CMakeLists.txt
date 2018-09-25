@@ -12,7 +12,7 @@ add_subdirectory(lib/bgfx.cmake)
 
 include_directories(./lib/tinyxml2)
 include_directories(./lib/imgui)
-include_directories(./lib/bgfx.cmake/include)
+include_directories(./lib/bgfx.cmake/brtshaderc)
 
 FILE(GLOB SRC_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 FILE(GLOB_RECURSE HEAD_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h ${CMAKE_CURRENT_SOURCE_DIR}/src/*.inl)

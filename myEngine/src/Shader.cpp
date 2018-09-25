@@ -7,18 +7,33 @@
 #include "HelperFunc.h"
 
 #include "bgfx/bgfx.h"
+#include "brtshaderc.h"
 
 namespace myEngine
 {
 
 	int Shader::UNIFORM_MAX_NUM = 32;
 	
-	Shader::Shader(const char* vs_name, const char* fs_name)
+	Shader::Shader()
 		:m_vertex_shader(BGFX_INVALID_HANDLE)
 		, m_fragment_shader(BGFX_INVALID_HANDLE)
 		, m_program(BGFX_INVALID_HANDLE)
 	{
 
+	
+	}
+	Shader::~Shader()
+	{
+		if (bgfx::isValid(m_program))
+			bgfx::destroy(m_program);
+		if (bgfx::isValid(m_fragment_shader))
+			bgfx::destroy(m_fragment_shader);
+		if (bgfx::isValid(m_vertex_shader))
+			bgfx::destroy(m_vertex_shader);
+	}
+
+	void Shader::initStaticShader(const char * vs_name, const char * fs_name)
+	{
 		string vs_path = Config::shader_bin_path + vs_name;
 		int vs_bin_size = HelperFunc::getFileSize(vs_path.c_str());
 		char * vs_bin = new char[vs_bin_size];
@@ -66,15 +81,13 @@ namespace myEngine
 			m_uniform_info[name] = info;
 		}
 	}
-	Shader::~Shader()
+
+	void Shader::initDynamicShader(const char * vs_name, const char * fs_name, const char * defines)
 	{
-		if (bgfx::isValid(m_program))
-			bgfx::destroy(m_program);
-		if (bgfx::isValid(m_fragment_shader))
-			bgfx::destroy(m_fragment_shader);
-		if (bgfx::isValid(m_vertex_shader))
-			bgfx::destroy(m_vertex_shader);
+
 	}
+
+
 
 	void Shader::setUniform(const std::string &name, const void* values) const
 	{

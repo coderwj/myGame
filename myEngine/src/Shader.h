@@ -13,8 +13,11 @@ namespace myEngine
 	{
 	public:
 	
-		Shader(const char* vs_name, const char* fs_name);
+		Shader();
 		~Shader();
+
+		void	initStaticShader(const char* vs_name, const char* fs_name);
+		void	initDynamicShader(const char* vs_name, const char* fs_name, const char* defines);
 
 		void    setUniform(const std::string &name, const void* values) const;
 		void    setUniform(const std::string &name, const void* values, unsigned int count) const;

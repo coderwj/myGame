@@ -50,4 +50,24 @@
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
   </model>
+  <model id="6">
+    <name>model_6</name>
+    <path>CesiumMan/CesiumMan.gltf</path>
+    <material>pbr_gltf</material>
+    <scale>1.0</scale>
+    <rotateTheta>0</rotateTheta>
+    <rotateX>0.0</rotateX>
+    <rotateY>1.0</rotateY>
+    <rotateZ>0.0</rotateZ>
+  </model>
+  <model id="7">
+    <name>model_7</name>
+    <path>BrainStem/BrainStem.gltf</path>
+    <material>pbr_gltf</material>
+    <scale>1.0</scale>
+    <rotateTheta>0</rotateTheta>
+    <rotateX>0.0</rotateX>
+    <rotateY>1.0</rotateY>
+    <rotateZ>0.0</rotateZ>
+  </model>
 </modelconfig>
