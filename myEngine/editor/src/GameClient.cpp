@@ -159,6 +159,25 @@ namespace myGame
 		if (pEngine)
 			pEngine->render();
 
+		ImGui::Text("FPS:  %d.", static_cast<int>(1000.f / m_deltaTime + 0.5f));
+		if (ImGui::Button("Reset Camera", ImVec2(100.f, 20.f)))
+		{
+			if (NULL != m_cameraOption)
+			{
+				m_cameraOption->resetCameraPos();
+			}
+		}
+		static float startSpeed = m_cameraOption->getMoveSpeed();
+		static float currentSpeed = startSpeed;
+		if (ImGui::SliderFloat("CameraMove Speed", &currentSpeed, startSpeed, 8.f * startSpeed, "Speed = %.6f"))
+		{
+			if (NULL != m_cameraOption)
+			{
+				m_cameraOption->setMoveSpeed(currentSpeed);
+			}
+		}
+		ImGui::Render();
+
 		imguiEndFrame();
 
 		//end tick, get time.
@@ -217,6 +236,14 @@ namespace myGame
 	{
 		if (nullptr == m_cameraOption)
 			return;
+		if (ImGui::GetIO().WantCaptureMouse)
+		{
+			m_touchPosX = x;
+			m_touchPosY = y;
+			s_mouseState.m_mx = m_touchPosX;
+			s_mouseState.m_my = m_touchPosY;
+			return;
+		}
 		int dx = x - m_touchPosX;
 		m_cameraOption->processKeyboard(CameraMoveDir::ROTATERIGHT, dx);
 		int dy = y - m_touchPosY;
