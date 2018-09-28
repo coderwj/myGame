@@ -145,7 +145,7 @@ namespace myEngine
 	void RenderObject::_createProgram(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
 	{
 		m_material = new Material;
-		m_material->setProgram("pbr_gltf_vs.bin", "pbr_gltf_fs.bin");
+		m_material->setProgram("pbr_gltf_vs", "pbr_gltf_fs");
 
 
 		const tinygltf::Material& _material = model.materials[primitive.material];

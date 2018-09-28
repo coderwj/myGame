@@ -52,6 +52,7 @@ if(WIN32)
 	target_link_libraries(myEngine
 		tinyxml2
 		imgui
-		bgfx)
-	add_dependencies(myEngine imgui tinyxml2 bgfx)
+		bgfx
+		brtshaderc)
+	add_dependencies(myEngine imgui tinyxml2 bgfx brtshaderc)
 endif()

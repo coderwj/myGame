@@ -14,6 +14,7 @@ namespace myEngine
 		static const string INVALID_STR;
 		static const string engine_res_path;
 		static const string shader_bin_path;
+		static const string shader_src_path;
 		static const string game_res_path;
 		static const string model_path;
 		static const string scene_path;

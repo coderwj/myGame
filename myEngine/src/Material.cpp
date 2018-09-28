@@ -35,7 +35,9 @@ namespace myEngine
 		if (m_shader != NULL)
 			return;
 		m_shader = new Shader();
-		m_shader->initStaticShader(vs_name, fs_name);
+		const std::string& vs_defines = _getVertexShaderDefines();
+		const std::string& fs_defines = _getFragmentShaderDefines();
+		m_shader->initDynamicShader(vs_name, fs_name, vs_defines.c_str(), fs_defines.c_str());
 	}
 
 	const Shader* Material::getProgram()
@@ -222,6 +224,36 @@ namespace myEngine
 				}
 			}
 		}
+	}
+
+	std::string Material::_getVertexShaderDefines()
+	{
+		std::string result = "";
+		if (true)
+			result += "HAS_NORMALS;";
+		if (true)
+			result += "HAS_TANGENTS;";
+		if (true)
+			result += "HAS_UV;";
+		return result;
+	}
+
+	std::string Material::_getFragmentShaderDefines()
+	{
+		std::string result = "";
+		if (true)
+			result += "HAS_BASECOLORMAP;";
+		if (true)
+			result += "HAS_TANGENTS;";
+		if (true)
+			result += "HAS_NORMALS;";
+		if (true)
+			result += "HAS_NORMALMAP;";
+		if (true)
+			result += "HAS_EMISSIVEMAP;";
+		if (true)
+			result += "HAS_METALROUGHNESSMAP;";
+		return result;
 	}
 
 

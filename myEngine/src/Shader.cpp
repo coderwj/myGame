@@ -34,7 +34,7 @@ namespace myEngine
 
 	void Shader::initStaticShader(const char * vs_name, const char * fs_name)
 	{
-		string vs_path = Config::shader_bin_path + vs_name;
+		string vs_path = Config::shader_bin_path + vs_name + ".bin";
 		int vs_bin_size = HelperFunc::getFileSize(vs_path.c_str());
 		char * vs_bin = new char[vs_bin_size];
 		HelperFunc::LoadFromFile(vs_path.c_str(), vs_bin, vs_bin_size);
@@ -46,7 +46,7 @@ namespace myEngine
 			return;
 		}
 
-		string fs_path = Config::shader_bin_path + fs_name;
+		string fs_path = Config::shader_bin_path + fs_name + ".bin";
 		int fs_bin_size = HelperFunc::getFileSize(fs_path.c_str());
 		char * fs_bin = new char[fs_bin_size];
 		HelperFunc::LoadFromFile(fs_path.c_str(), fs_bin, fs_bin_size);
@@ -82,9 +82,48 @@ namespace myEngine
 		}
 	}
 
-	void Shader::initDynamicShader(const char * vs_name, const char * fs_name, const char * defines)
+	void Shader::initDynamicShader(const char * vs_name, const char * fs_name, const char * vs_defines, const char * fs_defines)
 	{
+		string varying_path = Config::shader_src_path + "pbr_gltf_varying.def.sc";
+		string vs_path = Config::shader_src_path + vs_name + ".sc";
+		const bgfx::Memory* _vs_men = shaderc::compileShader(shaderc::ST_VERTEX, vs_path.c_str(), vs_defines, varying_path.c_str());
+		m_vertex_shader = bgfx::createShader(_vs_men);
+		if (!bgfx::isValid(m_vertex_shader))
+		{
+			std::cout << "Error while compiling vertex shader: " << vs_path << std::endl;
+			return;
+		}
+		string fs_path = Config::shader_src_path + fs_name + ".sc";
+		const bgfx::Memory* _fs_men = shaderc::compileShader(shaderc::ST_FRAGMENT, fs_path.c_str(), fs_defines, varying_path.c_str());
+		m_fragment_shader = bgfx::createShader(_fs_men);
+		if (!bgfx::isValid(m_fragment_shader))
+		{
+			std::cout << "Error while compiling fragment shader: " << fs_path << std::endl;
+			return;
+		}
 
+		// Create bgfx program.
+		m_program = bgfx::createProgram(m_vertex_shader, m_fragment_shader, true);
+		if (!bgfx::isValid(m_program))
+		{
+			std::cout << "Error while creating bgfx program with shaders" << vs_path << "," << fs_path << "." << std::endl;
+			return;
+		}
+
+		// Query uniforms from shaders.
+		m_uniform.resize(UNIFORM_MAX_NUM);
+		uint16_t num1 = bgfx::getShaderUniforms(m_vertex_shader, &m_uniform[0], UNIFORM_MAX_NUM);
+		uint16_t num2 = bgfx::getShaderUniforms(m_fragment_shader, &m_uniform[num1], UNIFORM_MAX_NUM - num1);
+		m_uniform.resize(num1 + num2);
+		for (std::vector<bgfx::UniformHandle>::iterator it = m_uniform.begin(); it != m_uniform.end(); it++)
+		{
+			bgfx::UniformInfo info;
+			bgfx::getUniformInfo((*it), info);
+			int index = it - m_uniform.begin();
+			std::string name = std::string(info.name);
+			m_uniform_idx[name] = index;
+			m_uniform_info[name] = info;
+		}
 	}
 
 

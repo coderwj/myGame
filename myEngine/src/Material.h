@@ -27,6 +27,11 @@ namespace myEngine
 		void initParams(const tinygltf::Material& material_info);
 
 		void bindUniforms(Model* _model);
+
+	private:
+		std::string _getVertexShaderDefines();
+		std::string _getFragmentShaderDefines();
+
 	private:
 		Shader* m_shader;
 
