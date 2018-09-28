@@ -241,17 +241,17 @@ namespace myEngine
 	std::string Material::_getFragmentShaderDefines()
 	{
 		std::string result = "";
-		if (true)
+		if (m_baseColorTextureID != -1)
 			result += "HAS_BASECOLORMAP;";
 		if (true)
 			result += "HAS_TANGENTS;";
 		if (true)
 			result += "HAS_NORMALS;";
-		if (true)
+		if (m_normalTextureID != -1)
 			result += "HAS_NORMALMAP;";
-		if (true)
+		if (m_emissiveTextureID != -1)
 			result += "HAS_EMISSIVEMAP;";
-		if (true)
+		if (m_metallicRoughnessTextureID != -1)
 			result += "HAS_METALROUGHNESSMAP;";
 		return result;
 	}

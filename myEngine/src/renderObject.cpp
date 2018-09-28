@@ -144,14 +144,10 @@ namespace myEngine
 
 	void RenderObject::_createProgram(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
 	{
-		m_material = new Material;
-		m_material->setProgram("pbr_gltf_vs", "pbr_gltf_fs");
-
-
 		const tinygltf::Material& _material = model.materials[primitive.material];
-
+		m_material = new Material;
 		m_material->initParams(_material);
-		//if(_material.values.find("baseColorFactor") != _material.values.end())
+		m_material->setProgram("pbr_gltf_vs", "pbr_gltf_fs");
 	}
 	
 	void RenderObject::init(Model* modelptr, const tinygltf::Primitive& primitive, const tinygltf::Model& model)
