@@ -56,16 +56,28 @@ namespace myEngine
 		}
 		copyTexture();
 
-		std::vector<tinygltf::Mesh>::iterator it = m_gltf_model->meshes.begin();
-		for (; it != m_gltf_model->meshes.end(); it++)
+		int current_scene_id = m_gltf_model->defaultScene;
+		const tinygltf::Scene& current_scene = m_gltf_model->scenes[current_scene_id];
+		for (int elem : current_scene.nodes)
 		{
-			std::vector<tinygltf::Primitive>::iterator it2 = (*it).primitives.begin();
-			for (; it2 != (*it).primitives.end(); it2++)
+			tinygltf::Node& current_node = m_gltf_model->nodes[elem];
+			//mesh node
+			if (current_node.mesh != -1)
 			{
-				RenderObject* pRenderObject = new RenderObject();
-				pRenderObject->init(this, *it2, *m_gltf_model);
-				m_render_objects.push_back(pRenderObject);
+				const tinygltf::Mesh& current_mesh = m_gltf_model->meshes[current_node.mesh];
+				for (const tinygltf::Primitive& elem1 : current_mesh.primitives)
+				{
+					RenderObject* pRenderObject = new RenderObject();
+					pRenderObject->init(this, elem1, *m_gltf_model);
+					m_render_objects.push_back(pRenderObject);
+				}
+				//mesh has skin
+				if (current_node.skin != -1)
+				{
+
+				}
 			}
+			// TODO
 		}
 	}
 

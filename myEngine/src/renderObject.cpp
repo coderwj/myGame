@@ -72,6 +72,10 @@ namespace myEngine
 			return bgfx::Attrib::TexCoord0;
 		else if (attr_str == "NORMAL")
 			return bgfx::Attrib::Normal;
+		else if (attr_str == "JOINTS_0")
+			return bgfx::Attrib::Indices;
+		else if (attr_str == "WEIGHTS_0")
+			return bgfx::Attrib::Weight;
 		else
 			return bgfx::Attrib::Count;
 	}

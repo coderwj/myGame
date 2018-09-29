@@ -19,7 +19,7 @@ namespace myGame
 	public:
 		Character();
 		~Character();
-		static Character * Create(string modelName, Vector3 position = Vector3(0.0f), Vector3 orientation = Vector3(1.0f, 0.0f, 0.0f));
+		static Character * Create(string modelName);
 		void setPosition(Vector3 pos){m_position = pos;}
 		Vector3 getPosition(){return m_position;}
 		void setOrientation(Vector3 ori){m_orientation = ori;}
@@ -37,7 +37,7 @@ namespace myGame
 		float m_theta;
 		Vector3 m_rotateVec;
 	
-		bool init(string modelName, Vector3 position = Vector3(0.0f), Vector3 orientation = Vector3(1.0f, 0.0f, 0.0f));
+		bool init(string modelName);
 	};
 }
 

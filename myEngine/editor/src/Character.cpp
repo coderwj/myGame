@@ -33,7 +33,7 @@ namespace myGame
 	    }
 	}
 	
-	bool Character::init(string modelName, Vector3 position, Vector3 orientation)
+	bool Character::init(string modelName)
 	{
 	    string model_str = "";
 	    string material_name = "";
@@ -60,45 +60,18 @@ namespace myGame
 	    }
 	    if(model_str == "")
 	    {
-	        //todo log info
 	        return false;
 	    }
 	    m_model = new Model(Config::model_path + model_str);
 		m_model->setScale(m_scale);
-	
-	    string shader_config_path = Config::engine_res_path + "shader/shaderConfig.xml";
-	    tinyxml2::XMLDocument shader_doc;
-	    shader_doc.LoadFile(shader_config_path.c_str());
-	
-	    string vs_name = "", fs_name = "";
-	
-	    tinyxml2::XMLElement* materialElement = shader_doc.FirstChildElement("shaderconfig")->FirstChildElement( "material" );
-	    for (;;materialElement = materialElement->NextSiblingElement("material")) {
-	        if(materialElement == NULL)
-	        {
-	            break;
-	        }
-	        if(material_name == materialElement->FirstChildElement("name")->GetText())
-	        {
-	            vs_name = materialElement->FirstChildElement("vertexshader")->GetText();
-	            fs_name = materialElement->FirstChildElement("fragmentshader")->GetText();
-	            break;
-	        }
-	    }
-	    if(vs_name == "" || fs_name == "")
-	    {
-	        return false;
-	        //assert(true);
-	    }
-		//Model->setShaderName(vs_name, fs_name);
 
 	    return true;
 	}
 	
-	Character * Character::Create(string modelName, Vector3 position, Vector3 orientation)
+	Character * Character::Create(string modelName)
 	{
 	    Character * cha = new Character();
-	    if(cha->init(modelName, position, orientation))
+	    if(cha->init(modelName))
 	        return cha;
 	    else
 	        return NULL;
