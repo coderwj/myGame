@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<modelconfig>
+<modelConfig>
   <model id="1">
     <name>model_1</name>
     <path>cube/Cube.gltf</path>
@@ -50,4 +50,4 @@
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
   </model>
-</modelconfig>
+</modelConfig>

@@ -20,8 +20,10 @@ namespace myEngine
 	class Model
 	{
 	public:	
-		Model(const std::string &path);
+		Model();
 		~Model();
+
+		void load(const std::string &path);
 	
 		void draw();
 
@@ -34,9 +36,10 @@ namespace myEngine
 		Matrix4 getModelMatrix();
 	
 	private:
-		void loadModel(const std::string &path);
 
-		void copyTexture();
+		void _loadNodeTreeMesh(int node_id);
+
+		void _createTextureHandle();
 
 	private:
 		tinygltf::Model* m_gltf_model;

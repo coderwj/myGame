@@ -23,97 +23,112 @@ using namespace std;
 
 namespace myEngine
 {
-	Model::Model(const std::string &path)
+	Model::Model()
 	:m_gltf_model(nullptr)
 	{
-		loadModel(path);
 	}
 
 	Model::~Model()
 	{
-		delete m_gltf_model;
-		m_gltf_model = nullptr;
-
-		std::vector<RenderObject*>::iterator it = m_render_objects.begin();
-		for (; it != m_render_objects.end(); it++)
+		if (m_gltf_model)
 		{
-			delete (*it);
+			delete m_gltf_model;
+			m_gltf_model = nullptr;
+		}
+
+		for (const RenderObject* r : m_render_objects)
+		{
+			delete(r);
 		}
 		m_render_objects.clear();
 	}
 	
-	void Model::loadModel(const string &path)
+	void Model::load(const std::string &path)
 	{
-		m_gltf_model = new(tinygltf::Model);
-		tinygltf::TinyGLTF gltf_ctx;
+		m_gltf_model = new tinygltf::Model();
+		tinygltf::TinyGLTF loader;
 		std::string err;
-		bool ret = false;
-		ret = gltf_ctx.LoadASCIIFromFile(m_gltf_model, &err, path);
-		if (!ret) {
-			printf("Failed to parse glTF\n");
-			if (!err.empty())
-				printf("Err: %s\n", err.c_str());
+		bool r = loader.LoadASCIIFromFile(m_gltf_model, &err, path);
+		if (!r) {
+			printf("LoadASCIIFromFile Error: %s\n", err.c_str());
+			return;
 		}
-		copyTexture();
 
-		int current_scene_id = m_gltf_model->defaultScene;
-		const tinygltf::Scene& current_scene = m_gltf_model->scenes[current_scene_id];
-		for (int elem : current_scene.nodes)
+		_createTextureHandle();
+
+		int _id = m_gltf_model->defaultScene;
+		const tinygltf::Scene& _scene = m_gltf_model->scenes[_id];
+		for (int n : _scene.nodes)
 		{
-			tinygltf::Node& current_node = m_gltf_model->nodes[elem];
-			//mesh node
-			if (current_node.mesh != -1)
-			{
-				const tinygltf::Mesh& current_mesh = m_gltf_model->meshes[current_node.mesh];
-				for (const tinygltf::Primitive& elem1 : current_mesh.primitives)
-				{
-					RenderObject* pRenderObject = new RenderObject();
-					pRenderObject->init(this, elem1, *m_gltf_model);
-					m_render_objects.push_back(pRenderObject);
-				}
-				//mesh has skin
-				if (current_node.skin != -1)
-				{
-
-				}
-			}
-			// TODO
+			_loadNodeTreeMesh(n);
 		}
 	}
 
-	void Model::copyTexture()
+	void Model::_loadNodeTreeMesh(int node_id)
 	{
-		assert(nullptr != m_gltf_model);
-		for (std::vector<tinygltf::Image>::iterator it = m_gltf_model->images.begin(); it != m_gltf_model->images.end(); it++)
+		const tinygltf::Node& _node = m_gltf_model->nodes[node_id];
+		//mesh node
+		if (_node.mesh != -1)
 		{
-			tinygltf::Image& _image = *it;
-			_image.image;
-			const bgfx::Memory* _data = bgfx::copy(reinterpret_cast<char*>(&(_image.image[0])), static_cast<uint32_t>(_image.width * _image.width * _image.component));
-			bgfx::TextureFormat::Enum _format = bgfx::TextureFormat::Count;
-			if (_image.component == 3)
+			const tinygltf::Mesh& _mesh = m_gltf_model->meshes[_node.mesh];
+			for (const tinygltf::Primitive& p : _mesh.primitives)
+			{
+				RenderObject* _render_object = new RenderObject();
+				_render_object->init(this, p, *m_gltf_model);
+				m_render_objects.push_back(_render_object);
+			}
+			//mesh has skin
+			if (_node.skin != -1)
+			{
+
+			}
+		}
+		//load children recursive
+		if (!_node.children.empty())
+		{
+			for (int i : _node.children)
+				_loadNodeTreeMesh(i);
+		}
+	}
+
+	void Model::_createTextureHandle()
+	{
+		if (nullptr == m_gltf_model)
+			return;
+
+		for (tinygltf::Image& _img : m_gltf_model->images)
+		{
+			uint32_t _size = static_cast<uint32_t>(_img.width * _img.height * _img.component);
+			const bgfx::Memory* _data = bgfx::copy(_img.image.data(), _size);
+
+			bgfx::TextureFormat::Enum _format;
+			if (_img.component == 3)
 				_format = bgfx::TextureFormat::RGB8;
-			else if (_image.component == 4)
+			else if (_img.component == 4)
 				_format = bgfx::TextureFormat::RGBA8;
-			bgfx::TextureHandle textureHandle = bgfx::createTexture2D(static_cast<uint16_t>(_image.width), 
-																	  static_cast<uint16_t>(_image.width),
-																	  false,
-																	  1,
-																	  _format,
-																	  0,
-																	  _data);
-			_image.image.clear();
-			_image.image.reserve(0);
-			m_textrue_handles.push_back(textureHandle);
+			else
+				_format = bgfx::TextureFormat::Count;
+
+			bgfx::TextureHandle _th = bgfx::createTexture2D(static_cast<uint16_t>(_img.width),
+															static_cast<uint16_t>(_img.height),
+															false,
+															1,
+															_format,
+															0,
+															_data);
+			_img.image.clear();
+			_img.image.reserve(0);
+			m_textrue_handles.push_back(_th);
 		}
 	}
 
 	bgfx::TextureHandle Model::getTextureHandle(int index)
 	{
-		if (index >= 0 && index < static_cast<int>(m_textrue_handles.size()))
-		{
-			return m_textrue_handles[index];
-		}
-		return BGFX_INVALID_HANDLE;
+		if (index < 0)
+			return BGFX_INVALID_HANDLE;
+		if (index > static_cast<int>(m_textrue_handles.size()))
+			return BGFX_INVALID_HANDLE;
+		return m_textrue_handles[index];
 	}
 
 	void Model::draw()
@@ -121,10 +136,9 @@ namespace myEngine
 		Renderer* _renderer = Renderer::getInstance();
 		if (nullptr == _renderer)
 			return;
-		std::vector<RenderObject*>::iterator it = m_render_objects.begin();
-		for (; it != m_render_objects.end(); it++)
+		for (const RenderObject* r : m_render_objects)
 		{
-			_renderer->pushRenderObject(*it);
+			_renderer->pushRenderObject(r);
 		}
 	}
 

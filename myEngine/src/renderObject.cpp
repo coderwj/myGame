@@ -162,7 +162,7 @@ namespace myEngine
 		_createProgram(primitive, model);
 	}
 
-	void RenderObject::draw()
+	void RenderObject::draw() const
 	{
 		if (nullptr == m_material)
 			return;

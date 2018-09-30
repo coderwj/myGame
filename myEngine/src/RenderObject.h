@@ -18,7 +18,7 @@ namespace myEngine
 		static bgfx::Attrib::Enum		mapAttributeType(const std::string& attr_str);
 
 		void init(Model* modelptr, const tinygltf::Primitive& primitive, const tinygltf::Model& model);
-		void draw();
+		void draw() const;
 
 	private:
 		static bool _cmpByValue(const std::pair<std::string, int>& p1, const std::pair<std::string, int>& p2);

@@ -70,9 +70,9 @@ namespace myEngine
 
 		bgfx::setViewRect(0, 0, 0, static_cast<uint16_t>(m_viewport_width), static_cast<uint16_t>(m_viewport_height));
 
-		for (size_t i = 0; i < m_RenderObjects.size(); i++)
+		for (const RenderObject* r : m_RenderObjects)
 		{
-			m_RenderObjects[i]->draw();
+			r->draw();
 		}
 		m_RenderObjects.clear();
 
@@ -96,7 +96,7 @@ namespace myEngine
 {
 		bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0xaaaaaaff, 1.0f, 0);
 	}
-	void Renderer::pushRenderObject(RenderObject * v)
+	void Renderer::pushRenderObject(const RenderObject * v)
 	{
 		m_RenderObjects.push_back(v);
 	}

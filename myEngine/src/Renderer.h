@@ -24,7 +24,7 @@ namespace myEngine
 		void clearColor() const;
 		void clear() const;
 
-		void pushRenderObject(RenderObject* v);
+		void pushRenderObject(const RenderObject* v);
 
 	private:
 
@@ -32,7 +32,7 @@ namespace myEngine
 		~Renderer();
 
 		static Renderer* r;
-		std::vector<RenderObject*> m_RenderObjects;
+		std::vector<const RenderObject*> m_RenderObjects;
 
 		int m_viewport_width;
 		int m_viewport_height;

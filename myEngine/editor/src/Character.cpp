@@ -41,7 +41,7 @@ namespace myGame
 	    tinyxml2::XMLDocument character_model_doc;
 	    character_model_doc.LoadFile(model_config_path.c_str());
 	    tinyxml2::XMLElement* character_model_element =
-	    character_model_doc.FirstChildElement("modelconfig")->FirstChildElement("model");
+	    character_model_doc.FirstChildElement("modelConfig")->FirstChildElement("model");
 	    for (;;character_model_element = character_model_element->NextSiblingElement("model")) {
 	        if(character_model_element == NULL)
 	            break;
@@ -62,7 +62,8 @@ namespace myGame
 	    {
 	        return false;
 	    }
-	    m_model = new Model(Config::model_path + model_str);
+	    m_model = new Model();
+		m_model->load(Config::model_path + model_str);
 		m_model->setScale(m_scale);
 
 	    return true;
