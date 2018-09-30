@@ -2,7 +2,7 @@ rm -r ../build/mac
 mkdir ../build/mac
 
 cd ./tolua
-sh build.sh
+#sh build.sh
 cd ..
 
 cd ../build/mac
