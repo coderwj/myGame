@@ -21,6 +21,9 @@ void main()
                  a_weight.w * u_JointMatrixs[a_indices.w];
   mat4 modelMatrix = u_ModelMatrix * skinMat;
   mat4 normalMatrix = u_NormalMatrix * skinMat;
+#else // !HAS_SKIN
+  mat4 modelMatrix = u_ModelMatrix;
+  mat4 normalMatrix = u_NormalMatrix;
 #endif
 
   vec4 pos = mul(modelMatrix, vec4(a_position, 1.0));

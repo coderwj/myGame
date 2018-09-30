@@ -34,7 +34,7 @@
     <name>model_4</name>
     <path>CesiumMan/CesiumMan.gltf</path>
     <material>pbr_gltf</material>
-    <scale>10.0</scale>
+    <scale>6.0</scale>
     <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
@@ -44,7 +44,7 @@
     <name>model_5</name>
     <path>BrainStem/BrainStem.gltf</path>
     <material>pbr_gltf</material>
-    <scale>10.0</scale>
+    <scale>6.0</scale>
     <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>

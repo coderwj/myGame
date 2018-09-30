@@ -63,6 +63,10 @@ namespace myEngine
 		{
 			_loadNodeTreeMesh(n);
 		}
+		for (const tinygltf::Animation& a : m_gltf_model->animations)
+		{
+			// TODO
+		}
 	}
 
 	void Model::_loadNodeTreeMesh(int node_id)
