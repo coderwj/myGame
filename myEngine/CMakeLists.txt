@@ -6,6 +6,8 @@ message("--->Cmake myEngine--->")
 # Set projectname
 project(myEngine)
 
+add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31)
+
 add_subdirectory(lib/tinyxml2)
 add_subdirectory(lib/imgui)
 add_subdirectory(lib/bgfx.cmake)

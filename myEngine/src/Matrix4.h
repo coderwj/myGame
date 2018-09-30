@@ -23,6 +23,8 @@ namespace myEngine
 	    void initWithScale(const Vector3& v);
 	
 	    void initWithRotate(const Vector3& axis, float theta);
+
+		void initWithRotateQuaternion(const Quaternion& quat);
 	
 	    void initWithTranslate(const Vector3& v);
 	

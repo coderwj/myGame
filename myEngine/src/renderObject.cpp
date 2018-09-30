@@ -16,7 +16,7 @@ namespace myEngine
 	,m_vbh(BGFX_INVALID_HANDLE)
 	,m_ibh(BGFX_INVALID_HANDLE)
 	{
-	
+		m_material = new Material;
 	}
 	
 	RenderObject::~RenderObject()
@@ -56,7 +56,7 @@ namespace myEngine
 			return bgfx::AttribType::Float;
 
 		else
-			// Unknown componenty type
+			// Unknown component type
 			return bgfx::AttribType::Count;
 	}
 
@@ -104,6 +104,8 @@ namespace myEngine
 			_dec.add(mapAttributeType(it->first), tinygltf::GetTypeSizeInBytes(_accessor.type), mapAttributeComponentType(_accessor.componentType));
 			if (mapAttributeType(it->first) == bgfx::Attrib::Position)
 				_vertexNum = _accessor.count;
+			if (mapAttributeType(it->first) == bgfx::Attrib::Indices)
+				m_material->setHasSkin(true);
 		}
 		_dec.end();
 
@@ -149,7 +151,6 @@ namespace myEngine
 	void RenderObject::_createProgram(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
 	{
 		const tinygltf::Material& _material = model.materials[primitive.material];
-		m_material = new Material;
 		m_material->initParams(_material);
 		m_material->setProgram("pbr_gltf_vs", "pbr_gltf_fs");
 	}

@@ -20,6 +20,7 @@ namespace myEngine
 	,m_metallicFactor(0.f)
 	,m_metallicRoughnessTextureID(-1)
 	,m_roughnessFactor(0.f)
+	,m_hasSkin(false)
 	{
 		m_baseColorFactor.insert(m_baseColorFactor.end(), 4, 1.f);
 	}
@@ -218,6 +219,12 @@ namespace myEngine
 					float _metallicRoughnessValues[4] = { m_metallicFactor, m_roughnessFactor, 0.f, 0.f };
 					m_shader->setUniform(*it, static_cast<void*>(_metallicRoughnessValues));
 				}
+				else if ((*it).compare("u_JointMatrixs") == 0)
+				{
+					const void* _data = _model->getJointMatrixsData();
+					unsigned int _num = static_cast<unsigned int>(_model->getJointMatrixsNum());
+					m_shader->setUniform(*it, _data, _num);
+				}
 				else
 				{
 					std::cout << "Error uniform name!" << std::endl;
@@ -235,6 +242,8 @@ namespace myEngine
 			result += "HAS_TANGENTS;";
 		if (true)
 			result += "HAS_UV;";
+		if (m_hasSkin)
+			result += "HAS_SKIN;";
 		return result;
 	}
 

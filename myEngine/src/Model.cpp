@@ -3,6 +3,7 @@
 #include "RenderObject.h"
 #include "Renderer.h"
 #include "Vector3.h"
+#include "Quaternion.h"
 
 #ifndef TINYGLTF_IMPLEMENTATION
 #define TINYGLTF_IMPLEMENTATION
@@ -80,7 +81,46 @@ namespace myEngine
 			//mesh has skin
 			if (_node.skin != -1)
 			{
+				const tinygltf::Skin& _skin = m_gltf_model->skins[_node.skin];
+				for (int j : _skin.joints)
+				{
+					const tinygltf::Node& _node_joint = m_gltf_model->nodes[j];
 
+					Matrix4 _sm;
+					if (!_node_joint.scale.empty())
+					{
+						Vector3 _sv(
+							static_cast<float>(_node_joint.scale[0]),
+							static_cast<float>(_node_joint.scale[1]),
+							static_cast<float>(_node_joint.scale[2]));
+						_sm.initWithScale(_sv);
+					}
+
+					Matrix4 _rm;
+					if (!_node_joint.rotation.empty())
+					{
+						Quaternion _rq(
+							static_cast<float>(_node_joint.rotation[0]),
+							static_cast<float>(_node_joint.rotation[1]),
+							static_cast<float>(_node_joint.rotation[2]),
+							static_cast<float>(_node_joint.rotation[3]));
+						_rm.initWithRotateQuaternion(_rq);
+					}
+
+					Matrix4 _tm;
+					if (!_node_joint.translation.empty())
+					{
+						Vector3 _tv(
+							static_cast<float>(_node_joint.translation[0]),
+							static_cast<float>(_node_joint.translation[1]),
+							static_cast<float>(_node_joint.translation[2]));
+						_tm.initWithTranslate(_tv);
+					}
+
+					Matrix4 _joint_matrix = _sm * _rm * _tm;
+
+					m_joint_matrixs.push_back(_joint_matrix);
+				}
 			}
 		}
 		//load children recursive
@@ -129,6 +169,16 @@ namespace myEngine
 		if (index > static_cast<int>(m_textrue_handles.size()))
 			return BGFX_INVALID_HANDLE;
 		return m_textrue_handles[index];
+	}
+
+	int Model::getJointMatrixsNum() const
+	{
+		return static_cast<int>(m_joint_matrixs.size());
+	}
+
+	const Matrix4* Model::getJointMatrixsData() const
+	{
+		return m_joint_matrixs.data();
 	}
 
 	void Model::draw()

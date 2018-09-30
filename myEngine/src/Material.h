@@ -28,6 +28,8 @@ namespace myEngine
 
 		void bindUniforms(Model* _model);
 
+		void setHasSkin(bool v) { m_hasSkin = v; }
+
 	private:
 		std::string _getVertexShaderDefines();
 		std::string _getFragmentShaderDefines();
@@ -52,6 +54,8 @@ namespace myEngine
 		float m_metallicFactor;
 		int m_metallicRoughnessTextureID;
 		float m_roughnessFactor;
+
+		bool m_hasSkin;
 	};
 }
 

@@ -1,6 +1,7 @@
 #include "Matrix4.h"
 #include "Vector3.h"
 #include "MathUtil.h"
+#include "Quaternion.h"
 
 #include<cstring>
 
@@ -56,6 +57,14 @@ namespace myEngine
 	    m42 = 0.0f;
 	    m43 = 0.0f;
 	    m44 = 1.0f;
+	}
+
+	void Matrix4::initWithRotateQuaternion(const Quaternion & quat)
+	{
+		// temp method. TODO..
+		const Vector3& _axis = quat.getRotationAxis();
+		float _theta = toTheta(quat.getRotationAngle());
+		initWithRotate(_axis, _theta);
 	}
 	
 	void Matrix4::initWithTranslate(const Vector3 &v)

@@ -12,7 +12,11 @@ namespace myEngine
 		float x;
 		float y;
 		float z;
-	
+
+		Quaternion();
+		Quaternion(float x, float y, float z, float w);
+		~Quaternion() {}
+
 		void identity(){
 			w = 1.0f;
 			x = y = z = 0.0f;

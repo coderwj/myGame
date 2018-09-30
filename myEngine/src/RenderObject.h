@@ -20,6 +20,8 @@ namespace myEngine
 		void init(Model* modelptr, const tinygltf::Primitive& primitive, const tinygltf::Model& model);
 		void draw() const;
 
+		const Material* getMaterial() { return m_material; };
+
 	private:
 		static bool _cmpByValue(const std::pair<std::string, int>& p1, const std::pair<std::string, int>& p2);
 

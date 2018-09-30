@@ -8,6 +8,17 @@
 
 namespace myEngine
 {
+	Quaternion::Quaternion()
+	{
+		identity();
+	}
+	Quaternion::Quaternion(float _x, float _y, float _z, float _w)
+	:x(_x)
+	,y(_y)
+	,z(_z)
+	,w(_w)
+	{
+	}
 	void Quaternion::setToRotateAboutX(float theta){
 		float thetaOver2 = theta * 0.5f;
 		w = cos(thetaOver2);

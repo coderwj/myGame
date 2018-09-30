@@ -29,6 +29,9 @@ namespace myEngine
 
 		bgfx::TextureHandle getTextureHandle(int index);
 
+		int getJointMatrixsNum() const;
+		const Matrix4* getJointMatrixsData() const;
+
 		float getScale() const;
 
 		void setScale(float val);
@@ -45,7 +48,7 @@ namespace myEngine
 		tinygltf::Model* m_gltf_model;
 		std::vector<bgfx::TextureHandle> m_textrue_handles;
 		std::vector<RenderObject*> m_render_objects;
-
+		std::vector<Matrix4> m_joint_matrixs;
 		float  m_scale;
 	};
 }
