@@ -17,6 +17,9 @@ add_subdirectory(lib/bgfx.cmake)
 include_directories(./lib/tinyxml2)
 include_directories(./lib/imgui)
 include_directories(./lib/bgfx.cmake/brtshaderc)
+#include_directories(./lib/bgfx.cmake/bgfx/include)
+#include_directories(./lib/bgfx.cmake/bx/include)
+#include_directories(./lib/bgfx.cmake/bimg/include)
 
 FILE(GLOB SRC_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 FILE(GLOB_RECURSE HEAD_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h ${CMAKE_CURRENT_SOURCE_DIR}/src/*.inl)
@@ -48,6 +51,15 @@ if(APPLE)
 			bgfx)
 		add_dependencies(myEngine imgui tinyxml2 bgfx)
 	endif()
+endif()
+
+if(ANDROID)
+	target_link_libraries(myEngine
+		tinyxml2
+		imgui
+		bgfx
+		brtshaderc)
+	add_dependencies(myEngine imgui tinyxml2 bgfx brtshaderc)
 endif()
 
 if(WIN32)

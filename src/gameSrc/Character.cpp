@@ -63,7 +63,8 @@ namespace myGame
 	        //todo log info
 	        return false;
 	    }
-	    m_model = new Model(Config::model_path + model_str);
+	    m_model = new myEngine::Model();
+        m_model->load(Config::model_path + model_str);
 		m_model->setScale(m_scale);
 	
 	    string shader_config_path = Config::engine_res_path + "shader/shaderConfig.xml";

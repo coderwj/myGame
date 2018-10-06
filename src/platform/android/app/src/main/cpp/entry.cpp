@@ -2,20 +2,20 @@
 #include <android/native_activity.h>
 #include <android_native_app_glue.h>
 #include "GameClient.h"
-//#include "bgfx/platform.h"
+#include "bgfx/platform.h"
 
 struct android_app* g_app;
 
-//void androidSetWindow(::ANativeWindow* _window)
-//{
-//    bgfx::PlatformData pd;
-//    pd.ndt          = NULL;
-//    pd.nwh          = _window;
-//    pd.context      = NULL;
-//    pd.backBuffer   = NULL;
-//    pd.backBufferDS = NULL;
-//    bgfx::setPlatformData(pd);
-//}
+void androidSetWindow(::ANativeWindow* _window)
+{
+    bgfx::PlatformData pd;
+    pd.ndt          = NULL;
+    pd.nwh          = _window;
+    pd.context      = NULL;
+    pd.backBuffer   = NULL;
+    pd.backBufferDS = NULL;
+    bgfx::setPlatformData(pd);
+}
 
 void onAppCommand(struct android_app *app, int32_t cmd)
 {
@@ -23,7 +23,6 @@ void onAppCommand(struct android_app *app, int32_t cmd)
     switch (cmd)
     {
         case APP_CMD_INIT_WINDOW:
-            myGame::GameClient::getInstance()->init();
             break;
         case APP_CMD_TERM_WINDOW:
             break;
@@ -80,5 +79,6 @@ void android_main(struct android_app* _app) {
     androidSetWindow(_app->window);
     _app->onAppCmd     = onAppCommand;
     _app->onInputEvent = onInputEvent;
+    myGame::GameClient::getInstance()->init();
     mainLoop();
 }

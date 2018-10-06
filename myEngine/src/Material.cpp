@@ -130,7 +130,7 @@ namespace myEngine
 
 		Matrix4 _mat_model = _model->getModelMatrix();
 		myEngine::Camera* _camera = myEngine::Engine::getInstance()->getMaincCamera();
-		Vector3& _camera_pos = _camera->getPosition();
+		Vector3 _camera_pos = _camera->getPosition();
 		const Matrix4& _mat_proj = _camera->GetProjectMatrix();
 		const Matrix4& _mat_view = _camera->GetViewMatrix();
 		Matrix4 u_MVPMatrix = _mat_model * _mat_view * _mat_proj;

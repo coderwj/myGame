@@ -28,8 +28,12 @@ add_subdirectory(../../../../myEngine androidmyEngine.out)
 
 include_directories(../../../gameSrc)
 include_directories(../../../../myEngine/src)
+#include_directories(../../../../myEngine/lib/bgfx.cmake/bgfx/include)
+#include_directories(../../../../myEngine/lib/bgfx.cmake/bx/include)
+#include_directories(../../../../myEngine/lib/bgfx.cmake/bimg/include)
 include_directories(${ANDROID_NDK}/sources/android/native_app_glue)
 
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate")
 
 add_library(native-activity SHARED src/main/cpp/entry.cpp)
 

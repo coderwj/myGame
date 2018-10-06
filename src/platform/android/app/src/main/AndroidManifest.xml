@@ -10,13 +10,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true">
         <activity android:name="android.app.NativeActivity"
-            android:label="myGame"
+            android:label="native-activity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden">
             <!--这里比较重要，value指的是ndk生成的库-->
             <meta-data android:name="android.app.lib_name"
-                android:value="myGame" />
+                android:value="native-activity" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

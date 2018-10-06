@@ -12,6 +12,7 @@ include_directories(../../myEngine/lib/imgui)
 include_directories(../../dependencies/Lua53/src)
 include_directories(../../dependencies/LuaTinker)
 include_directories(../../dependencies/tolua)
+include_directories(../../myEngine/lib/bgfx.cmake/bgfx/include)
 
 FILE(GLOB SRC_1 "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 FILE(GLOB_RECURSE HEAD_GAMESRC ${CMAKE_CURRENT_SOURCE_DIR}/*.h )
