@@ -6,7 +6,9 @@ message("--->Cmake myEngine--->")
 # Set projectname
 project(myEngine)
 
-add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31)
+if(WIN32)
+	add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31)
+endif()
 
 add_subdirectory(lib/tinyxml2)
 add_subdirectory(lib/imgui)
