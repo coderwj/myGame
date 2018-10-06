@@ -16,15 +16,13 @@ add_subdirectory(../../../../dependencies androidDepend.out)
 add_subdirectory(../../../gameSrc androidGameSrc.out)
 add_subdirectory(../../../../myEngine androidmyEngine.out)
 
-include_directories(../../../gameSrc)
-include_directories(../../../../myEngine/src)
-
-include_directories(${ANDROID_NDK}/sources/android/native_app_glue)
 add_library(app-glue STATIC ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c )
 
+include_directories(../../../gameSrc)
+include_directories(../../../../myEngine/src)
+include_directories(${ANDROID_NDK}/sources/android/native_app_glue)
 
-add_library( Main SHARED
-             src/main/cpp/entry.cpp )
+add_library(Main SHARED src/main/cpp/entry.cpp )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -32,9 +30,9 @@ add_library( Main SHARED
 # you want to add. CMake verifies that the library exists before
 # completing its build.
 
-find_library( log-lib log )
-find_library( OPENGLES3_LIBRARY GLESv3 "OpenGL ES v3.0 library")
-find_library( EGL_LIBRARY EGL "EGL 1.4 library" )
+find_library(log-lib log )
+find_library(OPENGLES3_LIBRARY GLESv3 "OpenGL ES v3.0 library")
+find_library(EGL_LIBRARY EGL "EGL 1.4 library" )
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
