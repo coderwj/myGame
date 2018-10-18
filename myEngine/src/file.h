@@ -1,5 +1,4 @@
-#ifndef ANDROID_FOPEN_H
-#define ANDROID_FOPEN_H
+#pragma once
 
 #include <stdio.h>
 #include <android/asset_manager.h>

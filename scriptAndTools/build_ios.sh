@@ -1,5 +1,5 @@
 rm -r ../build/ios
 mkdir ../build/ios
 cd ../build/ios
-cmake ../../ -G Xcode -DIOS=true
+cmake ../../src/platform/ios/ -G Xcode
 cd ../../scriptAndTools

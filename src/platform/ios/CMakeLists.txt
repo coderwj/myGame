@@ -1,8 +1,13 @@
 cmake_minimum_required (VERSION 3.7)
 
 message("--->Cmake ios--->" ${CMAKE_MODULE_PATH})
+
+OPTION(IOS "" TRUE)
+
+#SET(CMAKE_MODULE_PATH ./cmake)
+
 set(IOS_PLATFORM SIMULATOR64)
-INCLUDE(ios)
+INCLUDE(cmake/ios.cmake)
 set(DEVELOPMENT_PROJECT_NAME "myGame_project")                  # <== Set to your project name, e.g. project.xcodeproj
 set(DEVELOPMENT_TEAM_ID "1019139374@qq.com")                       # <== Set to your team ID from Apple
 set(APP_NAME "myGame")                                     # <== Set To your app's name
@@ -16,6 +21,10 @@ set(LOGIC_ONLY_TESTS 0)                                     # <== Set to 1 if yo
 project(${DEVELOPMENT_PROJECT_NAME})
 include(BundleUtilities)
 include(FindXCTest)
+
+add_subdirectory(../../../dependencies iosDepend.out)
+add_subdirectory(../../gameSrc iosGameSrc.out)
+add_subdirectory(../../../myEngine iosmyEngine.out)
 
 message(STATUS XCTestFound:${XCTest_FOUND})
 
