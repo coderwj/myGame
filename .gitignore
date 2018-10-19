@@ -1,5 +1,6 @@
 /build/mac
 /build/win
+/build/ios
 /lib/debug
 /lib/release
 /bin/debug

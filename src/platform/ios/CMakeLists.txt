@@ -6,7 +6,12 @@ OPTION(IOS "" TRUE)
 
 #SET(CMAKE_MODULE_PATH ./cmake)
 
-set(IOS_PLATFORM SIMULATOR64)
+set(CMAKE_CXX_STANDARD 11) # C++11...
+set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
+set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
+
+#set(IOS_PLATFORM SIMULATOR64)
+#set(IOS_PLATFORM OS)
 INCLUDE(cmake/ios.cmake)
 set(DEVELOPMENT_PROJECT_NAME "myGame_project")                  # <== Set to your project name, e.g. project.xcodeproj
 set(DEVELOPMENT_TEAM_ID "1019139374@qq.com")                       # <== Set to your team ID from Apple
@@ -71,58 +76,14 @@ add_executable(
 # To disable bitcode:
 # set_target_properties(${APP_NAME} PROPERTIES XCODE_ATTRIBUTE_ENABLE_BITCODE "NO")
 
-# To link a statically linked Framework from the filesystem:
-# Note: dynamic frameworks require copying to the app bundle. Statically linked are copied into the executable itself.
-# target_link_libraries(${APP_NAME}
-  # ${PROJECT_SOURCE_DIR}/Torch.framework
-# )
-
-
-# Include the same headers for the statically linked framework:
-# Include headers to they're available as #import <Header/Header.h> from a framework
-# target_include_directories(${APP_NAME}
-  # PUBLIC ${PROJECT_SOURCE_DIR}/Torch.framework/Headers
-# )
-
-
-# Static Link a library archive into the executable
-# target_link_libraries(${APP_NAME}
-#   ${PROJECT_SOURCE_DIR}/framework/lib/libtorch.a
-# )
-
-
-# Include a source directory outside a framework
-# target_include_directories(${APP_NAME}
-#   PUBLIC ${PROJECT_SOURCE_DIR}/framework/include
-# )
-
-# We require CMake >= 2.8
-
 include_directories(../../../include)
 include_directories(../../../myEngine/include)
-
-include_directories(../../../myEngine/lib/glm/glm)
 include_directories(../../../myEngine/lib/imgui)
 
-if(APPLE)
-  include_directories(../../../myEngine/lib/glew/mac/include)
-  include_directories(../../../myEngine/lib/glfw/mac/include)
 
-  link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glew/mac/lib)
-  link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glfw/mac/lib)
-endif()
+target_link_libraries(${APP_NAME} GameSrc)
 
-if(WIN32)
-  include_directories(../../../myEngine/lib/glew/win32/include)
-  include_directories(../../../myEngine/lib/glfw/win32/include)
-
-  link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glew/win32/lib)
-  link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../myEngine/lib/glfw/win32/lib)
-endif()
-
-target_link_libraries(${APP_NAME} GameSrc myEngine)
-
-add_dependencies(${APP_NAME} GameSrc myEngine)
+add_dependencies(${APP_NAME} GameSrc)
 
 # Locate system libraries on iOS
 find_library(UIKIT UIKit PATHS ENV PATH)
@@ -164,13 +125,6 @@ set_target_properties(${APP_NAME} PROPERTIES
                       XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN YES
 )
 
-# Include framework headers, needed to make "Build" Xcode action work.
-# "Archive" works fine just relying on default search paths as it has different
-# build product output directory.
-# target_include_directories(${APP_NAME} PUBLIC
-#     "${PROJECT_BINARY_DIR}/cppframework/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${FRAMEWORK_NAME}.framework"
-# )
-
 # Set the app's linker search path to the default location on iOS
 # set_target_properties(
 #     ${APP_NAME}
@@ -178,10 +132,3 @@ set_target_properties(${APP_NAME} PROPERTIES
 #     XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS
 #     "@executable_path/Frameworks"
 # )
-
-# Note that commands below are indented just for readability. They will endup as
-# one liners after processing and unescaped ; will disappear so \; are needed.
-# First condition in each command is for normal build, second for archive.
-# \&\>/dev/null makes sure that failure of one command and success of other
-# is not printed and does not make Xcode complain that /bin/sh failed and build
-# continued.
