@@ -78,12 +78,14 @@ add_executable(
 
 include_directories(../../../include)
 include_directories(../../../myEngine/include)
-include_directories(../../../myEngine/lib/imgui)
+#include_directories(../../../../myEngine/lib/bgfx.cmake/bgfx/include)
+#include_directories(../../../../myEngine/lib/bgfx.cmake/bx/include)
+#include_directories(../../../../myEngine/lib/bgfx.cmake/bimg/include)
 
 
-target_link_libraries(${APP_NAME} GameSrc)
+target_link_libraries(${APP_NAME} GameSrc myEngine)
 
-add_dependencies(${APP_NAME} GameSrc)
+add_dependencies(${APP_NAME} GameSrc myEngine)
 
 # Locate system libraries on iOS
 find_library(UIKIT UIKit PATHS ENV PATH)
