@@ -14,9 +14,9 @@ set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
 #set(IOS_PLATFORM OS)
 INCLUDE(cmake/ios.cmake)
 set(DEVELOPMENT_PROJECT_NAME "myGame_project")                  # <== Set to your project name, e.g. project.xcodeproj
-set(DEVELOPMENT_TEAM_ID "1019139374@qq.com")                       # <== Set to your team ID from Apple
+set(DEVELOPMENT_TEAM_ID "jie wen")                       # <== Set to your team ID from Apple
 set(APP_NAME "myGame")                                     # <== Set To your app's name
-set(APP_BUNDLE_IDENTIFIER "com.coderwj.app")                # <== Set to your app's bundle identifier
+set(APP_BUNDLE_IDENTIFIER "com.coderwj")                # <== Set to your app's bundle identifier
 set(FRAMEWORK_BUNDLE_IDENTIFIER "com.coderwj.framework")    # <== Set to your framework's bundle identifier (cannot be the same as app bundle identifier)
 set(CODE_SIGN_IDENTITY "iPhone Developer")                  # <== Set to your preferred code sign identity, to see list:
 set(DEPLOYMENT_TARGET 8.0)                                  # <== Set your deployment target version of iOS
@@ -76,8 +76,8 @@ add_executable(
 # To disable bitcode:
 # set_target_properties(${APP_NAME} PROPERTIES XCODE_ATTRIBUTE_ENABLE_BITCODE "NO")
 
-include_directories(../../../include)
-include_directories(../../../myEngine/include)
+include_directories(../../../src/gameSrc)
+include_directories(../../../myEngine/src)
 #include_directories(../../../../myEngine/lib/bgfx.cmake/bgfx/include)
 #include_directories(../../../../myEngine/lib/bgfx.cmake/bx/include)
 #include_directories(../../../../myEngine/lib/bgfx.cmake/bimg/include)
@@ -107,7 +107,7 @@ set_target_properties(${APP_NAME} PROPERTIES
 )
 
 # Turn on ARC
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc")
 
 # Create the app target
 set_target_properties(${APP_NAME} PROPERTIES

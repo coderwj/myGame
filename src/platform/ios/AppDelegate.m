@@ -1,5 +1,8 @@
 #import "AppDelegate.h"
+
 #include "bgfx/platform.h"
+#include "bgfx/bgfx.h"
+#include "GameClient.h"
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -16,24 +19,6 @@ static    void* m_device = NULL;
 
 @implementation View
 
-+ (Class)layerClass
-{
-#ifdef HAS_METAL_SDK
-    Class metalClass = NSClassFromString(@"CAMetalLayer");    //is metal runtime sdk available
-    if ( metalClass != nil)
-    {
-        m_device = MTLCreateSystemDefaultDevice(); // is metal supported on this device (is there a better way to do this - without creating device ?)
-        if (m_device)
-        {
-            [m_device retain];
-            return metalClass;
-        }
-    }
-#endif
-    
-    return [CAEAGLLayer class];
-}
-
 - (id)initWithFrame:(CGRect)rect
 {
     self = [super initWithFrame:rect];
@@ -42,22 +27,21 @@ static    void* m_device = NULL;
     {
         return nil;
     }
-    
-    bgfx::PlatformData pd;
-    pd.ndt          = NULL;
-    pd.nwh          = (__bridge void*)(self.layer);
-    pd.context      = NULL;
-    pd.backBuffer   = NULL;
-    pd.backBufferDS = NULL;
-    bgfx::setPlatformData(pd);
+//    bgfx::PlatformData pd;
+//    pd.ndt          = NULL;
+//    pd.nwh          = (__bridge void*)(self.layer);
+//    pd.context      = NULL;
+//    pd.backBuffer   = NULL;
+//    pd.backBufferDS = NULL;
+//    bgfx::setPlatformData(pd);
     
     return self;
 }
 
 - (void)layoutSubviews
 {
-//    uint32_t frameW = (uint32_t)(self.contentScaleFactor * self.frame.size.width);
-//    uint32_t frameH = (uint32_t)(self.contentScaleFactor * self.frame.size.height);
+    uint32_t frameW = (uint32_t)(self.contentScaleFactor * self.frame.size.width);
+    uint32_t frameH = (uint32_t)(self.contentScaleFactor * self.frame.size.height);
 //    s_ctx->m_eventQueue.postSizeEvent(s_defaultWindow, frameW, frameH);
 }
 
