@@ -11,14 +11,14 @@ namespace myEngine
 	class Config
 	{
 	public:
-		static const string INVALID_STR;
-		static const string engine_res_path;
-		static const string shader_bin_path;
-		static const string shader_src_path;
-		static const string game_res_path;
-		static const string model_path;
-		static const string scene_path;
-		static const string lua_path;
+		const static string INVALID_STR;
+		static string engine_res_path;
+		static string shader_bin_path;
+		static string shader_src_path;
+		static string game_res_path;
+		static string model_path;
+		static string scene_path;
+		static string lua_path;
 	
 	    static const unordered_map<string, string> configMap;
 	

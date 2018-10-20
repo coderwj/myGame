@@ -5,17 +5,20 @@ namespace myEngine
 {
 	const string Config::INVALID_STR = "";
 #ifdef _EDITOR
-	const string Config::engine_res_path = "../../../myEngine/res/";
-	const string Config::game_res_path = "../../../res/";
+    string Config::engine_res_path = "../../../myEngine/res/";
+	string Config::game_res_path = "../../../res/";
+#elif __APPLE__
+	string Config::engine_res_path = "";
+	string Config::game_res_path = "";
 #else
-	const string Config::engine_res_path = "../../myEngine/res/";
-	const string Config::game_res_path = "../../res/";
+    string Config::engine_res_path = "../../myEngine/res/";
+    string Config::game_res_path = "../../res/";
 #endif // DEBUG
-	const string Config::shader_bin_path = engine_res_path + "shaderbin/";
-	const string Config::shader_src_path = engine_res_path + "shader/";
-	const string Config::model_path = Config::game_res_path + "models/";
-	const string Config::scene_path = Config::game_res_path + "scenes/";
-	const string Config::lua_path = Config::game_res_path + "luafiles/";
+	string Config::shader_bin_path = Config::engine_res_path + "shaderbin/";
+	string Config::shader_src_path = Config::engine_res_path + "shader/";
+	string Config::model_path = Config::game_res_path + "models/";
+	string Config::scene_path = Config::game_res_path + "scenes/";
+	string Config::lua_path = Config::game_res_path + "luafiles/";
 	
 	const unordered_map<string, string> Config::configMap = unordered_map<string, string>();
 	

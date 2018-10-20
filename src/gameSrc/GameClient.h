@@ -53,6 +53,8 @@ namespace myGame
 
 		int						getFps					() const;
 		void					setFps					(int val);
+        
+        void                    setResPath              (const char* path);
 
 	private:
 		GameClient();
@@ -80,6 +82,8 @@ namespace myGame
 		int					m_touchBeginPosY;
 		int					m_touchPosX;
 		int					m_touchPosY;
+        
+        std::string         m_resPath;
 	};
 }
 

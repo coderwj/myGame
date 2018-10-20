@@ -1,23 +1,17 @@
 #import "AppDelegate.h"
-
-#include "bgfx/platform.h"
-#include "bgfx/bgfx.h"
-#include "GameClient.h"
+#import "CppInterface.h"
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <QuartzCore/CAEAGLLayer.h>
 
-static    void* m_device = NULL;
-
-@interface View : UIView
-{
-    CADisplayLink* m_displayLink;
-}
-
-@end
-
 @implementation View
+
++ (Class)layerClass
+{
+
+    return [CAEAGLLayer class];
+}
 
 - (id)initWithFrame:(CGRect)rect
 {
@@ -27,14 +21,6 @@ static    void* m_device = NULL;
     {
         return nil;
     }
-//    bgfx::PlatformData pd;
-//    pd.ndt          = NULL;
-//    pd.nwh          = (__bridge void*)(self.layer);
-//    pd.context      = NULL;
-//    pd.backBuffer   = NULL;
-//    pd.backBufferDS = NULL;
-//    bgfx::setPlatformData(pd);
-    
     return self;
 }
 
@@ -68,7 +54,7 @@ static    void* m_device = NULL;
 
 - (void)renderFrame
 {
-    
+    [[[AppDelegate GetDelegate] m_cppInterface] tick];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -121,28 +107,37 @@ static    void* m_device = NULL;
 
 @synthesize m_window;
 @synthesize m_view;
+@synthesize m_viewController;
+@synthesize m_cppInterface;
+
++(AppDelegate*) GetDelegate
+{
+    AppDelegate* appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    return appDelegate;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  // Insert code here to initialize your application
-  NSLog(@"didFinishLaunchingWithOptions");
-    
-    
+
     CGRect rect = [ [UIScreen mainScreen] bounds];
+
     m_window = [ [UIWindow alloc] initWithFrame: rect];
     m_view = [ [View alloc] initWithFrame: rect];
-    
     [m_window addSubview: m_view];
     
-    UIViewController *viewController = [[UIViewController alloc] init];
-    viewController.view = m_view;
+    m_viewController = [[ViewController alloc] init];
+    m_viewController.view = m_view;
     
-    [m_window setRootViewController:viewController];
+    [m_window setRootViewController:m_viewController];
     [m_window makeKeyAndVisible];
     
     float scaleFactor = [[UIScreen mainScreen] scale];
     [m_view setContentScaleFactor: scaleFactor ];
     
-  return YES;
+    m_cppInterface = [[CppInterface alloc]init];
+    
+    [m_cppInterface initGame: m_view.layer ];
+
+    return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

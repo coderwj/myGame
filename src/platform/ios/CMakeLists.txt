@@ -63,6 +63,10 @@ set(APP_SOURCE_FILES
 set(RESOURCES
   ./Main.storyboard
   ./LaunchScreen.storyboard
+  ../../../res/commonConfig.xml
+  ../../../res/luafiles
+  ../../../res/models
+  ../../../myEngine/res/shader
 )
 
 add_executable(

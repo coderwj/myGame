@@ -236,6 +236,18 @@ namespace myGame
 	{
 		m_fps = val;
 	}
+    
+    void GameClient::setResPath(const char* path)
+    {
+        m_resPath = path;
+        myEngine::Config::engine_res_path = m_resPath;
+        myEngine::Config::game_res_path = m_resPath;
+        Config::shader_bin_path = Config::engine_res_path + "shaderbin/";
+        Config::shader_src_path = Config::engine_res_path + "shader/";
+        Config::model_path = Config::game_res_path + "models/";
+        Config::scene_path = Config::game_res_path + "scenes/";
+        Config::lua_path = Config::game_res_path + "luafiles/";
+    }
 	
 
 }

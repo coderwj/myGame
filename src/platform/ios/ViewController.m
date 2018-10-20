@@ -1,12 +1,6 @@
 #import "ViewController.h"
 #import "CppInterface.h"
 
-@interface ViewController ()
-{
-    CppInterface* i;
-}
-@end
-
 @implementation ViewController
 
 - (BOOL)prefersStatusBarHidden
@@ -16,7 +10,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    i = [[CppInterface alloc]init];
 }
 
 - (void)didReceiveMemoryWarning {
