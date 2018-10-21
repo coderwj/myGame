@@ -33,12 +33,32 @@
     path += "/";
     myGame::GameClient::getInstance()->setResPath(path.c_str());
     
+    CGRect rect = [ [UIScreen mainScreen] bounds];
+    float scaleFactor = [[UIScreen mainScreen] scale];
+    myGame::GameClient::getInstance()->onResize(rect.size.width * scaleFactor, rect.size.height * scaleFactor);
+    
     myGame::GameClient::getInstance()->init();
+
 }
 
 -(void) tick
 {
     myGame::GameClient::getInstance()->tick();
+}
+
+-(void) handleTouchBegin:(CGPoint)p
+{
+    myGame::GameClient::getInstance()->handleTouchBegin(p.x, p.y);
+}
+
+-(void) handleTouchMove:(CGPoint)p
+{
+    myGame::GameClient::getInstance()->handleTouchMove(p.x, p.y);
+}
+
+-(void) handleTouchEnd:(CGPoint)p
+{
+    myGame::GameClient::getInstance()->handleTouchEnd(p.x, p.y);
 }
 
 @end

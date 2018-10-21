@@ -121,6 +121,15 @@ namespace myGame
 		luaopen_base(m_state);
 		luaL_openlibs(m_state);
 		//tolua__open(m_state);
+        
+        lua_getglobal(m_state, "package");                              /* stack: package */
+        lua_getfield(m_state, -1, "path");            /* get package.path, stack: package path */
+        const char* cur_path =  lua_tostring(m_state, -1);
+        lua_pop(m_state, 1);                                            /* stack: package */
+        lua_pushfstring(m_state, "%s;%s?.lua", cur_path, Config::lua_path.c_str());        /* stack: package newpath */
+        lua_setfield(m_state, -2, "path");      /* package.path = newpath, stack: package */
+        lua_pop(m_state, 1);
+        
 		string luafile = Config::lua_path + "dofile.lua";
 		lua_tinker::dofile(m_state, luafile.c_str());
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "InitGame");

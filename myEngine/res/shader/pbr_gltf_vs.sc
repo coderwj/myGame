@@ -15,10 +15,10 @@ void main()
 {
 
 #ifdef HAS_SKIN
-  mat4 skinMat = a_weight.x * u_JointMatrixs[a_indices.x] +
-                 a_weight.y * u_JointMatrixs[a_indices.y] +
-                 a_weight.z * u_JointMatrixs[a_indices.z] +
-                 a_weight.w * u_JointMatrixs[a_indices.w];
+  mat4 skinMat = a_weight.x * u_JointMatrixs[int(a_indices.x)] +
+                 a_weight.y * u_JointMatrixs[int(a_indices.y)] +
+                 a_weight.z * u_JointMatrixs[int(a_indices.z)] +
+                 a_weight.w * u_JointMatrixs[int(a_indices.w)];
   mat4 modelMatrix = u_ModelMatrix * skinMat;
   mat4 normalMatrix = u_NormalMatrix * skinMat;
 #else // !HAS_SKIN

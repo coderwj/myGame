@@ -63,7 +63,8 @@
     CGPoint touchLocation = [touch locationInView:self];
     touchLocation.x *= self.contentScaleFactor;
     touchLocation.y *= self.contentScaleFactor;
-    
+
+    [[[AppDelegate GetDelegate] m_cppInterface] handleTouchBegin:touchLocation];
 //    s_ctx->m_eventQueue.postMouseEvent(s_defaultWindow, touchLocation.x, touchLocation.y, 0);
 }
 
@@ -73,7 +74,7 @@
     CGPoint touchLocation = [touch locationInView:self];
     touchLocation.x *= self.contentScaleFactor;
     touchLocation.y *= self.contentScaleFactor;
-    
+    [[[AppDelegate GetDelegate] m_cppInterface] handleTouchEnd:touchLocation];
 //    s_ctx->m_eventQueue.postMouseEvent(s_defaultWindow, touchLocation.x, touchLocation.y, 0, MouseButton::Left, false);
 }
 
@@ -83,7 +84,7 @@
     CGPoint touchLocation = [touch locationInView:self];
     touchLocation.x *= self.contentScaleFactor;
     touchLocation.y *= self.contentScaleFactor;
-    
+    [[[AppDelegate GetDelegate] m_cppInterface] handleTouchMove:touchLocation];
 //    s_ctx->m_eventQueue.postMouseEvent(s_defaultWindow, touchLocation.x, touchLocation.y, 0);
 }
 
@@ -156,6 +157,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [m_view start];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

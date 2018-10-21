@@ -36,12 +36,17 @@ namespace myEngine
 
 	void Engine::onCreate()
 	{
-
+        m_renderer = Renderer::getInstance();
+        m_maincCamera = new Camera();
 	}
 
 	void Engine::onDestroy()
 	{
-
+        if (m_maincCamera)
+        {
+            delete(m_maincCamera);
+            m_maincCamera = nullptr;
+        }
 	}
 
 	void Engine::onResize(int width, int height)
@@ -59,12 +64,16 @@ namespace myEngine
 
 	bool Engine::init()
 	{
-		m_renderer = Renderer::getInstance();
-		m_renderer->init();
+        if (nullptr != m_renderer)
+        {
+		    m_renderer->init();
+        }
 
-		m_maincCamera = new Camera();
-		m_maincCamera->setPosition(Vector3(0.f, 0.f, 1.f));
-		m_maincCamera->SetFocusPos(Vector3(0.f, 0.f, 0.f));
+        if (nullptr != m_maincCamera)
+        {
+            m_maincCamera->setPosition(Vector3(0.f, 0.f, 1.f));
+            m_maincCamera->SetFocusPos(Vector3(0.f, 0.f, 0.f));
+        }
 		return true;
 	}
 	

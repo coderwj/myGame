@@ -5,4 +5,8 @@
 
 -(void) tick;
 
+-(void) handleTouchBegin:(CGPoint)p;
+-(void) handleTouchMove:(CGPoint)p;
+-(void) handleTouchEnd:(CGPoint)p;
+
 @end

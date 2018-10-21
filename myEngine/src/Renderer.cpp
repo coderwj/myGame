@@ -39,8 +39,8 @@ namespace myEngine
 	{
 		bgfx::Init init;
 		//init.type = bgfx::RendererType::OpenGLES;
-		//init.type = bgfx::RendererType::Count;
-		init.type = bgfx::RendererType::OpenGL;
+		init.type = bgfx::RendererType::Count;
+		//init.type = bgfx::RendererType::OpenGL;
 		init.vendorId = BGFX_PCI_ID_NONE; //auto select
 		init.resolution.width = m_viewport_width;
 		init.resolution.height = m_viewport_height;
