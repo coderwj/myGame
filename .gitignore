@@ -5,6 +5,7 @@
 /lib/release
 /bin/debug
 /bin/release
+/src/platform/android/app/src/main/assets
 /src/gameSrc/luaClientPort.cpp
 /src/gameSrc/protocgen
 log.txt
