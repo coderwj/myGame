@@ -1,12 +1,13 @@
 #pragma once
 
 #include <string>
-using namespace std;
+#include <vector>
 
 namespace myEngine
 {
 	class Camera;
 	class Renderer;
+	class Animation;
 
 	class Engine
 	{
@@ -28,6 +29,8 @@ namespace myEngine
 		myEngine::Camera* getMaincCamera() const { return m_maincCamera; }
 		void setMaincCamera(myEngine::Camera* val) { m_maincCamera = val; }
 
+		void addAnimation(Animation* anim);
+
 	private:
 		static Engine* e;
 
@@ -37,6 +40,8 @@ namespace myEngine
 		Camera* m_maincCamera;
 
 		Renderer* m_renderer;
+
+		std::vector<Animation*> m_animations;
 	};
 
 }

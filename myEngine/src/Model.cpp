@@ -4,6 +4,8 @@
 #include "Renderer.h"
 #include "Vector3.h"
 #include "Quaternion.h"
+#include "Animation.h"
+#include "Engine.h"
 
 #ifndef TINYGLTF_IMPLEMENTATION
 #define TINYGLTF_IMPLEMENTATION
@@ -63,9 +65,39 @@ namespace myEngine
 		{
 			_loadNodeTreeMesh(n);
 		}
+		Engine* _engine = Engine::getInstance();
+		if (nullptr == _engine)
+		{
+			return;
+		}
 		for (const tinygltf::Animation& a : m_gltf_model->animations)
 		{
-			// TODO
+			Animation *_anim = new Animation();
+			for (const tinygltf::AnimationChannel& c : a.channels)
+			{
+				int node_index = c.target_node;
+				const tinygltf::AnimationSampler& s = a.samplers[c.sampler];
+
+				
+				KEY_FRAME_ACCELERATE type = KEY_FRAME_ACCELERATE_LINEAR;
+				if (s.interpolation == "LINEAR" || s.interpolation == "")//default: "LINEAR"
+				{
+					type = KEY_FRAME_ACCELERATE_LINEAR;
+				}
+				else if (s.interpolation == "STEP")
+				{
+					type = KEY_FRAME_ACCELERATE_STEP;
+				}
+				else if (s.interpolation == "CATMULLROMSPLINE")
+				{
+					type = KEY_FRAME_ACCELERATE_CATMULLROMSPLINE;
+				}
+				else if (s.interpolation == "CUBICSPLINE")
+				{
+					type = KEY_FRAME_ACCELERATE_CUBICSPLINE;
+				}
+			}
+			_engine->addAnimation(_anim);
 		}
 	}
 

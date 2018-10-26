@@ -10,4 +10,9 @@ namespace myEngine
 		m_type = val;
 	}
 
+	void Animation::tick(int time)
+	{
+
+	}
+
 }

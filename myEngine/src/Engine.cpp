@@ -2,6 +2,7 @@
 
 #include "Camera.h"
 #include "Renderer.h"
+#include "Animation.h"
 
 namespace myEngine
 {
@@ -79,10 +80,19 @@ namespace myEngine
 	
 	void Engine::tick(int delta)
 	{
-
+		for (Animation * anim : m_animations)
+		{
+			anim->tick(delta);
+		}
 	}
 	void Engine::render()
 	{
 		m_renderer->render();
 	}
+
+	void Engine::addAnimation(Animation * anim)
+	{
+		m_animations.push_back(anim);
+	}
+
 }
