@@ -1,5 +1,6 @@
 #include "Config.h"
 #include "tinyxml2.h"
+#include <assert.h>
 
 namespace myEngine
 {
@@ -11,8 +12,8 @@ namespace myEngine
 	string Config::engine_res_path = "";
 	string Config::game_res_path = "";
 #else
-    string Config::engine_res_path = "../../myEngine/res/";
-    string Config::game_res_path = "../../res/";
+    string Config::engine_res_path = "../../../../../myEngine/res/";
+    string Config::game_res_path = "../../../../../res/";
 #endif // DEBUG
 	string Config::shader_bin_path = Config::engine_res_path + "shaderbin/";
 	string Config::shader_src_path = Config::engine_res_path + "shader/";
@@ -30,7 +31,11 @@ namespace myEngine
 		string value = "";
 		string conifg_path = Config::game_res_path + "commonConfig.xml";
 		tinyxml2::XMLDocument config_doc;
-		config_doc.LoadFile(conifg_path.c_str());
+		tinyxml2::XMLError res = config_doc.LoadFile(conifg_path.c_str());
+		if (tinyxml2::XML_SUCCESS != res)
+		{
+			assert(false);
+		}
 		tinyxml2::XMLElement* config_element =
 			config_doc.FirstChildElement("commonconfig")->FirstChildElement();
 		for (;; config_element = config_element->NextSiblingElement()) {
