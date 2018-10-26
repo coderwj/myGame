@@ -1,42 +1,57 @@
-// #pragma once
+ #pragma once
 
-// namespace myEngine
-// {
-// 	class KeyFrame
-// 	{
-// 	public:
-// 		KeyFrame()
-// 		:x(0.f)
-// 		,y(0.f)
-// 		,z(0.f)
-// 		{
+#include <vector>
+#include <map>
 
-// 		}
+ namespace myEngine
+ {
+	 enum KEY_FRAME_TYPE
+	 {
+		 KEY_FRAME_INVALID = 0,
+		 KEY_FRAME_V1 = 1,
+		 KEY_FRAME_V2,
+		 KEY_FRAME_V3,
+		 KEY_FRAME_V4
+	 };
 
-// 		~KeyFrame()
-// 		{
+	 class KeyFrame
+	 {
+	 public:
+		 KeyFrame():time(0.f) { }
+		 ~KeyFrame() { }
+		 float time;
+		 std::vector<float> values;
+	 };
 
-// 		}
+	 class AnimChain
+	 {
+	 public:
+		 AnimChain():m_type(KEY_FRAME_INVALID) { }
+		 ~AnimChain() { }
 
-// 		float x;
-// 		float y;
-// 		float z;
-// 	};
+		 myEngine::KEY_FRAME_TYPE getType() const;
 
-// 	class Animation
-// 	{
-// 	public:
-// 		Animation()
-// 		{
+		 void setType(myEngine::KEY_FRAME_TYPE val);
 
-// 		}
-// 		~Animation()
-// 		{
+	 private:
+		 KEY_FRAME_TYPE m_type;
+		 std::vector<KeyFrame> m_keyFrames;
+	 };
 
-// 		}
+	 class Animation
+	 {
+	 public:
+		 Animation()
+		 {
 
-// 	private:
-// 		std::vector<KeyFrame> m_keyFrames;
-// 	};
+		 }
+		 ~Animation()
+		 {
 
-// }
+		 }
+
+	 private:
+		 std::vector<KeyFrame> m_keyFrames;
+	 };
+
+ }
