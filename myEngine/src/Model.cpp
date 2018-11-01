@@ -134,8 +134,14 @@ namespace myEngine
 				{
 					KeyFrame _frame;
 					_frame.time = time_buffer_data[i * time_buffer_stride];
+					size_t _size = _chain.getType();
+					for (size_t j = 0; j < _size; j++)
+					{
+						_frame.values.push_back(value_buffer_data[i * _size + j]);
+					}
 					_chain.addKeyFrame(_frame);
 				}
+				_chain.sortKeyFrames();
 				_anim->addKeyChain(_chain);
 			}
 			_engine->addAnimation(_anim);

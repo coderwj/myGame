@@ -46,9 +46,14 @@ namespace myEngine
 		m_keyFrames.push_back(frame);
 	}
 
+	void KeyChain::sortKeyFrames()
+	{
+		std::sort(m_keyFrames.begin(), m_keyFrames.end());
+	}
+
 	void KeyChain::_update()
 	{
-		/*if (m_keyFrames.size() == 0)
+		if (m_keyFrames.size() == 0)
 		{
 			return;
 		}
@@ -57,6 +62,10 @@ namespace myEngine
 		std::vector<KeyFrame>::iterator right = std::lower_bound(m_keyFrames.begin(), m_keyFrames.end(), KeyFrame(m_time));
 		if (right == m_keyFrames.begin())
 			_value = m_keyFrames.begin()->values;
+		else if (right == m_keyFrames.end())
+		{
+			_value = (m_keyFrames.end() - 1)->values;
+		}
 		else
 		{
 			std::vector<KeyFrame>::iterator left = right - 1;
@@ -68,7 +77,7 @@ namespace myEngine
 				float _result = lerpf(left->values[i], right->values[i], _k);
 				_value.push_back(_result);
 			}
-		}*/
+		}
 	}
 
 	void Animation::tick(int time)

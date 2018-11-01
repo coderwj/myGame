@@ -61,6 +61,7 @@
 		 void setAccType(myEngine::KEY_CHAIN_ACCELERATE val);
 
 		 void addKeyFrame(const KeyFrame& frame);
+		 void sortKeyFrames();
 
 	 private:
 		 void _update();
