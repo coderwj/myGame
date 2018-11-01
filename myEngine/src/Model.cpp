@@ -6,6 +6,7 @@
 #include "Quaternion.h"
 #include "Animation.h"
 #include "Engine.h"
+#include "Node.h"
 
 #ifndef TINYGLTF_IMPLEMENTATION
 #define TINYGLTF_IMPLEMENTATION
@@ -76,26 +77,66 @@ namespace myEngine
 			for (const tinygltf::AnimationChannel& c : a.channels)
 			{
 				int node_index = c.target_node;
-				const tinygltf::AnimationSampler& s = a.samplers[c.sampler];
+				KeyChain _chain;
+				const std::string& path = c.target_path;
+				//"translation", "rotation", "scale", "weights"
+				if (path == "translation")
+				{
+					_chain.setType(KEY_CHAIN_TYPE_V3);
+				}
+				else if (path == "rotation")
+				{
+					_chain.setType(KEY_CHAIN_TYPE_V4);
+				}
+				else if (path == "scale")
+				{
+					_chain.setType(KEY_CHAIN_TYPE_V3);
+				}
+				else if (path == "weights")
+				{
+					//TODO
+				}
 
-				
-				KEY_FRAME_ACCELERATE type = KEY_FRAME_ACCELERATE_LINEAR;
+				const tinygltf::AnimationSampler& s = a.samplers[c.sampler];
 				if (s.interpolation == "LINEAR" || s.interpolation == "")//default: "LINEAR"
 				{
-					type = KEY_FRAME_ACCELERATE_LINEAR;
+					_chain.setAccType(KEY_CHAIN_ACCELERATE_LINEAR);
 				}
 				else if (s.interpolation == "STEP")
 				{
-					type = KEY_FRAME_ACCELERATE_STEP;
+					_chain.setAccType(KEY_CHAIN_ACCELERATE_STEP);
 				}
 				else if (s.interpolation == "CATMULLROMSPLINE")
 				{
-					type = KEY_FRAME_ACCELERATE_CATMULLROMSPLINE;
+					_chain.setAccType(KEY_CHAIN_ACCELERATE_CATMULLROMSPLINE);
 				}
 				else if (s.interpolation == "CUBICSPLINE")
 				{
-					type = KEY_FRAME_ACCELERATE_CUBICSPLINE;
+					_chain.setAccType(KEY_CHAIN_ACCELERATE_CUBICSPLINE);
 				}
+
+				//time accessor
+				const tinygltf::Accessor&	_acc_t	= m_gltf_model->accessors[s.input];
+				const tinygltf::BufferView& _view_t = m_gltf_model->bufferViews[_acc_t.bufferView];
+				const tinygltf::Buffer&		_buf_t	= m_gltf_model->buffers[_view_t.buffer];
+
+				//value accessor
+				const tinygltf::Accessor&	_acc_v	= m_gltf_model->accessors[s.output];
+				const tinygltf::BufferView& _view_v = m_gltf_model->bufferViews[_acc_v.bufferView];
+				const tinygltf::Buffer&		_buf_v	= m_gltf_model->buffers[_view_v.buffer];
+
+				const float* value_buffer_data = reinterpret_cast<const float*>(&_buf_v.data[_view_v.byteOffset + _acc_v.byteOffset]);
+
+
+				const float* time_buffer_data	= reinterpret_cast<const float*>(&_buf_t.data[_view_t.byteOffset + _acc_t.byteOffset]);
+				int			 time_buffer_stride	= _acc_t.ByteStride(_view_t);
+				for (size_t i = 0; i < _acc_t.count; i++)
+				{
+					KeyFrame _frame;
+					_frame.time = time_buffer_data[i * time_buffer_stride];
+					_chain.addKeyFrame(_frame);
+				}
+				_anim->addKeyChain(_chain);
 			}
 			_engine->addAnimation(_anim);
 		}
@@ -118,44 +159,44 @@ namespace myEngine
 			if (_node.skin != -1)
 			{
 				const tinygltf::Skin& _skin = m_gltf_model->skins[_node.skin];
+				Matrix4 _mat;
+				if (_skin.inverseBindMatrices != -1)
+				{
+					const tinygltf::Accessor& _acc = m_gltf_model->accessors[_skin.inverseBindMatrices];
+					//TODO
+				}
+				int _idx = 0;
 				for (int j : _skin.joints)
 				{
 					const tinygltf::Node& _node_joint = m_gltf_model->nodes[j];
 
-					Matrix4 _sm;
+					myEngine::Node* _node = new myEngine::Node();
 					if (!_node_joint.scale.empty())
 					{
-						Vector3 _sv(
+						_node->setScale(Vector3(
 							static_cast<float>(_node_joint.scale[0]),
 							static_cast<float>(_node_joint.scale[1]),
-							static_cast<float>(_node_joint.scale[2]));
-						_sm.initWithScale(_sv);
+							static_cast<float>(_node_joint.scale[2])));
 					}
-
-					Matrix4 _rm;
 					if (!_node_joint.rotation.empty())
 					{
-						Quaternion _rq(
+						_node->setRotate(Quaternion(
 							static_cast<float>(_node_joint.rotation[0]),
 							static_cast<float>(_node_joint.rotation[1]),
 							static_cast<float>(_node_joint.rotation[2]),
-							static_cast<float>(_node_joint.rotation[3]));
-						_rm.initWithRotateQuaternion(_rq);
+							static_cast<float>(_node_joint.rotation[3])));
 					}
-
-					Matrix4 _tm;
 					if (!_node_joint.translation.empty())
 					{
-						Vector3 _tv(
+						_node->setTranslate(Vector3(
 							static_cast<float>(_node_joint.translation[0]),
 							static_cast<float>(_node_joint.translation[1]),
-							static_cast<float>(_node_joint.translation[2]));
-						_tm.initWithTranslate(_tv);
+							static_cast<float>(_node_joint.translation[2])));
 					}
+					m_joint_nodes.push_back(_node);
+					m_joint_idxs.insert(std::make_pair(j, _idx));
+					_idx++;
 
-					Matrix4 _joint_matrix = _sm * _rm * _tm;
-
-					m_joint_matrixs.push_back(_joint_matrix);
 				}
 			}
 		}
@@ -209,11 +250,27 @@ namespace myEngine
 
 	int Model::getJointMatrixsNum() const
 	{
-		return static_cast<int>(m_joint_matrixs.size());
+		return static_cast<int>(m_joint_nodes.size());
 	}
 
 	const Matrix4* Model::getJointMatrixsData() const
 	{
+		std::vector<Matrix4> m_joint_matrixs;
+		m_joint_matrixs.clear();
+		m_joint_matrixs.reserve(m_joint_nodes.size());
+
+		for (const Node* _n : m_joint_nodes)
+		{
+			Matrix4 _sm;
+			_sm.initWithScale(_n->getScale());
+			Matrix4 _rm;
+			_rm.initWithRotateQuaternion(_n->getRotate());
+			Matrix4 _tm;
+			_tm.initWithTranslate(_n->getTranslate());
+
+			Matrix4 _joint_matrix = _sm * _rm * _tm;
+			m_joint_matrixs.push_back(_joint_matrix);
+		}
 		return m_joint_matrixs.data();
 	}
 

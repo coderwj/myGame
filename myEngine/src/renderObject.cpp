@@ -104,7 +104,7 @@ namespace myEngine
 			_dec.add(mapAttributeType(it->first), tinygltf::GetTypeSizeInBytes(_accessor.type), mapAttributeComponentType(_accessor.componentType));
 			if (mapAttributeType(it->first) == bgfx::Attrib::Position)
 				_vertexNum = _accessor.count;
-			if (mapAttributeType(it->first) == bgfx::Attrib::Indices)
+			if (mapAttributeType(it->first) == bgfx::Attrib::Weight)
 				m_material->setHasSkin(true);
 		}
 		_dec.end();
@@ -144,7 +144,7 @@ namespace myEngine
 
 		uint16_t _flag = BGFX_BUFFER_NONE;
 		if (_accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT)
-			_flag |= BGFX_BUFFER_INDEX32;
+			_flag = BGFX_BUFFER_INDEX32;
 		m_ibh = bgfx::createIndexBuffer(bgfx::copy(index_buffer_data, index_buffer_size), _flag);
 	}
 

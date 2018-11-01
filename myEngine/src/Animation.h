@@ -5,21 +5,21 @@
 
  namespace myEngine
  {
-	 enum KEY_FRAME_TYPE
+	 enum KEY_CHAIN_TYPE
 	 {
-		 KEY_FRAME_TYPE_INVALID = 0,
-		 KEY_FRAME_TYPE_V1 = 1,
-		 KEY_FRAME_TYPE_V2,
-		 KEY_FRAME_TYPE_V3,
-		 KEY_FRAME_TYPE_V4
+		 KEY_CHAIN_TYPE_INVALID = 0,
+		 KEY_CHAIN_TYPE_V1 = 1,
+		 KEY_CHAIN_TYPE_V2,
+		 KEY_CHAIN_TYPE_V3,
+		 KEY_CHAIN_TYPE_V4
 	 };
 
-	 enum KEY_FRAME_ACCELERATE
+	 enum KEY_CHAIN_ACCELERATE
 	 {
-		 KEY_FRAME_ACCELERATE_LINEAR,
-		 KEY_FRAME_ACCELERATE_STEP,
-		 KEY_FRAME_ACCELERATE_CATMULLROMSPLINE,
-		 KEY_FRAME_ACCELERATE_CUBICSPLINE
+		 KEY_CHAIN_ACCELERATE_LINEAR,
+		 KEY_CHAIN_ACCELERATE_STEP,
+		 KEY_CHAIN_ACCELERATE_CATMULLROMSPLINE,
+		 KEY_CHAIN_ACCELERATE_CUBICSPLINE
 	 };
 
 	 class KeyFrame
@@ -27,34 +27,38 @@
 	 public:
 		 KeyFrame()
 		 :time(0.f)
-		 ,accType(KEY_FRAME_ACCELERATE_LINEAR)
 		 {
 
 		 }
-		 KeyFrame(float t, KEY_FRAME_ACCELERATE type)
-			 :time(t)
-			 , accType(type)
+		 KeyFrame(float t)
+		 :time(t)
 		 {
 
 		 }
 		 ~KeyFrame() { }
-		 KEY_FRAME_ACCELERATE accType;
 		 float time;
 		 std::vector<float> values;
 	 };
 
-	 class AnimChain
+	 class KeyChain
 	 {
 	 public:
-		 AnimChain():m_type(KEY_FRAME_TYPE_INVALID) { }
-		 ~AnimChain() { }
+		 KeyChain():m_type(KEY_CHAIN_TYPE_INVALID), m_accType(KEY_CHAIN_ACCELERATE_LINEAR) { }
+		 ~KeyChain() { }
 
-		 myEngine::KEY_FRAME_TYPE getType() const;
+		 void tick(int time);
 
-		 void setType(myEngine::KEY_FRAME_TYPE val);
+		 myEngine::KEY_CHAIN_TYPE getType() const;
+		 myEngine::KEY_CHAIN_ACCELERATE getAccType() const;
+
+		 void setType(myEngine::KEY_CHAIN_TYPE val);
+		 void setAccType(myEngine::KEY_CHAIN_ACCELERATE val);
+
+		 void addKeyFrame(const KeyFrame& frame);
 
 	 private:
-		 KEY_FRAME_TYPE m_type;
+		 KEY_CHAIN_TYPE m_type;
+		 KEY_CHAIN_ACCELERATE m_accType;
 		 std::vector<KeyFrame> m_keyFrames;
 	 };
 
@@ -72,8 +76,10 @@
 
 		 void tick(int time);
 
+		 void addKeyChain(const KeyChain& chain);
+
 	 private:
-		 std::vector<KeyFrame> m_keyFrames;
+		 std::vector<KeyChain> m_keyChains;
 	 };
 
  }

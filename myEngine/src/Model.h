@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <map>
 
 #include "Matrix4.h"
 
@@ -16,6 +17,7 @@ namespace tinygltf
 
 namespace myEngine
 {
+	class Node;
 	class RenderObject;
 	class Model
 	{
@@ -49,6 +51,8 @@ namespace myEngine
 		std::vector<bgfx::TextureHandle> m_textrue_handles;
 		std::vector<RenderObject*> m_render_objects;
 		std::vector<Matrix4> m_joint_matrixs;
+		std::vector<Node*> m_joint_nodes;
+		std::map<int, int> m_joint_idxs; //k: gltf file node idx, v: m_joint_nodes vector idx.
 		float  m_scale;
 	};
 }
