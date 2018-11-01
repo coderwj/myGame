@@ -51,6 +51,11 @@ namespace myEngine
 	{
 		return f2 - f1 <= delta;
 	}
+
+	inline float lerpf(float from, float to, float k)
+	{
+		return from + k * (to - from);
+	}
 }
 
 #endif //__MATHUTIL_H__

@@ -36,6 +36,12 @@
 
 		 }
 		 ~KeyFrame() { }
+
+		 friend  bool operator < (const KeyFrame& k1, const KeyFrame& k2)
+		 {
+			 return k1.time < k2.time;
+		 }
+
 		 float time;
 		 std::vector<float> values;
 	 };
@@ -43,7 +49,7 @@
 	 class KeyChain
 	 {
 	 public:
-		 KeyChain():m_type(KEY_CHAIN_TYPE_INVALID), m_accType(KEY_CHAIN_ACCELERATE_LINEAR) { }
+		 KeyChain();
 		 ~KeyChain() { }
 
 		 void tick(int time);
@@ -57,9 +63,14 @@
 		 void addKeyFrame(const KeyFrame& frame);
 
 	 private:
+		 void _update();
+
+	 private:
 		 KEY_CHAIN_TYPE m_type;
 		 KEY_CHAIN_ACCELERATE m_accType;
 		 std::vector<KeyFrame> m_keyFrames;
+		 float m_time;
+		 bool m_loop;
 	 };
 
 	 class Animation
