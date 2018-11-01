@@ -32,7 +32,7 @@ namespace myEngine
 		bgfx::TextureHandle getTextureHandle(int index);
 
 		int getJointMatrixsNum() const;
-		const Matrix4* getJointMatrixsData() const;
+		const Matrix4* getJointMatrixsData();
 
 		float getScale() const;
 

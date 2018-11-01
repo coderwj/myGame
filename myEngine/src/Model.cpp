@@ -253,9 +253,8 @@ namespace myEngine
 		return static_cast<int>(m_joint_nodes.size());
 	}
 
-	const Matrix4* Model::getJointMatrixsData() const
+	const Matrix4* Model::getJointMatrixsData()
 	{
-		std::vector<Matrix4> m_joint_matrixs;
 		m_joint_matrixs.clear();
 		m_joint_matrixs.reserve(m_joint_nodes.size());
 
