@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "MathUtil.h"
+#include "Node.h"
 
 namespace myEngine
 {
@@ -10,7 +11,8 @@ namespace myEngine
 	:m_type(KEY_CHAIN_TYPE_INVALID)
 	,m_accType(KEY_CHAIN_ACCELERATE_LINEAR)
 	,m_time(0.f)
-	,m_loop(false)
+	,m_loop(true)
+	,m_target(nullptr)
 	{
 
 	}
@@ -31,14 +33,35 @@ namespace myEngine
 		return m_accType;
 	}
 
-	void KeyChain::setType(myEngine::KEY_CHAIN_TYPE val)
+	const Node * KeyChain::getTarget() const
 	{
-		m_type = val;
+		return m_target;
 	}
 
-	void KeyChain::setAccType(myEngine::KEY_CHAIN_ACCELERATE val)
+	KEY_CHAIN_TARGET KeyChain::getTargetType() const
+	{
+		return m_targetType;
+	}
+
+	void KeyChain::setType(KEY_CHAIN_TYPE val)
+	{
+		m_type = val;
+		m_values.reserve(val);
+	}
+
+	void KeyChain::setAccType(KEY_CHAIN_ACCELERATE val)
 	{
 		m_accType = val;
+	}
+
+	void KeyChain::setTarget(Node * val)
+	{
+		m_target = val;
+	}
+
+	void KeyChain::setTargetType(KEY_CHAIN_TARGET val)
+	{
+		m_targetType = val;
 	}
 
 	void KeyChain::addKeyFrame(const KeyFrame& frame)
@@ -57,14 +80,18 @@ namespace myEngine
 		{
 			return;
 		}
-		std::vector<float> _value;
-		_value.reserve(m_keyFrames.begin()->values.size());
+		m_values.clear();
 		std::vector<KeyFrame>::iterator right = std::lower_bound(m_keyFrames.begin(), m_keyFrames.end(), KeyFrame(m_time));
 		if (right == m_keyFrames.begin())
-			_value = m_keyFrames.begin()->values;
+			m_values = m_keyFrames.begin()->values;
 		else if (right == m_keyFrames.end())
 		{
-			_value = (m_keyFrames.end() - 1)->values;
+			m_values = (m_keyFrames.end() - 1)->values;
+			if (m_loop)
+			{
+				//reStart
+				m_time = 0.f;
+			}
 		}
 		else
 		{
@@ -75,7 +102,24 @@ namespace myEngine
 			for (size_t i = 0; i < left->values.size(); i++)
 			{
 				float _result = lerpf(left->values[i], right->values[i], _k);
-				_value.push_back(_result);
+				m_values.push_back(_result);
+			}
+		}
+		if (nullptr != m_target)
+		{
+			switch (m_targetType)
+			{
+			case myEngine::KEY_CHAIN_TARGET_SCALE:
+				m_target->setScale(Vector3(m_values[0], m_values[1], m_values[2]));
+				break;
+			case myEngine::KEY_CHAIN_TARGET_ROTATE:
+				m_target->setRotate(Quaternion(m_values[0], m_values[1], m_values[2], m_values[3]));
+				break;
+			case myEngine::KEY_CHAIN_TARGET_TRANSLATE:
+				m_target->setTranslate(Vector3(m_values[0], m_values[1], m_values[2]));
+				break;
+			default:
+				break;
 			}
 		}
 	}

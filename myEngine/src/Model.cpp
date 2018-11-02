@@ -83,14 +83,17 @@ namespace myEngine
 				if (path == "translation")
 				{
 					_chain.setType(KEY_CHAIN_TYPE_V3);
+					_chain.setTargetType(KEY_CHAIN_TARGET_TRANSLATE);
 				}
 				else if (path == "rotation")
 				{
 					_chain.setType(KEY_CHAIN_TYPE_V4);
+					_chain.setTargetType(KEY_CHAIN_TARGET_ROTATE);
 				}
 				else if (path == "scale")
 				{
 					_chain.setType(KEY_CHAIN_TYPE_V3);
+					_chain.setTargetType(KEY_CHAIN_TARGET_SCALE);
 				}
 				else if (path == "weights")
 				{
@@ -141,6 +144,7 @@ namespace myEngine
 					}
 					_chain.addKeyFrame(_frame);
 				}
+				_chain.setTarget(m_joint_nodes[m_joint_idxs[node_index]]);
 				_chain.sortKeyFrames();
 				_anim->addKeyChain(_chain);
 			}
