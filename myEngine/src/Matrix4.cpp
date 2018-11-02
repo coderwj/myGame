@@ -7,6 +7,10 @@
 
 namespace myEngine
 {
+	Matrix4::Matrix4(const float * data)
+	{
+		memcpy(this, data, sizeof(float) * 16);
+	}
 	Matrix4::Matrix4(const Matrix4& m)
 	{
 		memcpy(this, &m, sizeof(float) * 16);

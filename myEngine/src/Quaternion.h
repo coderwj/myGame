@@ -13,6 +13,8 @@ namespace myEngine
 		float y;
 		float z;
 
+		static const Quaternion IDENTITY;
+
 		Quaternion();
 		Quaternion(float x, float y, float z, float w);
 		~Quaternion() {}

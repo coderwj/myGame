@@ -8,6 +8,8 @@
 
 namespace myEngine
 {
+	const Quaternion Quaternion::IDENTITY(1.f, 0.f, 0.f, 0.f);
+
 	Quaternion::Quaternion()
 	{
 		identity();

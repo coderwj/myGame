@@ -7,6 +7,7 @@
 #include <map>
 
 #include "Matrix4.h"
+#include "Vector3.h"
 
 #include "bgfx/bgfx.h"
 
@@ -19,6 +20,21 @@ namespace myEngine
 {
 	class Node;
 	class RenderObject;
+
+	class Skeleton
+	{
+	public:
+		Skeleton()
+		:m_root_idx(0)
+		{
+
+		}
+		~Skeleton() { }
+		int m_root_idx;
+		std::vector<int> m_joint_idxs;
+		Matrix4 m_mat;
+	};
+
 	class Model
 	{
 	public:	
@@ -42,18 +58,28 @@ namespace myEngine
 	
 	private:
 
-		void _loadNodeTreeMesh(int node_id);
+		void _loadTextures();
 
-		void _createTextureHandle();
+		void _loadNodes();
+		void _loadNodeRecursive(int node_id, Node* parent);
+
+		void _loadAnimations();
+
+		void _updateNodeTransformToChilren(int node_id, const Vector3& _scale, const Quaternion& _rotate, const Vector3& _translate);
 
 	private:
 		tinygltf::Model* m_gltf_model;
 		std::vector<bgfx::TextureHandle> m_textrue_handles;
 		std::vector<RenderObject*> m_render_objects;
+
 		std::vector<Matrix4> m_joint_matrixs;
-		std::vector<Node*> m_joint_nodes;
-		std::map<int, int> m_joint_idxs; //k: gltf file node idx, v: m_joint_nodes vector idx.
+
+		std::vector<int>	m_roots;
+		std::vector<Node*> m_nodes;
+		std::map<int, Node*> m_node_map; //k: gltf file node idx, v: Node* in m_nodes vector.
 		float  m_scale;
+
+		Skeleton* m_skeleton;
 	};
 }
 

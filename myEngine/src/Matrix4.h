@@ -15,6 +15,7 @@ namespace myEngine
 	    float m41, m42, m43, m44;
 	
 	    Matrix4() { identity(); }
+		Matrix4(const float* data);
 	    Matrix4(const Matrix4& m);
 		~Matrix4() {};
 	
