@@ -17,7 +17,7 @@ namespace myEngine
 
 	}
 
-	void KeyChain::tick(int time)
+	void KeyChain::tick(float time)
 	{
 		m_time += time / 1000.f;
 		_update();
@@ -128,7 +128,7 @@ namespace myEngine
 	{
 		for (KeyChain& c : m_keyChains)
 		{
-			c.tick(time);
+			c.tick(time * m_speed);
 		}
 	}
 

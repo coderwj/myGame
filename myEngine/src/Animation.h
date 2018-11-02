@@ -61,7 +61,7 @@
 		 KeyChain();
 		 ~KeyChain() { }
 
-		 void tick(int time);
+		 void tick(float time);
 
 		 KEY_CHAIN_TYPE getType() const;
 		 KEY_CHAIN_ACCELERATE getAccType() const;
@@ -97,6 +97,7 @@
 	 {
 	 public:
 		 Animation()
+		 :m_speed(0.2f)
 		 {
 
 		 }
@@ -111,6 +112,8 @@
 
 	 private:
 		 std::vector<KeyChain> m_keyChains;
+
+		 float m_speed;
 	 };
 
  }

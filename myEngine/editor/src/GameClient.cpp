@@ -130,7 +130,7 @@ namespace myGame
 
 		imguiCreate(20, NULL);
 	
-	    m_mainCharacter = Character::Create("model_5");
+	    m_mainCharacter = Character::Create("model_4");
 	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
 
 		m_cameraOption = new CameraOption();
