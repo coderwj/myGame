@@ -274,7 +274,7 @@ namespace myEngine
 					}
 					_chain.addKeyFrame(_frame);
 				}
-				_chain.setTarget(m_joint_nodes[m_joint_idxs[node_index]]);
+				_chain.setTarget(m_node_map[node_index]);
 				_chain.sortKeyFrames();
 				_anim->addKeyChain(_chain);
 			}
@@ -293,21 +293,19 @@ namespace myEngine
 
 	int Model::getJointMatrixsNum() const
 	{
-		return static_cast<int>(m_joint_nodes.size());
+		return static_cast<int>(m_skeleton->m_joint_idxs.size());
 	}
 
 	const Matrix4* Model::getJointMatrixsData()
 	{
 		m_joint_matrixs.clear();
-		m_joint_matrixs.reserve(m_joint_nodes.size());
+		m_joint_matrixs.reserve(m_skeleton->m_joint_idxs.size());
 
-		for (Node* n : m_skeletons)
-		{
-			_updateNodeTransformToChilren(n, Vector3::ONE, Quaternion::IDENTITY, Vector3::ZERO);
-		}
+		_updateNodeTransformToChilren(m_skeleton->m_root_idx, Vector3::ONE, Quaternion::IDENTITY, Vector3::ZERO);
 
-		for (const Node* _n : m_joint_nodes)
+		for (int idx : m_skeleton->m_joint_idxs)
 		{
+			Node* _n = m_node_map[idx];
 			Matrix4 _sm;
 			_sm.initWithScale(_n->getScale());
 			Matrix4 _rm;
@@ -323,9 +321,7 @@ namespace myEngine
 
 	void Model::_updateNodeTransformToChilren(int node_id, const Vector3& _scale, const Quaternion& _rotate, const Vector3& _translate)
 	{
-		const tinygltf::Node& _node = m_gltf_model->nodes[node_id];
-		Node* _n = 
-		if (_node.children)
+		//Node* _n = m_node_map[node_id];
 	}
 
 	void Model::draw()
