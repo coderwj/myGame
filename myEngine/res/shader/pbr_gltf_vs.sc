@@ -21,9 +21,11 @@ void main()
                  a_weight.w * u_JointMatrixs[int(a_indices.w)];
   mat4 modelMatrix = u_ModelMatrix * skinMat;
   mat4 normalMatrix = u_NormalMatrix * skinMat;
+  mat4 MVPMatrix = u_MVPMatrix * skinMat;
 #else // !HAS_SKIN
   mat4 modelMatrix = u_ModelMatrix;
   mat4 normalMatrix = u_NormalMatrix;
+  mat4 MVPMatrix = u_MVPMatrix;
 #endif
 
   vec4 pos = mul(modelMatrix, vec4(a_position, 1.0));
@@ -48,6 +50,6 @@ void main()
   v_UV = vec2(0.0, 0.0);
 #endif
 
-  gl_Position = mul(u_MVPMatrix, vec4(a_position, 1.0)); // needs w for proper perspective correction
+  gl_Position = mul(MVPMatrix, vec4(a_position, 1.0)); // needs w for proper perspective correction
   
 }
