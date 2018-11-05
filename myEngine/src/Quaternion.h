@@ -41,6 +41,8 @@ namespace myEngine
 		Vector3 getRotationAxis() const;
 
 		void rotateVec3(Vector3& outVec, const Vector3& vec) const;
+
+		Vector3 operator* (const Vector3& v) const;
 	
 	};
 	extern float dotProduct(const Quaternion &a, const Quaternion &b);

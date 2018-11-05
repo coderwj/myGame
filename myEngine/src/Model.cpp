@@ -301,7 +301,7 @@ namespace myEngine
 		m_joint_matrixs.clear();
 		m_joint_matrixs.reserve(m_skeleton->m_joint_idxs.size());
 
-		_updateNodeTransformToChilren(m_skeleton->m_root_idx, Vector3::ONE, Quaternion::IDENTITY, Vector3::ZERO);
+		_updateNodeTransformToChilren(m_node_map[m_skeleton->m_root_idx]);
 
 		for (int idx : m_skeleton->m_joint_idxs)
 		{
@@ -319,9 +319,22 @@ namespace myEngine
 		return m_joint_matrixs.data();
 	}
 
-	void Model::_updateNodeTransformToChilren(int node_id, const Vector3& _scale, const Quaternion& _rotate, const Vector3& _translate)
+	void Model::_updateNodeTransformToChilren(Node* parent)
 	{
-		//Node* _n = m_node_map[node_id];
+		const Vector3& _scale_p = parent->getScale();
+		const Quaternion& _rotate_p = parent->getRotate();
+		const Vector3& _translate_p = parent->getTranslate();
+		std::vector<Node*> children = parent->getChildren();
+		for (Node* child : children)
+		{
+			const Vector3& _scale = child->getScale();
+			const Quaternion& _rotate = child->getRotate();
+			const Vector3& _translate = child->getTranslate();
+			child->setScale(_scale_p * _scale);
+			child->setRotate(_rotate_p * _rotate);
+			child->setTranslate(_rotate * (_scale * _translate_p) + _translate);
+			_updateNodeTransformToChilren(child);
+		}
 	}
 
 	void Model::draw()

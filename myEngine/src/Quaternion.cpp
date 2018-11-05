@@ -151,6 +151,19 @@ namespace myEngine
 		outVec = vec + uv + uuv;
 	}
 
+	Vector3 Quaternion::operator* (const Vector3& v) const
+	{
+		// nVidia SDK implementation
+		Vector3 uv, uuv;
+		Vector3 qvec(x, y, z);
+		uv = qvec.cross(v);
+		uuv = qvec.cross(uv);
+		uv *= 2.0f * w;
+		uuv *= 2.0f;
+
+		return v + uv + uuv;
+	}
+
 	float dotProduct(const Quaternion &a, const Quaternion &b) {
 		return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
 	}

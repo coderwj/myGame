@@ -85,10 +85,10 @@ namespace myEngine
 	    Vector3 r = Vector3(right).normalize();
 	    Vector3 u = (crossVector(r, f)).normalize();
 	
-	    m11 = r.x;          m12 = u.x;          m13 = -f.x;        m14 = 0.0f;
-	    m21 = r.y;          m22 = u.y;          m23 = -f.y;        m24 = 0.0f;
-	    m31 = r.z;          m32 = u.z;          m33 = -f.z;        m34 = 0.0f;
-	    m41 = -(r * eye);   m42 = -(u * eye);   m43 = (f * eye);   m44 = 1.0f;
+	    m11 = r.x;				m12 = u.x;				m13 = -f.x;			m14 = 0.0f;
+	    m21 = r.y;				m22 = u.y;				m23 = -f.y;			m24 = 0.0f;
+	    m31 = r.z;				m32 = u.z;				m33 = -f.z;			m34 = 0.0f;
+	    m41 = -(r.dot(eye));	m42 = -(u.dot(eye));	m43 = (f.dot(eye)); m44 = 1.0f;
 	}
 	
 	void Matrix4::initWithPerspective(float fovy, float aspect, float zN, float zF)

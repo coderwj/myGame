@@ -65,7 +65,7 @@ namespace myEngine
 
 		void _loadAnimations();
 
-		void _updateNodeTransformToChilren(int node_id, const Vector3& _scale, const Quaternion& _rotate, const Vector3& _translate);
+		void _updateNodeTransformToChilren(Node* parent);
 
 	private:
 		tinygltf::Model* m_gltf_model;
