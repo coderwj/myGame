@@ -332,12 +332,16 @@ namespace myEngine
 		std::vector<Node*> children = parent->getChildren();
 		for (Node* child : children)
 		{
-			Vector3 _scale = child->getScale();
-			Quaternion _rotate = child->getRotate();
-			Vector3 _translate = child->getTranslate();
-			child->setScale(_scale_p * _scale);
-			child->setRotate(_rotate_p * _rotate);
-			child->setTranslate(_rotate_p * (_scale_p * _translate) + _translate_p);
+			if (child->getDirty())
+			{
+				Vector3 _scale = child->getScale();
+				Quaternion _rotate = child->getRotate();
+				Vector3 _translate = child->getTranslate();
+				child->setScale(_scale_p * _scale);
+				child->setRotate(_rotate_p * _rotate);
+				child->setTranslate(_rotate_p * (_scale_p * _translate) + _translate_p);
+				child->setDirty(false);
+			}
 			_updateNodeTransformToChilren(child);
 		}
 	}
@@ -351,8 +355,12 @@ namespace myEngine
 		{
 			_renderer->pushRenderObject(r);
 		}
-		if(m_skeleton)
-			_updateNodeTransformToChilren(m_node_map[m_skeleton->m_root_idx]);
+		int _id = m_gltf_model->defaultScene;
+		const tinygltf::Scene& _scene = m_gltf_model->scenes[_id];
+		for (int n : _scene.nodes)
+		{
+			_updateNodeTransformToChilren(m_node_map[n]);
+		}
 	}
 
 	float Model::getScale() const
