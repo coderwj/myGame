@@ -178,11 +178,11 @@ namespace myEngine
 					const tinygltf::Buffer&		_buf	= m_gltf_model->buffers[_view.buffer];
 					const float* _data = reinterpret_cast<const float*>(&_buf.data[_view.byteOffset + _acc.byteOffset]);
 					m_skeleton->m_joint_inverse_mats.reserve(m_skeleton->m_joint_idxs.size());
-					for (int i = 0; i < m_skeleton->m_joint_idxs.size(); i++)
+					for (size_t i = 0; i < m_skeleton->m_joint_idxs.size(); i++)
 					{
 						Matrix4 _mat(_data);
-						_data += 16;
 						m_skeleton->m_joint_inverse_mats.push_back(_mat);
+						_data += 16;
 					}
 				}
 			}
@@ -307,10 +307,9 @@ namespace myEngine
 		m_joint_matrixs.clear();
 		m_joint_matrixs.reserve(m_skeleton->m_joint_idxs.size());
 
-		_updateNodeTransformToChilren(m_node_map[m_skeleton->m_root_idx]);
-		int i = 0;
-		for (int idx : m_skeleton->m_joint_idxs)
+		for (size_t i = 0; i < m_skeleton->m_joint_idxs.size(); i++)
 		{
+			int idx = m_skeleton->m_joint_idxs[i];
 			Node* _n = m_node_map[idx];
 			Matrix4 _sm;
 			_sm.initWithScale(_n->getScale());
@@ -321,7 +320,6 @@ namespace myEngine
 
 			Matrix4 _joint_matrix = _sm * _rm * _tm;
 			m_joint_matrixs.push_back(m_skeleton->m_joint_inverse_mats[i] * _joint_matrix);
-			i++;
 		}
 		return m_joint_matrixs.data();
 	}
@@ -334,12 +332,12 @@ namespace myEngine
 		std::vector<Node*> children = parent->getChildren();
 		for (Node* child : children)
 		{
-			const Vector3& _scale = child->getScale();
-			const Quaternion& _rotate = child->getRotate();
-			const Vector3& _translate = child->getTranslate();
+			Vector3 _scale = child->getScale();
+			Quaternion _rotate = child->getRotate();
+			Vector3 _translate = child->getTranslate();
 			child->setScale(_scale_p * _scale);
 			child->setRotate(_rotate_p * _rotate);
-			child->setTranslate(_rotate * (_scale * _translate_p) + _translate);
+			child->setTranslate(_rotate_p * (_scale_p * _translate) + _translate_p);
 			_updateNodeTransformToChilren(child);
 		}
 	}
@@ -353,6 +351,8 @@ namespace myEngine
 		{
 			_renderer->pushRenderObject(r);
 		}
+		if(m_skeleton)
+			_updateNodeTransformToChilren(m_node_map[m_skeleton->m_root_idx]);
 	}
 
 	float Model::getScale() const
