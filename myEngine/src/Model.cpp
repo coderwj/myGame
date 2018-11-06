@@ -168,17 +168,23 @@ namespace myEngine
 				const tinygltf::Skin& _skin = m_gltf_model->skins[_node.skin];
 				assert(nullptr == m_skeleton);
 				m_skeleton = new Skeleton();
+				m_skeleton->m_root_idx = _skin.skeleton;
+				m_skeleton->m_joint_idxs = _skin.joints;
+
 				if (_skin.inverseBindMatrices != -1)
 				{
 					const tinygltf::Accessor&	_acc	= m_gltf_model->accessors[_skin.inverseBindMatrices];
 					const tinygltf::BufferView& _view	= m_gltf_model->bufferViews[_acc.bufferView];
 					const tinygltf::Buffer&		_buf	= m_gltf_model->buffers[_view.buffer];
 					const float* _data = reinterpret_cast<const float*>(&_buf.data[_view.byteOffset + _acc.byteOffset]);
-
-					m_skeleton->m_mat = Matrix4(_data);
+					m_skeleton->m_joint_inverse_mats.reserve(m_skeleton->m_joint_idxs.size());
+					for (int i = 0; i < m_skeleton->m_joint_idxs.size(); i++)
+					{
+						Matrix4 _mat(_data);
+						_data += 16;
+						m_skeleton->m_joint_inverse_mats.push_back(_mat);
+					}
 				}
-				m_skeleton->m_root_idx = _skin.skeleton;
-				m_skeleton->m_joint_idxs = _skin.joints;
 			}
 		}
 
@@ -302,7 +308,7 @@ namespace myEngine
 		m_joint_matrixs.reserve(m_skeleton->m_joint_idxs.size());
 
 		_updateNodeTransformToChilren(m_node_map[m_skeleton->m_root_idx]);
-
+		int i = 0;
 		for (int idx : m_skeleton->m_joint_idxs)
 		{
 			Node* _n = m_node_map[idx];
@@ -314,7 +320,8 @@ namespace myEngine
 			_tm.initWithTranslate(_n->getTranslate());
 
 			Matrix4 _joint_matrix = _sm * _rm * _tm;
-			m_joint_matrixs.push_back(_joint_matrix);
+			m_joint_matrixs.push_back(m_skeleton->m_joint_inverse_mats[i] * _joint_matrix);
+			i++;
 		}
 		return m_joint_matrixs.data();
 	}

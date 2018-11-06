@@ -32,7 +32,7 @@ namespace myEngine
 		~Skeleton() { }
 		int m_root_idx;
 		std::vector<int> m_joint_idxs;
-		Matrix4 m_mat;
+		std::vector<Matrix4> m_joint_inverse_mats;
 	};
 
 	class Model
