@@ -7,6 +7,7 @@
  {
 	 enum KEY_CHAIN_TARGET
 	 {
+		 KEY_CHAIN_TARGET_INVALID,
 		 KEY_CHAIN_TARGET_SCALE,
 		 KEY_CHAIN_TARGET_ROTATE,
 		 KEY_CHAIN_TARGET_TRANSLATE
@@ -97,7 +98,7 @@
 	 {
 	 public:
 		 Animation()
-		 :m_speed(0.2f)
+		 :m_speed(0.5f)
 		 {
 
 		 }

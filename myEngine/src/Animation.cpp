@@ -13,6 +13,7 @@ namespace myEngine
 	,m_time(0.f)
 	,m_loop(true)
 	,m_target(nullptr)
+	,m_targetType(KEY_CHAIN_TARGET_INVALID)
 	{
 
 	}
