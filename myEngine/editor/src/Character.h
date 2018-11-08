@@ -3,7 +3,6 @@
 
 #include "Vector3.h"
 #include <string>
-using namespace std;
 using namespace myEngine;
 
 namespace myEngine
@@ -19,7 +18,7 @@ namespace myGame
 	public:
 		Character();
 		~Character();
-		static Character * Create(string modelName);
+		static Character * Create(std::string modelName);
 		void setPosition(Vector3 pos){m_position = pos;}
 		Vector3 getPosition(){return m_position;}
 		void setOrientation(Vector3 ori){m_orientation = ori;}
@@ -29,15 +28,15 @@ namespace myGame
 	private:
 		Vector3 m_position;//pos in world
 		Vector3 m_orientation;// ori in world
-		string m_modelName;
+		std::string m_modelName;
 	
-		Model * m_model;
+		int m_modelId;
 	
 		float m_scale;
 		float m_theta;
 		Vector3 m_rotateVec;
 	
-		bool init(string modelName);
+		bool init(std::string modelName);
 	};
 }
 

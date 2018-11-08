@@ -2,11 +2,13 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 namespace myEngine
 {
 	class Camera;
 	class Renderer;
+	class Model;
 	class Animation;
 
 	class Engine
@@ -29,7 +31,9 @@ namespace myEngine
 		myEngine::Camera* getMaincCamera() const { return m_maincCamera; }
 		void setMaincCamera(myEngine::Camera* val) { m_maincCamera = val; }
 
-		void addAnimation(Animation* anim);
+		int createModel(std::string path);
+		void destroyModelById(int id);
+		Model* getModelById(int id);
 
 	private:
 		static Engine* e;
@@ -41,7 +45,8 @@ namespace myEngine
 
 		Renderer* m_renderer;
 
-		std::vector<Animation*> m_animations;
+		std::unordered_map<int, Model*> m_model_map;
+
 	};
 
 }

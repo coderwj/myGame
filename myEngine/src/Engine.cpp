@@ -2,7 +2,7 @@
 
 #include "Camera.h"
 #include "Renderer.h"
-#include "Animation.h"
+#include "Model.h"
 
 namespace myEngine
 {
@@ -80,9 +80,12 @@ namespace myEngine
 	
 	void Engine::tick(int delta)
 	{
-		for (Animation * anim : m_animations)
+		for (std::pair<int, Model*> _pair : m_model_map)
 		{
-			anim->tick(delta);
+			if (nullptr != _pair.second)
+			{
+				_pair.second->tick(delta);
+			}
 		}
 	}
 	void Engine::render()
@@ -90,9 +93,42 @@ namespace myEngine
 		m_renderer->render();
 	}
 
-	void Engine::addAnimation(Animation * anim)
+	int Engine::createModel(std::string path)
 	{
-		m_animations.push_back(anim);
+		Model* _model = new Model();
+		if (nullptr == _model)
+		{
+			return -1;
+		}
+		_model->load(path);
+		static int idx = 0;
+		m_model_map.insert(std::make_pair(idx, _model));
+		return idx++;
+	}
+
+	void Engine::destroyModelById(int id)
+	{
+		std::unordered_map<int, Model*>::iterator it = m_model_map.find(id);
+		if (it != m_model_map.end())
+		{
+			Model* m = it->second;
+			if (m)
+				delete m;
+			m_model_map.erase(id);
+		}
+	}
+
+	Model * Engine::getModelById(int id)
+	{
+		std::unordered_map<int, Model*>::iterator it = m_model_map.find(id);
+		if (it != m_model_map.end())
+		{
+			return it->second;
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
 }

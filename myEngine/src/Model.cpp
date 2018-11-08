@@ -201,15 +201,10 @@ namespace myEngine
 
 	void Model::_loadAnimations()
 	{
-		Engine* _engine = Engine::getInstance();
-		if (nullptr == _engine)
-		{
-			return;
-		}
-
 		for (const tinygltf::Animation& a : m_gltf_model->animations)
 		{
 			Animation *_anim = new Animation();
+			m_animations.push_back(_anim);
 			for (const tinygltf::AnimationChannel& c : a.channels)
 			{
 				int node_index = c.target_node;
@@ -258,21 +253,20 @@ namespace myEngine
 				const tinygltf::Accessor&	_acc_t = m_gltf_model->accessors[s.input];
 				const tinygltf::BufferView& _view_t = m_gltf_model->bufferViews[_acc_t.bufferView];
 				const tinygltf::Buffer&		_buf_t = m_gltf_model->buffers[_view_t.buffer];
+				const float* time_buffer_data = reinterpret_cast<const float*>(&_buf_t.data[_view_t.byteOffset + _acc_t.byteOffset]);
 
 				//value accessor
 				const tinygltf::Accessor&	_acc_v = m_gltf_model->accessors[s.output];
 				const tinygltf::BufferView& _view_v = m_gltf_model->bufferViews[_acc_v.bufferView];
 				const tinygltf::Buffer&		_buf_v = m_gltf_model->buffers[_view_v.buffer];
-
 				const float* value_buffer_data = reinterpret_cast<const float*>(&_buf_v.data[_view_v.byteOffset + _acc_v.byteOffset]);
 
+				//TODO: Animation time and value current are only float data. not support other types.
 
-				const float* time_buffer_data = reinterpret_cast<const float*>(&_buf_t.data[_view_t.byteOffset + _acc_t.byteOffset]);
-				int			 time_buffer_stride = _acc_t.ByteStride(_view_t);
 				for (size_t i = 0; i < _acc_t.count; i++)
 				{
 					KeyFrame _frame;
-					_frame.time = time_buffer_data[i * time_buffer_stride];
+					_frame.time = time_buffer_data[i];
 					size_t _size = _chain.getType();
 					for (size_t j = 0; j < _size; j++)
 					{
@@ -284,7 +278,6 @@ namespace myEngine
 				_chain.sortKeyFrames();
 				_anim->addKeyChain(_chain);
 			}
-			_engine->addAnimation(_anim);
 		}
 	}
 
@@ -326,20 +319,23 @@ namespace myEngine
 
 	void Model::_updateNodeTransformToChilren(Node* parent)
 	{
-		const Vector3& _scale_p = parent->getScale();
-		const Quaternion& _rotate_p = parent->getRotate();
-		const Vector3& _translate_p = parent->getTranslate();
 		std::vector<Node*> children = parent->getChildren();
 		for (Node* child : children)
 		{
 			if (child->getDirty())
 			{
+				const Vector3& _scale_p = parent->getScale();
+				const Quaternion& _rotate_p = parent->getRotate();
+				const Vector3& _translate_p = parent->getTranslate();
+
 				Vector3 _scale = child->getScale();
 				Quaternion _rotate = child->getRotate();
 				Vector3 _translate = child->getTranslate();
+
 				child->setScale(_scale_p * _scale);
 				child->setRotate(_rotate_p * _rotate);
 				child->setTranslate(_rotate_p * (_scale_p * _translate) + _translate_p);
+
 				child->setDirty(false);
 			}
 			_updateNodeTransformToChilren(child);
@@ -354,12 +350,6 @@ namespace myEngine
 		for (const RenderObject* r : m_render_objects)
 		{
 			_renderer->pushRenderObject(r);
-		}
-		int _id = m_gltf_model->defaultScene;
-		const tinygltf::Scene& _scene = m_gltf_model->scenes[_id];
-		for (int n : _scene.nodes)
-		{
-			_updateNodeTransformToChilren(m_node_map[n]);
 		}
 	}
 
@@ -380,6 +370,21 @@ namespace myEngine
 		Matrix4 _rotate_mat;
 		Matrix4 _trans_mat;
 		return _scale_mat * _rotate_mat * _trans_mat;
+	}
+
+	void Model::tick(int delta)
+	{
+		for (Animation * _anim : m_animations)
+		{
+			_anim->tick(delta);
+		}
+		int _id = m_gltf_model->defaultScene;
+		const tinygltf::Scene& _scene = m_gltf_model->scenes[_id];
+		for (int n : _scene.nodes)
+		{
+			_updateNodeTransformToChilren(m_node_map[n]);
+		}
+		draw();
 	}
 
 }

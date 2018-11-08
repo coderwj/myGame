@@ -8,14 +8,13 @@
 
 #include "tinyxml2.h"
 
-using namespace std;
 using namespace myEngine;
 
 namespace myGame
 {
 	Character::Character():
 	m_modelName(""),
-	m_model(NULL),
+	m_modelId(-1),
 	m_scale(1.0f),
 	m_theta(0.0f)
 	{
@@ -26,18 +25,18 @@ namespace myGame
 	
 	Character::~Character()
 	{
-	    if(m_model)
-	    {
-	        delete(m_model);
-	        m_model = NULL;
-	    }
+		Engine* _engine = Engine::getInstance();
+		if (_engine)
+		{
+			_engine->destroyModelById(m_modelId);
+		}
 	}
 	
-	bool Character::init(string modelName)
+	bool Character::init(std::string modelName)
 	{
-	    string model_str = "";
-	    string material_name = "";
-	    string model_config_path = Config::model_path + "modelConfig.xml";
+		std::string model_str = "";
+		std::string material_name = "";
+		std::string model_config_path = Config::model_path + "modelConfig.xml";
 	    tinyxml2::XMLDocument character_model_doc;
 	    character_model_doc.LoadFile(model_config_path.c_str());
 	    tinyxml2::XMLElement* character_model_element =
@@ -62,14 +61,23 @@ namespace myGame
 	    {
 	        return false;
 	    }
-	    m_model = new Model();
-		m_model->load(Config::model_path + model_str);
-		m_model->setScale(m_scale);
+
+		Engine* _engine = Engine::getInstance();
+		if (nullptr == _engine)
+		{
+			return false;
+		}
+		m_modelId = _engine->createModel(Config::model_path + model_str);
+		Model* _model = _engine->getModelById(m_modelId);
+		if (_model)
+		{
+			_model->setScale(m_scale);
+		}
 
 	    return true;
 	}
 	
-	Character * Character::Create(string modelName)
+	Character * Character::Create(std::string modelName)
 	{
 	    Character * cha = new Character();
 	    if(cha->init(modelName))
@@ -80,6 +88,6 @@ namespace myGame
 	
 	void Character::tick(int delta)
 	{
-		m_model->draw();
+
 	}
 }

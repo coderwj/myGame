@@ -107,7 +107,11 @@ namespace myEngine
 		}
 		if (nullptr != m_target)
 		{
-			m_target->reset();
+			if (!m_target->getDirty())
+			{
+				m_target->reset();
+				m_target->setDirty(true);
+			}
 			switch (m_targetType)
 			{
 			case myEngine::KEY_CHAIN_TARGET_SCALE:
@@ -122,7 +126,6 @@ namespace myEngine
 			default:
 				break;
 			}
-			m_target->setDirty(true);
 		}
 	}
 

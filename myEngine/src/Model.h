@@ -20,6 +20,7 @@ namespace myEngine
 {
 	class Node;
 	class RenderObject;
+	class Animation;
 
 	class Skeleton
 	{
@@ -42,7 +43,7 @@ namespace myEngine
 		~Model();
 
 		void load(const std::string &path);
-	
+		void tick(int delta);
 		void draw();
 
 		bgfx::TextureHandle getTextureHandle(int index);
@@ -71,6 +72,8 @@ namespace myEngine
 		tinygltf::Model* m_gltf_model;
 		std::vector<bgfx::TextureHandle> m_textrue_handles;
 		std::vector<RenderObject*> m_render_objects;
+
+		std::vector<Animation*> m_animations;
 
 		std::vector<Matrix4> m_joint_matrixs;
 
