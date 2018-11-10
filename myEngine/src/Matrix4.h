@@ -32,6 +32,8 @@ namespace myEngine
 	    void initWithLookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
 	
 	    void initWithPerspective(float fovy, float aspect, float zN, float zF);
+
+		void translate(const Vector3& v);
 	
 	    Matrix4& operator = (const Matrix4& m);
 	

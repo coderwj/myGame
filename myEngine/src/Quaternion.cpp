@@ -5,6 +5,7 @@
 #include "MathUtil.h"
 #include "Vector3.h"
 #include "EulerAngles.h"
+#include "Matrix4.h"
 
 namespace myEngine
 {
@@ -88,9 +89,9 @@ namespace myEngine
 		Quaternion res;
 	
 		res.w = w * a.w - x * a.x - y * a.y - z * a.z;
-		res.x = w * a.x + x * a.w + z * a.y - y * a.z;
-		res.y = w * a.y + y * a.w + x * a.z - z * a.x;
-		res.z = w * a.z + z * a.w + y * a.x - x * a.y;
+		res.x = w * a.x + x * a.w + y * a.z - z * a.y;
+		res.y = w * a.y + y * a.w + z * a.x - x * a.z;
+		res.z = w * a.z + z * a.w + x * a.y - y * a.x;
 	
 		return res;
 	}
@@ -156,12 +157,33 @@ namespace myEngine
 		// nVidia SDK implementation
 		Vector3 uv, uuv;
 		Vector3 qvec(x, y, z);
-		uv = qvec.cross(v);
-		uuv = qvec.cross(uv);
-		uv *= 2.0f * w;
-		uuv *= 2.0f;
+		uv = crossVector(qvec, v);
+		uuv = crossVector(qvec, uv);
+		uv *= 2.f * w;
+		uuv *= 2.f;
 
 		return v + uv + uuv;
+	}
+
+	void Quaternion::toMat4(Matrix4& mat) const
+	{
+		float xs = x * 2.0f;
+		float ys = y * 2.0f;
+		float zs = z * 2.0f;
+		float wx = w * xs;
+		float wy = w * ys;
+		float wz = w * zs;
+		float xx = x * xs;
+		float xy = x * ys;
+		float xz = x * zs;
+		float yy = y * ys;
+		float yz = y * zs;
+		float zz = z * zs;
+
+		mat.m11 = 1.0f - (yy + zz);	mat.m12 = xy + wz;			mat.m13 = xz - wy;			mat.m14 = 0.0f;
+		mat.m21 = xy - wz;			mat.m22 = 1.0f - (xx + zz);	mat.m23 = yz + wx;			mat.m24 = 0.0f;
+		mat.m31 = xz + wy;			mat.m32 = yz - wx;			mat.m33 = 1.0f - (xx + yy);	mat.m34 = 0.0f;
+		mat.m41 = 0.0f;				mat.m42 = 0.0f;				mat.m43 = 0.0f;				mat.m44 = 1.0f;
 	}
 
 	float dotProduct(const Quaternion &a, const Quaternion &b) {

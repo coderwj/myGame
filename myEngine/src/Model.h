@@ -34,6 +34,7 @@ namespace myEngine
 		int m_root_idx;
 		std::vector<int> m_joint_idxs;
 		std::vector<Matrix4> m_joint_inverse_mats;
+		static int MAX_JOINT_NUM;
 	};
 
 	class Model
@@ -48,7 +49,6 @@ namespace myEngine
 
 		bgfx::TextureHandle getTextureHandle(int index);
 
-		int getJointMatrixsNum() const;
 		const Matrix4* getJointMatrixsData();
 
 		float getScale() const;

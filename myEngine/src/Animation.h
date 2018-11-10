@@ -98,7 +98,7 @@
 	 {
 	 public:
 		 Animation()
-		 :m_speed(0.5f)
+		 :m_speed(1.f)
 		 {
 
 		 }

@@ -5,6 +5,7 @@ namespace myEngine
 {
 	class Vector3;
 	class EulerAngles;
+	class Matrix4;
 	
 	class Quaternion{
 	public:
@@ -43,7 +44,8 @@ namespace myEngine
 		void rotateVec3(Vector3& outVec, const Vector3& vec) const;
 
 		Vector3 operator* (const Vector3& v) const;
-	
+
+		void toMat4(Matrix4& mat) const;
 	};
 	extern float dotProduct(const Quaternion &a, const Quaternion &b);
 

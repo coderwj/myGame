@@ -29,6 +29,9 @@ using namespace std;
 
 namespace myEngine
 {
+
+	int Skeleton::MAX_JOINT_NUM = 64;
+
 	Model::Model()
 	:m_gltf_model(nullptr)
 	,m_skeleton(nullptr)
@@ -290,28 +293,29 @@ namespace myEngine
 		return m_textrue_handles[index];
 	}
 
-	int Model::getJointMatrixsNum() const
-	{
-		return static_cast<int>(m_skeleton->m_joint_idxs.size());
-	}
-
 	const Matrix4* Model::getJointMatrixsData()
 	{
 		m_joint_matrixs.clear();
-		m_joint_matrixs.reserve(m_skeleton->m_joint_idxs.size());
+		m_joint_matrixs.reserve(Skeleton::MAX_JOINT_NUM);
 
 		for (size_t i = 0; i < m_skeleton->m_joint_idxs.size(); i++)
 		{
 			int idx = m_skeleton->m_joint_idxs[i];
 			Node* _n = m_node_map[idx];
-			Matrix4 _sm;
-			_sm.initWithScale(_n->getScale());
-			Matrix4 _rm;
-			_rm.initWithRotateQuaternion(_n->getRotate());
-			Matrix4 _tm;
-			_tm.initWithTranslate(_n->getTranslate());
 
-			Matrix4 _joint_matrix = _sm * _rm * _tm;
+			Matrix4 _joint_matrix;
+
+			//scale
+			_joint_matrix.initWithScale(_n->getScale());
+
+			//rotate
+			Matrix4 _rotate_mat;
+			_n->getRotate().toMat4(_rotate_mat);
+			_joint_matrix *= _rotate_mat;
+
+			//translate
+			_joint_matrix.translate(_n->getTranslate());
+
 			m_joint_matrixs.push_back(m_skeleton->m_joint_inverse_mats[i] * _joint_matrix);
 		}
 		return m_joint_matrixs.data();

@@ -221,9 +221,8 @@ namespace myEngine
 				}
 				else if ((*it).compare("u_JointMatrixs") == 0)
 				{
-					const void* _data = _model->getJointMatrixsData();
-					unsigned int _num = static_cast<unsigned int>(_model->getJointMatrixsNum());
-					m_shader->setUniform(*it, _data, _num);
+					const void* _data = static_cast<const void*>(_model->getJointMatrixsData());
+					m_shader->setUniform(*it, _data, Skeleton::MAX_JOINT_NUM);
 				}
 				else
 				{

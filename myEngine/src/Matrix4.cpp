@@ -108,6 +108,11 @@ namespace myEngine
 	    m43 = -(2.0f * zF * zN) / (zF - zN);
 	    m44 = 0.0f;
 	}
+
+	void Matrix4::translate(const Vector3 & v)
+	{
+		m41 = v.x;  m42 = v.y;  m43 = v.z;
+	}
 	
 	Matrix4& Matrix4::operator = (const Matrix4 &m)
 	{
