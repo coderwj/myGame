@@ -47,8 +47,12 @@ namespace myEngine
 	}
 	
 	void Quaternion::setToRotateAboutAxis(const Vector3 &axis, float theta){
-		assert(fabs(vectorMod(axis) - 1.0f) < 0.01f);
-	
+		//assert(fabs(vectorMod(axis) - 1.0f) < 0.01f);
+		if (axis == Vector3::ZERO)
+		{
+			*this = IDENTITY;
+			return;
+		}
 		float thetaOver2 = theta * 0.5f;
 		float sinThetaOver2 = sin(thetaOver2);
 		w = cos(thetaOver2);

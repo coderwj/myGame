@@ -17,10 +17,10 @@ namespace myEngine
 	    Matrix4 GetViewMatrix() const;
 		Matrix4 GetProjectMatrix() const;
 
-		Vector3 getPosition() const { return m_position; }
+		const Vector3& getPosition() const { return m_position; }
 		void setPosition(const Vector3& val) { m_position = val; }
 
-		Vector3 getFront() const { return m_front; }
+		const Vector3& getFront() const { return m_front; }
 		void setFront(Vector3 val) { m_front = val; }
 
 		void SetFocusPos(Vector3 pos);

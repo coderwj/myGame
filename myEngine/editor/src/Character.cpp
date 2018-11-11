@@ -53,6 +53,9 @@ namespace myGame
 	            float rotateX = character_model_element->FirstChildElement("rotateX")->FloatText(0.0f);
 	            float rotateY = character_model_element->FirstChildElement("rotateY")->FloatText(1.0f);
 	            float rotateZ = character_model_element->FirstChildElement("rotateZ")->FloatText(0.0f);
+				m_position.x = character_model_element->FirstChildElement("position")->FloatAttribute("x", 0.f);
+				m_position.y = character_model_element->FirstChildElement("position")->FloatAttribute("y", 0.f);
+				m_position.z = character_model_element->FirstChildElement("position")->FloatAttribute("z", 0.f);
 	            m_rotateVec = Vector3(rotateX, rotateY, rotateZ);
 	            break;
 	        }
@@ -71,7 +74,18 @@ namespace myGame
 		Model* _model = _engine->getModelById(m_modelId);
 		if (_model)
 		{
-			_model->setScale(m_scale);
+			Matrix4 _world_mat;
+			_world_mat.initWithScale(Vector3(m_scale));
+
+			//rotate
+			Matrix4 _rotate_mat;
+			_rotate_mat.initWithRotate(m_rotateVec, m_theta);
+			_world_mat *= _rotate_mat;
+
+			//translate
+			_world_mat.translate(m_position);
+
+			_model->setWorldMatrix(_world_mat);
 		}
 
 	    return true;

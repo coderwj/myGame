@@ -129,12 +129,13 @@ namespace myEngine
 		if (nullptr == m_shader)
 			return;
 
-		Matrix4 _mat_model = _model->getModelMatrix();
+		const Matrix4& _mat_model = _model->getModelMatrix();
+		const Matrix4& _mat_world = _mat_model * _model->getWorldMatrix();
 		myEngine::Camera* _camera = myEngine::Engine::getInstance()->getMaincCamera();
-		Vector3 _camera_pos = _camera->getPosition();
+		const Vector3& _camera_pos = _camera->getPosition();
 		const Matrix4& _mat_proj = _camera->GetProjectMatrix();
 		const Matrix4& _mat_view = _camera->GetViewMatrix();
-		Matrix4 u_MVPMatrix = _mat_model * _mat_view * _mat_proj;
+		Matrix4 u_MVPMatrix = _mat_world * _mat_view * _mat_proj;
 
 
 		std::vector<std::string> _uniform_names = m_shader->getAllUniformNames();
@@ -177,48 +178,48 @@ namespace myEngine
 			{
 				if ((*it).compare("u_MVPMatrix") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<void*>(&u_MVPMatrix));
+					m_shader->setUniform(*it, static_cast<const void*>(&u_MVPMatrix));
 				}
 				else if ((*it).compare("u_ModelMatrix") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<void*>(&_mat_model));
+					m_shader->setUniform(*it, static_cast<const void*>(&_mat_world));
 				}
 				else if ((*it).compare("u_NormalMatrix") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<void*>(&_mat_model));
+					m_shader->setUniform(*it, static_cast<const void*>(&_mat_world));
 				}
 				else if ((*it).compare("u_Camera") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<void*>(&_camera_pos));
+					m_shader->setUniform(*it, static_cast<const void*>(&_camera_pos));
 				}
 				else if ((*it).compare("u_LightDirection") == 0)
 				{
-					float _lightDirection[4] = { 1.f, 1.f, 1.f, 1.f };
-					m_shader->setUniform(*it, static_cast<void*>(_lightDirection));
+					float _lightDirection[4] = { 1.f, -1.f, 1.f, 1.f };
+					m_shader->setUniform(*it, static_cast<const void*>(_lightDirection));
 				}
 				else if ((*it).compare("u_LightColor") == 0)
 				{
 					float _lightColor[4] = { 1.f, 1.f, 1.f, 1.f };
-					m_shader->setUniform(*it, static_cast<void*>(_lightColor));
+					m_shader->setUniform(*it, static_cast<const void*>(_lightColor));
 				}
 				else if ((*it).compare("u_NormalScale") == 0)
 				{
 					float _normalScale[4] = { 1.f, 1.f, 1.f, 1.f };
-					m_shader->setUniform(*it, static_cast<void*>(_normalScale));
+					m_shader->setUniform(*it, static_cast<const void*>(_normalScale));
 				}
 				else if ((*it).compare("u_EmissiveFactor") == 0)
 				{
 					float _emissiveFactor[4] = { m_emissiveFactor.x, m_emissiveFactor.y, m_emissiveFactor.z, 0.f };
-					m_shader->setUniform(*it, static_cast<void*>(&_emissiveFactor));
+					m_shader->setUniform(*it, static_cast<const void*>(&_emissiveFactor));
 				}
 				else if ((*it).compare("u_BaseColorFactor") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<void*>(&m_baseColorFactor[0]));
+					m_shader->setUniform(*it, static_cast<const void*>(&m_baseColorFactor[0]));
 				}
 				else if ((*it).compare("u_MetallicRoughnessValues") == 0)
 				{
 					float _metallicRoughnessValues[4] = { m_metallicFactor, m_roughnessFactor, 0.f, 0.f };
-					m_shader->setUniform(*it, static_cast<void*>(_metallicRoughnessValues));
+					m_shader->setUniform(*it, static_cast<const void*>(_metallicRoughnessValues));
 				}
 				else if ((*it).compare("u_JointMatrixs") == 0)
 				{

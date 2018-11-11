@@ -51,11 +51,11 @@ namespace myEngine
 
 		const Matrix4* getJointMatrixsData();
 
-		float getScale() const;
+		const Matrix4& getModelMatrix();
+		const Matrix4& getWorldMatrix();
 
-		void setScale(float val);
-
-		Matrix4 getModelMatrix();
+		void setModelMatrix(const Matrix4& w);
+		void setWorldMatrix(const Matrix4& w);
 	
 	private:
 
@@ -80,7 +80,9 @@ namespace myEngine
 		std::vector<int>	m_roots;
 		std::vector<Node*> m_nodes;
 		std::map<int, Node*> m_node_map; //k: gltf file node idx, v: Node* in m_nodes vector.
-		float  m_scale;
+		
+		Matrix4 m_model_matrix;
+		Matrix4 m_world_matrix;
 
 		Skeleton* m_skeleton;
 	};

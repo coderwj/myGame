@@ -123,6 +123,18 @@ namespace myEngine
 		const tinygltf::Node& _node = m_gltf_model->nodes[node_id];
 		myEngine::Node* _my_node = new myEngine::Node();
 
+		////rootNode
+		//if (nullptr == parent)
+		//{
+		//	if (!_node.matrix.empty())
+		//	{
+		//		for (size_t i = 0 ; i < 16 ; i++)
+		//		{
+		//			m_model_matrix.m[i] = static_cast<float>(_node.matrix[i]);
+		//		}
+		//	}
+		//}
+
 		//parent
 		if (nullptr != parent)
 		{
@@ -357,23 +369,24 @@ namespace myEngine
 		}
 	}
 
-	float Model::getScale() const
+	const Matrix4& Model::getModelMatrix()
 	{
-		return m_scale;
+		return m_model_matrix;
 	}
 
-	void Model::setScale(float val)
+	void Model::setModelMatrix(const Matrix4 & w)
 	{
-		m_scale = val;
+		m_model_matrix = w;
 	}
 
-	Matrix4 Model::getModelMatrix()
+	const Matrix4& Model::getWorldMatrix()
 	{
-		Matrix4 _scale_mat;
-		_scale_mat.initWithScale(Vector3(m_scale));
-		Matrix4 _rotate_mat;
-		Matrix4 _trans_mat;
-		return _scale_mat * _rotate_mat * _trans_mat;
+		return m_world_matrix;
+	}
+
+	void Model::setWorldMatrix(const Matrix4 & w)
+	{
+		m_world_matrix = w;
 	}
 
 	void Model::tick(int delta)

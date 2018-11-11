@@ -131,7 +131,9 @@ namespace myGame
 		imguiCreate(20, NULL);
 	
 	    m_mainCharacter = Character::Create("model_4");
-	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
+
+		Character* c1 = Character::Create("model_5");
+		m_characters.push_back(c1);
 
 		m_cameraOption = new CameraOption();
 		m_cameraOption->setCamera(pEngine->getMaincCamera());
@@ -224,6 +226,13 @@ namespace myGame
 			pEngine->tick(delta);
 		if (m_mainCharacter)
 			m_mainCharacter->tick(delta);
+		for (Character* c : m_characters)
+		{
+			if (c)
+			{
+				c->tick(delta);
+			}
+		}
 
 	}
 

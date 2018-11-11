@@ -9,13 +9,20 @@ namespace myEngine
 	{
 	public:
 	
-	    float m11, m12, m13, m14;
-	    float m21, m22, m23, m24;
-	    float m31, m32, m33, m34;
-	    float m41, m42, m43, m44;
+		union {
+			struct
+			{
+				float m11, m12, m13, m14;
+				float m21, m22, m23, m24;
+				float m31, m32, m33, m34;
+				float m41, m42, m43, m44;
+			};
+			float m[16];
+		};
 	
 	    Matrix4() { identity(); }
 		Matrix4(const float* data);
+		Matrix4(const double* data);
 	    Matrix4(const Matrix4& m);
 		~Matrix4() {};
 	
