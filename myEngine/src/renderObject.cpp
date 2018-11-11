@@ -38,10 +38,10 @@ namespace myEngine
 			return bgfx::AttribType::Uint8;
 
 		else if (gltf_attr_comp_type == TINYGLTF_COMPONENT_TYPE_SHORT)
-			return bgfx::AttribType::Uint8;
+			return bgfx::AttribType::Int16;
 
 		else if (gltf_attr_comp_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
-			return bgfx::AttribType::Uint8;
+			return bgfx::AttribType::Int16;
 
 		else if (gltf_attr_comp_type == TINYGLTF_COMPONENT_TYPE_INT)
 			return bgfx::AttribType::Int16;
@@ -104,6 +104,8 @@ namespace myEngine
 			_dec.add(mapAttributeType(it->first), tinygltf::GetTypeSizeInBytes(_accessor.type), mapAttributeComponentType(_accessor.componentType));
 			if (mapAttributeType(it->first) == bgfx::Attrib::Position)
 				_vertexNum = _accessor.count;
+			if (mapAttributeType(it->first) == bgfx::Attrib::TexCoord0)
+				m_material->setHasUv(true);
 			if (mapAttributeType(it->first) == bgfx::Attrib::Weight)
 				m_material->setHasSkin(true);
 		}

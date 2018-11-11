@@ -21,6 +21,7 @@ namespace myEngine
 	,m_metallicRoughnessTextureID(-1)
 	,m_roughnessFactor(0.f)
 	,m_hasSkin(false)
+	,m_hasUv(false)
 	{
 		m_baseColorFactor.insert(m_baseColorFactor.end(), 4, 1.f);
 	}
@@ -239,7 +240,7 @@ namespace myEngine
 			result += "HAS_NORMALS;";
 		if (true)
 			result += "HAS_TANGENTS;";
-		if (true)
+		if (m_hasUv)
 			result += "HAS_UV;";
 		if (m_hasSkin)
 			result += "HAS_SKIN;";

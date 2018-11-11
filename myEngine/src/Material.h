@@ -30,6 +30,8 @@ namespace myEngine
 
 		void setHasSkin(bool v) { m_hasSkin = v; }
 
+		void setHasUv(bool v) { m_hasUv = v; }
+
 	private:
 		std::string _getVertexShaderDefines();
 		std::string _getFragmentShaderDefines();
@@ -56,6 +58,7 @@ namespace myEngine
 		float m_roughnessFactor;
 
 		bool m_hasSkin;
+		bool m_hasUv;
 	};
 }
 
