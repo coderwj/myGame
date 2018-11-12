@@ -39,7 +39,7 @@
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
-    <position x="4" y="0" z="0"/>
+    <position x="8" y="0" z="0"/>
   </model>
   <model id="5">
     <name>model_5</name>
@@ -50,6 +50,6 @@
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
-    <position x="-4" y="0" z="0"/>
+    <position x="0" y="0" z="0"/>
   </model>
 </modelConfig>
