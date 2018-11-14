@@ -76,7 +76,7 @@ namespace myGame
 	{
 		if (nullptr == m_camera)
 			return;
-		m_camera->setPosition(Vector3(0.f, -32.f, 16.f));
+		m_camera->setPosition(Vector3(0.f, 8.f, 32.f));
 		m_camera->SetFocusPos(Vector3(0.f, 0.f, 0.f));
 	}
 }

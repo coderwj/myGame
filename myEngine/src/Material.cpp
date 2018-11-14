@@ -129,13 +129,12 @@ namespace myEngine
 		if (nullptr == m_shader)
 			return;
 
+		myEngine::Camera* _camera = myEngine::Engine::getInstance()->getMaincCamera();
+		if (nullptr == _camera)
+			return;
+
 		const Matrix4& _mat_model = _model->getModelMatrix();
 		const Matrix4& _mat_world = _mat_model * _model->getWorldMatrix();
-		myEngine::Camera* _camera = myEngine::Engine::getInstance()->getMaincCamera();
-		const Vector3& _camera_pos = _camera->getPosition();
-		const Matrix4& _mat_proj = _camera->GetProjectMatrix();
-		const Matrix4& _mat_view = _camera->GetViewMatrix();
-		Matrix4 u_MVPMatrix = _mat_world * _mat_view * _mat_proj;
 
 
 		std::vector<std::string> _uniform_names = m_shader->getAllUniformNames();
@@ -163,6 +162,7 @@ namespace myEngine
 				{
 					texture_id = m_normalTextureID;
 				}
+
 				if (texture_id >= 0)
 				{
 					bgfx::TextureHandle _th = _model->getTextureHandle(texture_id);
@@ -176,11 +176,14 @@ namespace myEngine
 			}
 			else// if (_info.type == bgfx::UniformType::Vec4)
 			{
-				if ((*it).compare("u_MVPMatrix") == 0)
+				if ((*it).compare("u_VPMatrix") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<const void*>(&u_MVPMatrix));
+					const Matrix4& _mat_proj = _camera->GetProjectMatrix();
+					const Matrix4& _mat_view = _camera->GetViewMatrix();
+					Matrix4 u_VPMatrix = _mat_view * _mat_proj;
+					m_shader->setUniform(*it, static_cast<const void*>(&u_VPMatrix));
 				}
-				else if ((*it).compare("u_ModelMatrix") == 0)
+				else if ((*it).compare("u_WorldMatrix") == 0)
 				{
 					m_shader->setUniform(*it, static_cast<const void*>(&_mat_world));
 				}
@@ -190,6 +193,7 @@ namespace myEngine
 				}
 				else if ((*it).compare("u_Camera") == 0)
 				{
+					const Vector3& _camera_pos = _camera->getPosition();
 					m_shader->setUniform(*it, static_cast<const void*>(&_camera_pos));
 				}
 				else if ((*it).compare("u_LightDirection") == 0)

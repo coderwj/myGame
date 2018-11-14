@@ -92,7 +92,7 @@ namespace myEngine
 
 	Vector3 Camera::_getRight() const
 	{
-		Vector3 _right = crossVector(m_front, Vector3::UNIT_Z);
+		Vector3 _right = crossVector(m_front, Vector3::UNIT_Y);
 		Quaternion _rotate;
 		_rotate.setToRotateAboutAxis(m_front, m_rotate);
 		Vector3 _realRight = _right;

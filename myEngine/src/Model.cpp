@@ -123,17 +123,17 @@ namespace myEngine
 		const tinygltf::Node& _node = m_gltf_model->nodes[node_id];
 		myEngine::Node* _my_node = new myEngine::Node();
 
-		////rootNode
-		//if (nullptr == parent)
-		//{
-		//	if (!_node.matrix.empty())
-		//	{
-		//		for (size_t i = 0 ; i < 16 ; i++)
-		//		{
-		//			m_model_matrix.m[i] = static_cast<float>(_node.matrix[i]);
-		//		}
-		//	}
-		//}
+		//rootNode
+		if (nullptr == parent)
+		{
+			if (!_node.matrix.empty())
+			{
+				for (size_t i = 0 ; i < 16 ; i++)
+				{
+					m_model_matrix.m[i] = static_cast<float>(_node.matrix[i]);
+				}
+			}
+		}
 
 		//parent
 		if (nullptr != parent)
