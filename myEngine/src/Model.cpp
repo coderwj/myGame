@@ -133,6 +133,34 @@ namespace myEngine
 					m_model_matrix.m[i] = static_cast<float>(_node.matrix[i]);
 				}
 			}
+			else
+			{
+				if (!_node.scale.empty())
+				{
+					m_model_matrix.initWithScale(Vector3(
+						static_cast<float>(_node.scale[0]),
+						static_cast<float>(_node.scale[1]),
+						static_cast<float>(_node.scale[2])));
+				}
+				if (!_node.rotation.empty())
+				{
+					//rotate
+					Matrix4 _rotate_mat;
+					Quaternion(
+						static_cast<float>(_node.rotation[0]),
+						static_cast<float>(_node.rotation[1]),
+						static_cast<float>(_node.rotation[2]),
+						static_cast<float>(_node.rotation[3])).toMat4(_rotate_mat);
+					m_model_matrix *= _rotate_mat;
+				}
+				if (!_node.translation.empty())
+				{
+					m_model_matrix.translate(Vector3(
+						static_cast<float>(_node.scale[0]),
+						static_cast<float>(_node.scale[1]),
+						static_cast<float>(_node.scale[2])));
+				}
+			}
 		}
 
 		//parent
@@ -300,7 +328,7 @@ namespace myEngine
 	{
 		if (index < 0)
 			return BGFX_INVALID_HANDLE;
-		if (index > static_cast<int>(m_textrue_handles.size()))
+		if (index >= static_cast<int>(m_textrue_handles.size()))
 			return BGFX_INVALID_HANDLE;
 		return m_textrue_handles[index];
 	}

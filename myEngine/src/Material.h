@@ -24,13 +24,15 @@ namespace myEngine
 
 		void setUniform(const char* name, const void* values);
 
-		void initParams(const tinygltf::Material& material_info);
+		void initParams(const tinygltf::Material& material_info, const tinygltf::Model & model);
 
 		void bindUniforms(Model* _model);
 
 		void setHasSkin(bool v) { m_hasSkin = v; }
 
 		void setHasUv(bool v) { m_hasUv = v; }
+
+		void setHasTangent(bool v) { m_hasTangent = v; }
 
 	private:
 		std::string _getVertexShaderDefines();
@@ -42,9 +44,11 @@ namespace myEngine
 		//info from normal/occlusion/emissive values
 		bool m_doubleSided;
 
-		bool m_enableEmissive;
 		Vector3 m_emissiveFactor;
 		int m_emissiveTextureID;
+
+		Vector3 m_occlusionFactor;
+		int m_occlusionTextureID;
 
 		int m_normalTextureID;
 
@@ -59,6 +63,7 @@ namespace myEngine
 
 		bool m_hasSkin;
 		bool m_hasUv;
+		bool m_hasTangent;
 	};
 }
 

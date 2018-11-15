@@ -130,10 +130,16 @@ namespace myGame
 
 		imguiCreate(20, NULL);
 	
-	    m_mainCharacter = Character::Create("model_4");
+		m_mainCharacter = Character::Create("model_3");
 
-		Character* c1 = Character::Create("model_5");
+		//Character* c1 = Character::Create("model_5");
+		//m_characters.push_back(c1);
+
+		Character* c1 = Character::Create("model_6");
 		m_characters.push_back(c1);
+
+		/*Character* c2 = Character::Create("model_6");
+		m_characters.push_back(c2);*/
 
 		m_cameraOption = new CameraOption();
 		m_cameraOption->setCamera(pEngine->getMaincCamera());

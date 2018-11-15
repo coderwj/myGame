@@ -69,21 +69,33 @@ namespace myEngine
 		void _updateNodeTransformToChilren(Node* parent);
 
 	private:
+		//tinygltf model
 		tinygltf::Model* m_gltf_model;
+
+		//texture handles
 		std::vector<bgfx::TextureHandle> m_textrue_handles;
+
+		//render objects
 		std::vector<RenderObject*> m_render_objects;
 
+		//animations
 		std::vector<Animation*> m_animations;
 
+		//joint matrix
 		std::vector<Matrix4> m_joint_matrixs;
 
-		std::vector<int>	m_roots;
+		//node tree
+		std::vector<int> m_roots;
 		std::vector<Node*> m_nodes;
 		std::map<int, Node*> m_node_map; //k: gltf file node idx, v: Node* in m_nodes vector.
 		
+		//model matrix
 		Matrix4 m_model_matrix;
+
+		//world matrix
 		Matrix4 m_world_matrix;
 
+		//skeleton
 		Skeleton* m_skeleton;
 	};
 }

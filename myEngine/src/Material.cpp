@@ -12,9 +12,10 @@ namespace myEngine
 	Material::Material()
 	:m_shader(nullptr)
 	,m_doubleSided(false)
-	,m_enableEmissive(false)
 	,m_emissiveFactor(Vector3(0.f))
 	,m_emissiveTextureID(-1)
+	, m_occlusionFactor(Vector3(1.f))
+	, m_occlusionTextureID(-1)
 	,m_normalTextureID(-1)
 	,m_baseColorTextureID(-1)
 	,m_metallicFactor(0.f)
@@ -22,6 +23,7 @@ namespace myEngine
 	,m_roughnessFactor(0.f)
 	,m_hasSkin(false)
 	,m_hasUv(false)
+	,m_hasTangent(false)
 	{
 		m_baseColorFactor.insert(m_baseColorFactor.end(), 4, 1.f);
 	}
@@ -55,7 +57,7 @@ namespace myEngine
 		}
 	}
 
-	void Material::initParams(const tinygltf::Material & material_info)
+	void Material::initParams(const tinygltf::Material & material_info, const tinygltf::Model & model)
 	{
 		for (tinygltf::ParameterMap::const_iterator it = material_info.values.begin(); it != material_info.values.end(); it++)
 		{
@@ -70,7 +72,7 @@ namespace myEngine
 			}
 			else if (it->first.compare("baseColorTexture") == 0)
 			{
-				m_baseColorTextureID = it->second.TextureIndex();
+				m_baseColorTextureID = model.textures[it->second.TextureIndex()].source;
 			}
 			else if (it->first.compare("metallicFactor") == 0)
 			{
@@ -78,7 +80,7 @@ namespace myEngine
 			}
 			else if (it->first.compare("metallicRoughnessTexture") == 0)
 			{
-				m_metallicRoughnessTextureID = it->second.TextureIndex();
+				m_metallicRoughnessTextureID = model.textures[it->second.TextureIndex()].source;
 			}
 			else if (it->first.compare("roughnessFactor") == 0)
 			{
@@ -92,14 +94,12 @@ namespace myEngine
 
 		for (tinygltf::ParameterMap::const_iterator it = material_info.additionalValues.begin(); it != material_info.additionalValues.end(); it++)
 		{
-			bool _enableEmissive = false;
 			if (it->first.compare("doubleSided") == 0)
 			{
 				m_doubleSided = it->second.bool_value;
 			}
 			else if (it->first.compare("emissiveFactor") == 0)
 			{
-				_enableEmissive = true;
 				float x = static_cast<float>(it->second.ColorFactor()[0]);
 				float y = static_cast<float>(it->second.ColorFactor()[1]);
 				float z = static_cast<float>(it->second.ColorFactor()[2]);
@@ -107,12 +107,15 @@ namespace myEngine
 			}
 			else if (it->first.compare("emissiveTexture") == 0)
 			{
-				_enableEmissive = true;
-				m_emissiveTextureID = it->second.TextureIndex();
+				m_emissiveTextureID = model.textures[it->second.TextureIndex()].source;
+			}
+			else if (it->first.compare("occlusionTexture") == 0)
+			{
+				m_occlusionTextureID = model.textures[it->second.TextureIndex()].source;
 			}
 			else if (it->first.compare("normalTexture") == 0)
 			{
-				m_normalTextureID = it->second.TextureIndex();
+				m_normalTextureID = model.textures[it->second.TextureIndex()].source;
 			}
 			else
 			{
@@ -158,6 +161,10 @@ namespace myEngine
 				{
 					texture_id = m_emissiveTextureID;
 				}
+				else if ((*it).compare("u_OcclusionSampler") == 0)
+				{
+					texture_id = m_occlusionTextureID;
+				}
 				else if ((*it).compare("u_NormalSampler") == 0)
 				{
 					texture_id = m_normalTextureID;
@@ -198,7 +205,8 @@ namespace myEngine
 				}
 				else if ((*it).compare("u_LightDirection") == 0)
 				{
-					float _lightDirection[4] = { 1.f, -1.f, 1.f, 1.f };
+					//float _lightDirection[4] = { -1.f, -1.f, -1.f, 0.f };
+					float _lightDirection[4] = { 1.f, 1.f, 1.f, 0.f };
 					m_shader->setUniform(*it, static_cast<const void*>(_lightDirection));
 				}
 				else if ((*it).compare("u_LightColor") == 0)
@@ -216,9 +224,14 @@ namespace myEngine
 					float _emissiveFactor[4] = { m_emissiveFactor.x, m_emissiveFactor.y, m_emissiveFactor.z, 0.f };
 					m_shader->setUniform(*it, static_cast<const void*>(&_emissiveFactor));
 				}
+				else if ((*it).compare("u_OcclusionStrength") == 0)
+				{
+					float _occlusionFactor[4] = { m_occlusionFactor.x, 0.f, 0.f, 0.f };
+					m_shader->setUniform(*it, static_cast<const void*>(&_occlusionFactor));
+				}
 				else if ((*it).compare("u_BaseColorFactor") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<const void*>(&m_baseColorFactor[0]));
+					m_shader->setUniform(*it, static_cast<const void*>(m_baseColorFactor.data()));
 				}
 				else if ((*it).compare("u_MetallicRoughnessValues") == 0)
 				{
@@ -243,7 +256,7 @@ namespace myEngine
 		std::string result = "";
 		if (true)
 			result += "HAS_NORMALS;";
-		if (true)
+		if (m_hasTangent)
 			result += "HAS_TANGENTS;";
 		if (m_hasUv)
 			result += "HAS_UV;";
@@ -257,7 +270,7 @@ namespace myEngine
 		std::string result = "";
 		if (m_baseColorTextureID != -1)
 			result += "HAS_BASECOLORMAP;";
-		if (true)
+		if (m_hasTangent)
 			result += "HAS_TANGENTS;";
 		if (true)
 			result += "HAS_NORMALS;";
@@ -265,6 +278,8 @@ namespace myEngine
 			result += "HAS_NORMALMAP;";
 		if (m_emissiveTextureID != -1)
 			result += "HAS_EMISSIVEMAP;";
+		if (m_occlusionTextureID != -1)
+			result += "HAS_OCCLUSIONMAP;";
 		if (m_metallicRoughnessTextureID != -1)
 			result += "HAS_METALROUGHNESSMAP;";
 		return result;

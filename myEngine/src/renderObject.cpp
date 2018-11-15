@@ -108,6 +108,8 @@ namespace myEngine
 				m_material->setHasUv(true);
 			if (mapAttributeType(it->first) == bgfx::Attrib::Weight)
 				m_material->setHasSkin(true);
+			if (mapAttributeType(it->first) == bgfx::Attrib::Tangent)
+				m_material->setHasTangent(true);
 		}
 		_dec.end();
 
@@ -153,7 +155,7 @@ namespace myEngine
 	void RenderObject::_createProgram(const tinygltf::Primitive & primitive, const tinygltf::Model & model)
 	{
 		const tinygltf::Material& _material = model.materials[primitive.material];
-		m_material->initParams(_material);
+		m_material->initParams(_material, model);
 		m_material->setProgram("pbr_gltf_vs", "pbr_gltf_fs");
 	}
 	

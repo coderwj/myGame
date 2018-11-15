@@ -311,5 +311,5 @@ void main()
 
     gl_FragColor = vec4(pow(color,vec3_splat(1.0/2.2)), baseColor.a);
 
-    //gl_FragColor = gl_FragColor * 0.00001 + vec4(1.0, 0.0, 0.0, 1.0);
+    // gl_FragColor = gl_FragColor * 0.00001 + baseColor;
 }

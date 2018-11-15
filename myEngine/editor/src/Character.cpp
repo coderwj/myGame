@@ -53,10 +53,14 @@ namespace myGame
 	            float rotateX = character_model_element->FirstChildElement("rotateX")->FloatText(0.0f);
 	            float rotateY = character_model_element->FirstChildElement("rotateY")->FloatText(1.0f);
 	            float rotateZ = character_model_element->FirstChildElement("rotateZ")->FloatText(0.0f);
-				m_position.x = character_model_element->FirstChildElement("position")->FloatAttribute("x", 0.f);
-				m_position.y = character_model_element->FirstChildElement("position")->FloatAttribute("y", 0.f);
-				m_position.z = character_model_element->FirstChildElement("position")->FloatAttribute("z", 0.f);
-	            m_rotateVec = Vector3(rotateX, rotateY, rotateZ);
+				m_rotateVec = Vector3(rotateX, rotateY, rotateZ);
+				tinyxml2::XMLElement* pos = character_model_element->FirstChildElement("position");
+				if (pos)
+				{
+					m_position.x = character_model_element->FirstChildElement("position")->FloatAttribute("x", 0.f);
+					m_position.y = character_model_element->FirstChildElement("position")->FloatAttribute("y", 0.f);
+					m_position.z = character_model_element->FirstChildElement("position")->FloatAttribute("z", 0.f);
+				}
 	            break;
 	        }
 	    }

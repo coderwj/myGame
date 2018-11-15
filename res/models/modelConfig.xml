@@ -24,28 +24,51 @@
     <name>model_3</name>
     <path>pony_cartoon/scene.gltf</path>
     <material>pbr_gltf</material>
-    <scale>0.02</scale>
-    <rotateTheta>0</rotateTheta>
+    <scale>0.004</scale>
+    <rotateTheta>30</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
+    <position x="3" y="0" z="0"/>
   </model>
   <model id="4">
     <name>model_4</name>
     <path>CesiumMan/CesiumMan.gltf</path>
     <material>pbr_gltf</material>
-    <scale>6.0</scale>
-    <rotateTheta>0</rotateTheta>
+    <scale>1.0</scale>
+    <rotateTheta>15</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
-    <position x="8" y="0" z="0"/>
+    <position x="2" y="0" z="0"/>
   </model>
   <model id="5">
     <name>model_5</name>
     <path>BrainStem/BrainStem.gltf</path>
     <material>pbr_gltf</material>
-    <scale>6.0</scale>
+    <scale>1.0</scale>
+    <rotateTheta>0</rotateTheta>
+    <rotateX>0.0</rotateX>
+    <rotateY>1.0</rotateY>
+    <rotateZ>0.0</rotateZ>
+    <position x="0" y="0" z="0"/>
+  </model>
+  <model id="6">
+    <name>model_6</name>
+    <path>DamagedHelmet/DamagedHelmet.gltf</path>
+    <material>pbr_gltf</material>
+    <scale>1.0</scale>
+    <rotateTheta>0</rotateTheta>
+    <rotateX>0.0</rotateX>
+    <rotateY>1.0</rotateY>
+    <rotateZ>0.0</rotateZ>
+    <position x="0" y="0" z="0"/>
+  </model>
+  <model id="7">
+    <name>scene_1</name>
+    <path>scene1/VC.gltf</path>
+    <material>pbr_gltf</material>
+    <scale>1.0</scale>
     <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
