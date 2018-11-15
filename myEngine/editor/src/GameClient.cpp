@@ -130,12 +130,9 @@ namespace myGame
 
 		imguiCreate(20, NULL);
 	
-		m_mainCharacter = Character::Create("model_3");
+		m_mainCharacter = Character::Create("model_4");
 
-		//Character* c1 = Character::Create("model_5");
-		//m_characters.push_back(c1);
-
-		Character* c1 = Character::Create("model_6");
+		Character* c1 = Character::Create("model_5");
 		m_characters.push_back(c1);
 
 		/*Character* c2 = Character::Create("model_6");
