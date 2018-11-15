@@ -14,13 +14,13 @@ namespace myEngine
 	,m_doubleSided(false)
 	,m_emissiveFactor(Vector3(0.f))
 	,m_emissiveTextureID(-1)
-	, m_occlusionFactor(Vector3(1.f))
+	, m_occlusionStrengh(1.f)
 	, m_occlusionTextureID(-1)
 	,m_normalTextureID(-1)
 	,m_baseColorTextureID(-1)
-	,m_metallicFactor(0.f)
+	,m_metallicFactor(1.f)
 	,m_metallicRoughnessTextureID(-1)
-	,m_roughnessFactor(0.f)
+	,m_roughnessFactor(1.f)
 	,m_hasSkin(false)
 	,m_hasUv(false)
 	,m_hasTangent(false)
@@ -226,7 +226,7 @@ namespace myEngine
 				}
 				else if ((*it).compare("u_OcclusionStrength") == 0)
 				{
-					float _occlusionFactor[4] = { m_occlusionFactor.x, 0.f, 0.f, 0.f };
+					float _occlusionFactor[4] = { m_occlusionStrengh, 0.f, 0.f, 0.f };
 					m_shader->setUniform(*it, static_cast<const void*>(&_occlusionFactor));
 				}
 				else if ((*it).compare("u_BaseColorFactor") == 0)

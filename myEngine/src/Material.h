@@ -47,7 +47,7 @@ namespace myEngine
 		Vector3 m_emissiveFactor;
 		int m_emissiveTextureID;
 
-		Vector3 m_occlusionFactor;
+		float m_occlusionStrengh;
 		int m_occlusionTextureID;
 
 		int m_normalTextureID;
