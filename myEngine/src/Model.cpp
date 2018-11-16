@@ -155,11 +155,14 @@ namespace myEngine
 		}
 		if (!_node.matrix.empty())
 		{
-			_my_node->setUseMatrix(true);
-			for (size_t i = 0; i < 16; i++)
-			{
-				_my_node->setMatrix(_node.matrix.data());
-			}
+			Matrix4 m(_node.matrix.data());
+			Vector3 s;
+			Quaternion r;
+			Vector3 t;
+			m.deCompose(s, r, t);
+			_my_node->setScale(s);
+			_my_node->setRotate(r);
+			_my_node->setTranslate(t);
 		}
 
 		//mesh node
@@ -312,24 +315,7 @@ namespace myEngine
 			Node* _n = m_node_map[idx];
 
 			Matrix4 _joint_matrix;
-
-			if (!_n->getUseMatrix())
-			{
-				//scale
-				_joint_matrix.initWithScale(_n->getScale());
-
-				//rotate
-				Matrix4 _rotate_mat;
-				_n->getRotate().toMat4(_rotate_mat);
-				_joint_matrix *= _rotate_mat;
-
-				//translate
-				_joint_matrix.translate(_n->getTranslate());
-			}
-			else
-			{
-				_joint_matrix = _n->getMatrix();
-			}
+			_joint_matrix.initWithScaleRotateTranslate(_n->getScale(), _n->getRotate(), _n->getTranslate());
 
 			m_joint_matrixs.push_back(m_skeleton->m_joint_inverse_mats[i] * _joint_matrix);
 		}

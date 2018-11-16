@@ -3,7 +3,8 @@
 #include "MathUtil.h"
 #include "Quaternion.h"
 
-#include<cstring>
+#include <cstring>
+#include <math.h>
 
 namespace myEngine
 {
@@ -82,6 +83,20 @@ namespace myEngine
 	    m31 = 0.0f; m32 = 0.0f; m33 = 1.0f; m34 = 0.0f;
 	    m41 = v.x;  m42 = v.y;  m43 = v.z;  m44 = 1.0f;
 	}
+
+	void Matrix4::initWithScaleRotateTranslate(const Vector3 & s, const Quaternion & r, const Vector3 & t)
+	{
+		//scale
+		initWithScale(s);
+
+		//rotate
+		Matrix4 _rotate_mat;
+		r.toMat4(_rotate_mat);
+		*this *= _rotate_mat;
+
+		//translate
+		translate(t);
+	}
 	
 	void Matrix4::initWithLookAt(const Vector3 &eye, const Vector3 &center, const Vector3 &right)
 	{
@@ -116,6 +131,29 @@ namespace myEngine
 	void Matrix4::translate(const Vector3 & v)
 	{
 		m41 = v.x;  m42 = v.y;  m43 = v.z;
+	}
+
+	void Matrix4::deCompose(Vector3 & s, Quaternion & r, Vector3 & t) const
+	{
+		t.x = m41;	t.y = m42;	t.z = m43;
+
+		s.x = sqrt(m11 * m11 + m12 * m12 + m13 * m13);
+		s.y = sqrt(m21 * m21 + m22 * m22 + m23 * m23);
+		s.z = sqrt(m31 * m31 + m32 * m32 + m33 * m33);
+
+		Matrix4 rm;
+		rm.m11 = m11 / s.x;		rm.m12 = m12 / s.x;		rm.m13 = m13 / s.x;
+		rm.m21 = m21 / s.y;		rm.m22 = m22 / s.y;		rm.m23 = m23 / s.y;
+		rm.m31 = m31 / s.z;		rm.m32 = m32 / s.z;		rm.m33 = m33 / s.z;
+		
+		// Adapted from: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
+		r.w = sqrt(std::fmaxf(0.f, 1 + rm.m11 + rm.m22 + rm.m33)) / 2;
+		r.x = sqrt(std::fmaxf(0.f, 1 + rm.m11 - rm.m22 - rm.m33)) / 2;
+		r.y = sqrt(std::fmaxf(0.f, 1 - rm.m11 + rm.m22 - rm.m33)) / 2;
+		r.z = sqrt(std::fmaxf(0.f, 1 - rm.m11 - rm.m22 + rm.m33)) / 2;
+		r.x *= std::copysignf(r.x, (m32 - m23));
+		r.y *= std::copysignf(r.y, (m13 - m31));
+		r.z *= std::copysignf(r.z, (m21 - m12));
 	}
 	
 	Matrix4& Matrix4::operator = (const Matrix4 &m)

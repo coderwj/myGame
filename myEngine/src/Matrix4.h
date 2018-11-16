@@ -35,12 +35,16 @@ namespace myEngine
 		void initWithRotateQuaternion(const Quaternion& quat);
 	
 	    void initWithTranslate(const Vector3& v);
+
+		void initWithScaleRotateTranslate(const Vector3& s, const Quaternion& r, const Vector3& t);
 	
 	    void initWithLookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
 	
 	    void initWithPerspective(float fovy, float aspect, float zN, float zF);
 
 		void translate(const Vector3& v);
+
+		void deCompose(Vector3& s, Quaternion& r, Vector3& t) const;
 	
 	    Matrix4& operator = (const Matrix4& m);
 	
