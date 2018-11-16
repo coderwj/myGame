@@ -7,6 +7,7 @@ namespace myEngine
 	,m_rotate()
 	,m_translate(Vector3::ZERO)
 	,m_parent(nullptr)
+	,m_useMatrix(false)
 	,m_dirty(true)
 	{
 
@@ -27,6 +28,11 @@ namespace myEngine
 		return m_translate;
 	}
 
+	const Matrix4& Node::getMatrix() const
+	{
+		return m_matrix;
+	}
+
 	const Node* Node::getParent() const
 	{
 		return m_parent;
@@ -45,6 +51,11 @@ namespace myEngine
 	void Node::setTranslate(const Vector3& val)
 	{
 		m_translate = val;
+	}
+
+	void Node::setMatrix(const Matrix4& val)
+	{
+		m_matrix = val;
 	}
 
 	void Node::setParent(Node* n)

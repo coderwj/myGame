@@ -123,46 +123,6 @@ namespace myEngine
 		const tinygltf::Node& _node = m_gltf_model->nodes[node_id];
 		myEngine::Node* _my_node = new myEngine::Node();
 
-		//rootNode
-		if (nullptr == parent)
-		{
-			if (!_node.matrix.empty())
-			{
-				for (size_t i = 0 ; i < 16 ; i++)
-				{
-					m_model_matrix.m[i] = static_cast<float>(_node.matrix[i]);
-				}
-			}
-			else
-			{
-				if (!_node.scale.empty())
-				{
-					m_model_matrix.initWithScale(Vector3(
-						static_cast<float>(_node.scale[0]),
-						static_cast<float>(_node.scale[1]),
-						static_cast<float>(_node.scale[2])));
-				}
-				if (!_node.rotation.empty())
-				{
-					//rotate
-					Matrix4 _rotate_mat;
-					Quaternion(
-						static_cast<float>(_node.rotation[0]),
-						static_cast<float>(_node.rotation[1]),
-						static_cast<float>(_node.rotation[2]),
-						static_cast<float>(_node.rotation[3])).toMat4(_rotate_mat);
-					m_model_matrix *= _rotate_mat;
-				}
-				if (!_node.translation.empty())
-				{
-					m_model_matrix.translate(Vector3(
-						static_cast<float>(_node.scale[0]),
-						static_cast<float>(_node.scale[1]),
-						static_cast<float>(_node.scale[2])));
-				}
-			}
-		}
-
 		//parent
 		if (nullptr != parent)
 		{
@@ -192,6 +152,14 @@ namespace myEngine
 				static_cast<float>(_node.translation[0]),
 				static_cast<float>(_node.translation[1]),
 				static_cast<float>(_node.translation[2])));
+		}
+		if (!_node.matrix.empty())
+		{
+			_my_node->setUseMatrix(true);
+			for (size_t i = 0; i < 16; i++)
+			{
+				_my_node->setMatrix(_node.matrix.data());
+			}
 		}
 
 		//mesh node
@@ -345,16 +313,23 @@ namespace myEngine
 
 			Matrix4 _joint_matrix;
 
-			//scale
-			_joint_matrix.initWithScale(_n->getScale());
+			if (!_n->getUseMatrix())
+			{
+				//scale
+				_joint_matrix.initWithScale(_n->getScale());
 
-			//rotate
-			Matrix4 _rotate_mat;
-			_n->getRotate().toMat4(_rotate_mat);
-			_joint_matrix *= _rotate_mat;
+				//rotate
+				Matrix4 _rotate_mat;
+				_n->getRotate().toMat4(_rotate_mat);
+				_joint_matrix *= _rotate_mat;
 
-			//translate
-			_joint_matrix.translate(_n->getTranslate());
+				//translate
+				_joint_matrix.translate(_n->getTranslate());
+			}
+			else
+			{
+				_joint_matrix = _n->getMatrix();
+			}
 
 			m_joint_matrixs.push_back(m_skeleton->m_joint_inverse_mats[i] * _joint_matrix);
 		}
