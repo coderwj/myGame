@@ -5,6 +5,7 @@
 #include "Material.h"
 #include "Shader.h"
 #include "Matrix4.h"
+#include "Node.h"
 
 #include "bgfx/bgfx.h"
 
@@ -12,6 +13,7 @@ namespace myEngine
 {
 	RenderObject::RenderObject()
 	:m_model(nullptr)
+	,m_node(nullptr)
 	,m_material(nullptr)
 	,m_vbh(BGFX_INVALID_HANDLE)
 	,m_ibh(BGFX_INVALID_HANDLE)
@@ -159,9 +161,10 @@ namespace myEngine
 		m_material->setProgram("pbr_gltf_vs", "pbr_gltf_fs");
 	}
 	
-	void RenderObject::init(Model* modelptr, const tinygltf::Primitive& primitive, const tinygltf::Model& model)
+	void RenderObject::init(Model* modelPtr, Node* nodePtr, const tinygltf::Primitive& primitive, const tinygltf::Model& model)
 	{
-		m_model = modelptr;
+		m_model = modelPtr;
+		m_node = nodePtr;
 		_createVertexBuffer(primitive, model);
 		_createIndexBuffer(primitive, model);
 		_createProgram(primitive, model);
@@ -180,7 +183,7 @@ namespace myEngine
 		bgfx::setIndexBuffer(m_ibh);
 		bgfx::setVertexBuffer(0, m_vbh);
 
-		m_material->bindUniforms(m_model);
+		m_material->bindUniforms(m_model, m_node);
 
 		bgfx::submit(0, _shader->getProgramHandle());
 	}

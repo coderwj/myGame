@@ -13,6 +13,7 @@ namespace myEngine
 {
 	class Shader;
 	class Model;
+	class Node;
 	class Material
 	{
 	public:
@@ -26,7 +27,7 @@ namespace myEngine
 
 		void initParams(const tinygltf::Material& material_info, const tinygltf::Model & model);
 
-		void bindUniforms(Model* _model);
+		void bindUniforms(Model* _model, Node* _node);
 
 		void setHasSkin(bool v) { m_hasSkin = v; }
 

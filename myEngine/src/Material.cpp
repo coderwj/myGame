@@ -6,6 +6,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Model.h"
+#include "Node.h"
 
 namespace myEngine
 {
@@ -125,9 +126,11 @@ namespace myEngine
 
 	}
 
-	void Material::bindUniforms(Model* _model)
+	void Material::bindUniforms(Model* _model, Node* _node)
 	{
 		if (nullptr == _model)
+			return;
+		if (nullptr == _node)
 			return;
 		if (nullptr == m_shader)
 			return;
@@ -136,7 +139,8 @@ namespace myEngine
 		if (nullptr == _camera)
 			return;
 
-		const Matrix4& _mat_model = _model->getModelMatrix();
+		Matrix4 _mat_model;
+		_mat_model.initWithScaleRotateTranslate(_node->getScale(), _node->getRotate(), _node->getTranslate());
 		const Matrix4& _mat_world = _mat_model * _model->getWorldMatrix();
 
 

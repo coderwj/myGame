@@ -45,6 +45,8 @@ namespace myEngine
 		void translate(const Vector3& v);
 
 		void deCompose(Vector3& s, Quaternion& r, Vector3& t) const;
+
+		void inverse();
 	
 	    Matrix4& operator = (const Matrix4& m);
 	

@@ -7,6 +7,7 @@ namespace myEngine
 {
 	class Material;
 	class Model;
+	class Node;
 
 	class RenderObject
 	{
@@ -17,7 +18,7 @@ namespace myEngine
 		static bgfx::AttribType::Enum	mapAttributeComponentType(int gltf_attr_comp_type);
 		static bgfx::Attrib::Enum		mapAttributeType(const std::string& attr_str);
 
-		void init(Model* modelptr, const tinygltf::Primitive& primitive, const tinygltf::Model& model);
+		void init(Model* modelPtr, Node* nodePtr, const tinygltf::Primitive& primitive, const tinygltf::Model& model);
 		void draw() const;
 
 		const Material* getMaterial() { return m_material; };
@@ -31,6 +32,7 @@ namespace myEngine
 
 	private:
 		Model* m_model;
+		Node* m_node;
 		Material*	m_material;
 		bgfx::VertexBufferHandle	m_vbh;
 		bgfx::IndexBufferHandle		m_ibh;

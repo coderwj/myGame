@@ -14,7 +14,10 @@ namespace myEngine
 	}
 	Matrix4::Matrix4(const double * data)
 	{
-		memcpy(this, data, sizeof(float) * 16);
+		for (size_t i = 0; i < 16; i++)
+		{
+			m[i] = static_cast<float>(data[i]);
+		}
 	}
 	Matrix4::Matrix4(const Matrix4& m)
 	{
@@ -151,9 +154,15 @@ namespace myEngine
 		r.x = sqrt(std::fmaxf(0.f, 1 + rm.m11 - rm.m22 - rm.m33)) / 2;
 		r.y = sqrt(std::fmaxf(0.f, 1 - rm.m11 + rm.m22 - rm.m33)) / 2;
 		r.z = sqrt(std::fmaxf(0.f, 1 - rm.m11 - rm.m22 + rm.m33)) / 2;
-		r.x *= std::copysignf(r.x, (m32 - m23));
-		r.y *= std::copysignf(r.y, (m13 - m31));
-		r.z *= std::copysignf(r.z, (m21 - m12));
+		r.x = std::copysignf(r.x, (m32 - m23));
+		r.y = std::copysignf(r.y, (m13 - m31));
+		r.z = std::copysignf(r.z, (m21 - m12));
+		r.normalize();
+	}
+
+	void Matrix4::inverse()
+	{
+		//TODO
 	}
 	
 	Matrix4& Matrix4::operator = (const Matrix4 &m)

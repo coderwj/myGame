@@ -172,7 +172,7 @@ namespace myEngine
 			for (const tinygltf::Primitive& p : _mesh.primitives)
 			{
 				RenderObject* _render_object = new RenderObject();
-				_render_object->init(this, p, *m_gltf_model);
+				_render_object->init(this, _my_node, p, *m_gltf_model);
 				m_render_objects.push_back(_render_object);
 			}
 
