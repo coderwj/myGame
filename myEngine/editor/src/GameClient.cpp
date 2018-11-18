@@ -102,18 +102,15 @@ namespace myGame
 		}
 		m_state = nullptr;
 
-		for (vector<Character *>::iterator it = m_characters.begin(); it != m_characters.end();)
+		for (std::pair<std::string, Character*> c : m_characters)
 		{
-			if (*it)
+			if (c.second)
 			{
-				delete(*it);
-				it = m_characters.erase(it);
-			}
-			else
-			{
-				it++;
+				delete(c.second);
 			}
 		}
+		m_characters.clear();
+
 		imguiDestroy();
 	}
 	
@@ -130,13 +127,7 @@ namespace myGame
 
 		imguiCreate(20, NULL);
 	
-		m_mainCharacter = Character::Create("model_3");
-
-		Character* c1 = Character::Create("model_6");
-		m_characters.push_back(c1);
-
-		//Character* c2 = Character::Create("model_6");
-		//m_characters.push_back(c2);
+		//m_mainCharacter = Character::Create("scene_1");
 
 		m_cameraOption = new CameraOption();
 		m_cameraOption->setCamera(pEngine->getMaincCamera());
@@ -205,6 +196,37 @@ namespace myGame
 			ImGui::TreePop();
 		}
 		ImGui::Separator();
+
+		ImGui::BeginGroup();
+		std::vector<std::string> modelNames;
+		modelNames.push_back("model_3");
+		modelNames.push_back("model_4");
+		modelNames.push_back("model_5");
+		modelNames.push_back("model_6");
+		static bool showModel[4] = {false, true, false, false};
+		for (size_t i = 0; i < 4; i++)
+		{
+			ImGui::Checkbox(modelNames[i].c_str(), &(showModel[i]));
+			if (showModel[i])
+			{
+				if (m_characters.find(modelNames[i]) == m_characters.end())
+				{
+					Character* c = Character::Create(modelNames[i].c_str());
+					m_characters.insert(std::make_pair(modelNames[i], c));
+				}
+				m_characters[modelNames[i]]->setModelVisible(true);
+			}
+			else
+			{
+				if (m_characters.find(modelNames[i]) != m_characters.end())
+				{
+					m_characters[modelNames[i]]->setModelVisible(false);
+				}
+			}
+		}
+		ImGui::EndGroup();
+
+		ImGui::Separator();
 		ImGui::End();
 
 		ImGui::End();
@@ -229,11 +251,11 @@ namespace myGame
 			pEngine->tick(delta);
 		if (m_mainCharacter)
 			m_mainCharacter->tick(delta);
-		for (Character* c : m_characters)
+		for (std::pair<std::string, Character*> c : m_characters)
 		{
-			if (c)
+			if (c.second)
 			{
-				c->tick(delta);
+				c.second->tick(delta);
 			}
 		}
 

@@ -57,12 +57,12 @@
     <name>model_6</name>
     <path>DamagedHelmet/DamagedHelmet.gltf</path>
     <material>pbr_gltf</material>
-    <scale>1.0</scale>
+    <scale>0.2</scale>
     <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
-    <position x="0" y="0" z="0"/>
+    <position x="0" y="0" z="2"/>
   </model>
   <model id="7">
     <name>scene_1</name>

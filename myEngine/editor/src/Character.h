@@ -23,6 +23,8 @@ namespace myGame
 		Vector3 getPosition(){return m_position;}
 		void setOrientation(Vector3 ori){m_orientation = ori;}
 		Vector3 getOrientation(){return m_orientation;}
+
+		void setModelVisible(bool v) const;
 	
 		void tick(int delta);
 	private:

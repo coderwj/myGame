@@ -104,6 +104,20 @@ namespace myGame
 	        return NULL;
 	}
 	
+	void Character::setModelVisible(bool v) const
+	{
+		Engine* _engine = Engine::getInstance();
+		if (nullptr == _engine)
+		{
+			return;
+		}
+		if (m_modelId != -1)
+		{
+			Model* _model = _engine->getModelById(m_modelId);
+			_model->setVisible(v);
+		}
+	}
+
 	void Character::tick(int delta)
 	{
 

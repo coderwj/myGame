@@ -35,6 +35,7 @@ namespace myEngine
 	Model::Model()
 	:m_gltf_model(nullptr)
 	,m_skeleton(nullptr)
+	,m_visible(true)
 	{
 	}
 
@@ -155,7 +156,14 @@ namespace myEngine
 		}
 		if (!_node.matrix.empty())
 		{
-			Matrix4 m(_node.matrix.data());
+			Matrix4 m;
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					m.m[i * 4 + j] = _node.matrix[j * 4 + i];
+				}
+			}
 			Vector3 s;
 			Quaternion r;
 			Vector3 t;
@@ -352,6 +360,14 @@ namespace myEngine
 		Renderer* _renderer = Renderer::getInstance();
 		if (nullptr == _renderer)
 			return;
+
+		int _id = m_gltf_model->defaultScene;
+		const tinygltf::Scene& _scene = m_gltf_model->scenes[_id];
+		for (int n : _scene.nodes)
+		{
+			_updateNodeTransformToChilren(m_node_map[n]);
+		}
+
 		for (const RenderObject* r : m_render_objects)
 		{
 			_renderer->pushRenderObject(r);
@@ -384,13 +400,10 @@ namespace myEngine
 		{
 			_anim->tick(delta);
 		}
-		int _id = m_gltf_model->defaultScene;
-		const tinygltf::Scene& _scene = m_gltf_model->scenes[_id];
-		for (int n : _scene.nodes)
+		if (m_visible)
 		{
-			_updateNodeTransformToChilren(m_node_map[n]);
+			draw();
 		}
-		draw();
 	}
 
 }

@@ -3,7 +3,7 @@
 #include "Vector3.h"
 
 #include <string>
-#include <vector>
+#include <map>
 
 using namespace myEngine;
 
@@ -66,7 +66,7 @@ namespace myGame
 		Character*			m_mainCharacter;
 		CameraOption*		m_cameraOption;
 
-		std::vector<Character*> m_characters;
+		std::map<std::string, Character*> m_characters;
 
 		struct lua_State*	m_state;
 

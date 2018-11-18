@@ -56,6 +56,9 @@ namespace myEngine
 
 		void setModelMatrix(const Matrix4& w);
 		void setWorldMatrix(const Matrix4& w);
+
+		bool getVisible() const { return m_visible; }
+		void setVisible(bool val) { m_visible = val; }
 	
 	private:
 
@@ -97,6 +100,8 @@ namespace myEngine
 
 		//skeleton
 		Skeleton* m_skeleton;
+
+		bool m_visible;
 	};
 }
 

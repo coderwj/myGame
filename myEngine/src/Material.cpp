@@ -140,7 +140,10 @@ namespace myEngine
 			return;
 
 		Matrix4 _mat_model;
-		_mat_model.initWithScaleRotateTranslate(_node->getScale(), _node->getRotate(), _node->getTranslate());
+		if (!m_hasSkin)
+		{
+			_mat_model.initWithScaleRotateTranslate(_node->getScale(), _node->getRotate(), _node->getTranslate());
+		}
 		const Matrix4& _mat_world = _mat_model * _model->getWorldMatrix();
 
 
