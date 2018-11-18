@@ -127,7 +127,7 @@ namespace myGame
 
 		imguiCreate(20, NULL);
 	
-		//m_mainCharacter = Character::Create("model_1");
+		m_mainCharacter = Character::Create("scene_1");
 
 		m_cameraOption = new CameraOption();
 		m_cameraOption->setCamera(pEngine->getMaincCamera());
@@ -205,7 +205,7 @@ namespace myGame
 		modelNames.push_back("model_4");
 		modelNames.push_back("model_5");
 		modelNames.push_back("model_6");
-		static bool showModel[6] = {true, false, false, false, false, false};
+		static bool showModel[6] = {false, false, false, false, false, false};
 		for (size_t i = 0; i < 6; i++)
 		{
 			ImGui::Checkbox(modelNames[i].c_str(), &(showModel[i]));

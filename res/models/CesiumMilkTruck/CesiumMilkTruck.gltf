@@ -458,19 +458,6 @@
                 },
                 "metallicFactor": 0.0
             },
-            "extensions": {
-                "KHR_materials_pbrSpecularGlossiness": {
-                    "diffuseTexture": {
-                        "index": 0
-                    },
-                    "specularFactor": [
-                        0.03999999910593033,
-                        0.03999999910593033,
-                        0.03999999910593033
-                    ],
-                    "glossinessFactor": 1.0
-                }
-            },
             "name": "truck"
         },
         {
@@ -482,22 +469,6 @@
                     1.0
                 ],
                 "metallicFactor": 0.0
-            },
-            "extensions": {
-                "KHR_materials_pbrSpecularGlossiness": {
-                    "diffuseFactor": [
-                        0.0,
-                        0.04050629958510399,
-                        0.021240700036287309,
-                        1.0
-                    ],
-                    "specularFactor": [
-                        0.6499999761581421,
-                        0.6499999761581421,
-                        0.6499999761581421
-                    ],
-                    "glossinessFactor": 1.0
-                }
             },
             "name": "glass"
         },
@@ -511,22 +482,6 @@
                 ],
                 "metallicFactor": 0.0
             },
-            "extensions": {
-                "KHR_materials_pbrSpecularGlossiness": {
-                    "diffuseFactor": [
-                        0.06400000303983689,
-                        0.06400000303983689,
-                        0.06400000303983689,
-                        1.0
-                    ],
-                    "specularFactor": [
-                        0.03999999910593033,
-                        0.03999999910593033,
-                        0.03999999910593033
-                    ],
-                    "glossinessFactor": 1.0
-                }
-            },
             "name": "window_trim"
         },
         {
@@ -535,19 +490,6 @@
                     "index": 1
                 },
                 "metallicFactor": 0.0
-            },
-            "extensions": {
-                "KHR_materials_pbrSpecularGlossiness": {
-                    "diffuseTexture": {
-                        "index": 1
-                    },
-                    "specularFactor": [
-                        0.03999999910593033,
-                        0.03999999910593033,
-                        0.03999999910593033
-                    ],
-                    "glossinessFactor": 1.0
-                }
             },
             "name": "wheels"
         }
@@ -612,8 +554,5 @@
             "byteLength": 109384,
             "uri": "CesiumMilkTruck0.bin"
         }
-    ],
-    "extensionsUsed": [
-        "KHR_materials_pbrSpecularGlossiness"
     ]
 }

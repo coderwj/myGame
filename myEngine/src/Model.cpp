@@ -156,14 +156,7 @@ namespace myEngine
 		}
 		if (!_node.matrix.empty())
 		{
-			Matrix4 m;
-			for (int i = 0; i < 4; i++)
-			{
-				for (int j = 0; j < 4; j++)
-				{
-					m.m[i * 4 + j] = _node.matrix[j * 4 + i];
-				}
-			}
+			Matrix4 m(_node.matrix.data());
 			Vector3 s;
 			Quaternion r;
 			Vector3 t;
