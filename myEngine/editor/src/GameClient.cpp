@@ -127,7 +127,7 @@ namespace myGame
 
 		imguiCreate(20, NULL);
 	
-		//m_mainCharacter = Character::Create("scene_1");
+		//m_mainCharacter = Character::Create("model_1");
 
 		m_cameraOption = new CameraOption();
 		m_cameraOption->setCamera(pEngine->getMaincCamera());
@@ -186,7 +186,7 @@ namespace myGame
 			}
 			static float startSpeed = m_cameraOption->getMoveSpeed();
 			static float currentSpeed = startSpeed;
-			if (ImGui::SliderFloat("Move Speed", &currentSpeed, startSpeed, 8.f * startSpeed, "Speed = %.6f"))
+			if (ImGui::SliderFloat("Camera Speed", &currentSpeed, 0.1f * startSpeed, 10.f * startSpeed, "Speed = %.2f"))
 			{
 				if (NULL != m_cameraOption)
 				{
@@ -199,12 +199,14 @@ namespace myGame
 
 		ImGui::BeginGroup();
 		std::vector<std::string> modelNames;
+		modelNames.push_back("model_1");
+		modelNames.push_back("model_2");
 		modelNames.push_back("model_3");
 		modelNames.push_back("model_4");
 		modelNames.push_back("model_5");
 		modelNames.push_back("model_6");
-		static bool showModel[4] = {false, true, false, false};
-		for (size_t i = 0; i < 4; i++)
+		static bool showModel[6] = {true, false, false, false, false, false};
+		for (size_t i = 0; i < 6; i++)
 		{
 			ImGui::Checkbox(modelNames[i].c_str(), &(showModel[i]));
 			if (showModel[i])

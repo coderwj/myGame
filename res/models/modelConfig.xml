@@ -2,23 +2,25 @@
 <modelConfig>
   <model id="1">
     <name>model_1</name>
-    <path>cube/Cube.gltf</path>
+    <path>CesiumMilkTruck/CesiumMilkTruck.gltf</path>
     <material>pbr_gltf</material>
     <scale>1.0</scale>
     <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
+    <position x="2" y="0" z="2"/>
   </model>
   <model id="2">
     <name>model_2</name>
     <path>water_bottle/WaterBottle.gltf</path>
     <material>pbr_gltf</material>
-    <scale>10.0</scale>
+    <scale>2.0</scale>
     <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
+    <position x="4" y="0" z="2"/>
   </model>
   <model id="3">
     <name>model_3</name>
@@ -29,7 +31,7 @@
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
-    <position x="3" y="0" z="0"/>
+    <position x="4" y="0" z="0"/>
   </model>
   <model id="4">
     <name>model_4</name>
@@ -57,7 +59,7 @@
     <name>model_6</name>
     <path>DamagedHelmet/DamagedHelmet.gltf</path>
     <material>pbr_gltf</material>
-    <scale>0.2</scale>
+    <scale>0.4</scale>
     <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
