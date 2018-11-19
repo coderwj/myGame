@@ -227,6 +227,7 @@ namespace myEngine
 
 	void Model::_loadAnimations()
 	{
+		m_animations.reserve(m_gltf_model->animations.size());
 		for (const tinygltf::Animation& a : m_gltf_model->animations)
 		{
 			Animation *_anim = new Animation();
@@ -294,6 +295,7 @@ namespace myEngine
 					KeyFrame _frame;
 					_frame.time = time_buffer_data[i];
 					size_t _size = _chain.getType();
+					_frame.values.reserve(_size);
 					for (size_t j = 0; j < _size; j++)
 					{
 						_frame.values.push_back(value_buffer_data[i * _size + j]);

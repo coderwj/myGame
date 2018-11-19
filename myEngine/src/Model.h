@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 #include "Matrix4.h"
 #include "Vector3.h"
@@ -90,7 +90,7 @@ namespace myEngine
 		//node tree
 		std::vector<int> m_roots;
 		std::vector<Node*> m_nodes;
-		std::map<int, Node*> m_node_map; //k: gltf file node idx, v: Node* in m_nodes vector.
+		std::unordered_map<int, Node*> m_node_map; //k: gltf file node idx, v: Node* in m_nodes vector.
 		
 		//model matrix
 		Matrix4 m_model_matrix;

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <assert.h>
 
 #include "config.h"
 #include "HelperFunc.h"
@@ -65,14 +66,17 @@ namespace myEngine
 		uint16_t num1 = bgfx::getShaderUniforms(m_vertex_shader, &m_uniform[0], UNIFORM_MAX_NUM);
 		uint16_t num2 = bgfx::getShaderUniforms(m_fragment_shader, &m_uniform[num1], UNIFORM_MAX_NUM - num1);
 		m_uniform.resize(num1 + num2);
+		m_uniform_name.reserve(num1 + num2);
+		m_uniform_info.reserve(num1 + num2);
 		for (std::vector<bgfx::UniformHandle>::iterator it = m_uniform.begin(); it != m_uniform.end(); it++)
 		{
 			bgfx::UniformInfo info;
 			bgfx::getUniformInfo((*it), info);
 			int index = it - m_uniform.begin();
-			std::string name = std::string(info.name);
+			const std::string& name = std::string(info.name);
+			m_uniform_name.push_back(name);
 			m_uniform_idx[name] = index;
-			m_uniform_info[name] = info;
+			m_uniform_info.push_back(info);
 		}
 	}
 
@@ -96,34 +100,25 @@ namespace myEngine
 		bgfx::setTexture(stage, _handle, th);
 	}
 
-	std::vector<std::string> Shader::getAllUniformNames() const
+	const std::vector<std::string>& Shader::getAllUniformNames() const
 	{
-		std::vector<std::string> result;
-		for (std::map<std::string, int>::const_iterator it = m_uniform_idx.begin(); it != m_uniform_idx.end(); it++)
-		{
-			result.push_back(it->first);
-		}
-		return result;
+		return m_uniform_name;
 	}
 
-	const bgfx::UniformInfo& Shader::getUniformInfo(const std::string & s) const
+	const bgfx::UniformInfo& Shader::getUniformInfo(const std::string& s) const
 	{
-		std::map<std::string, bgfx::UniformInfo>::const_iterator it = m_uniform_info.find(s);
-		if (it != m_uniform_info.end())
-		{
-			return it->second;
-		}
-		//TODO
-		return m_uniform_info.begin()->second;
+		int idx = m_uniform_idx.at(s);
+		assert(idx >= 0 && static_cast<size_t>(idx) < m_uniform_info.size());
+		return m_uniform_info[idx];
 	}
 
-	bgfx::UniformHandle Shader::_getUniformByName(const std::string & name) const
+	bgfx::UniformHandle Shader::_getUniformByName(const std::string& name) const
 	{
-		std::map<std::string, int>::const_iterator it = m_uniform_idx.find(name);
+		bgfx::UniformHandle result = BGFX_INVALID_HANDLE;
+		std::unordered_map<std::string, int>::const_iterator it = m_uniform_idx.find(name);
 		if (it != m_uniform_idx.end() && it->second < static_cast<int>(m_uniform.size()))
-			return m_uniform[it->second];
-
-		return bgfx::UniformHandle(BGFX_INVALID_HANDLE);
+			result = m_uniform[it->second];
+		return result;
 	}
 
 }

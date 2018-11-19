@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 #include "bgfx/bgfx.h"
 
@@ -23,7 +23,7 @@ namespace myEngine
 
 		void	setTexture(int stage, const std::string &name, const bgfx::TextureHandle& th) const;
 
-		std::vector<std::string> getAllUniformNames() const;
+		const std::vector<std::string>& getAllUniformNames() const;
 		const bgfx::UniformInfo& getUniformInfo(const std::string& s) const;
 
 		//void    setUniform(const char* name, const void* values) const { setUniform(std::string(name), values); }
@@ -39,8 +39,9 @@ namespace myEngine
 		bgfx::ShaderHandle                  m_fragment_shader;
 		bgfx::ProgramHandle                 m_program;
 		std::vector<bgfx::UniformHandle>    m_uniform;
-		std::map<std::string, int>          m_uniform_idx;
-		std::map<std::string, bgfx::UniformInfo>	m_uniform_info;
+		std::vector<std::string>			m_uniform_name;
+		std::unordered_map<std::string, int> m_uniform_idx;
+		std::vector<bgfx::UniformInfo>		m_uniform_info;
 
 		static int                          UNIFORM_MAX_NUM;
 	};
