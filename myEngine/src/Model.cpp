@@ -132,28 +132,6 @@ namespace myEngine
 		}
 
 		//node transform
-		if (!_node.scale.empty())
-		{
-			_my_node->setScale(Vector3(
-				static_cast<float>(_node.scale[0]),
-				static_cast<float>(_node.scale[1]),
-				static_cast<float>(_node.scale[2])));
-		}
-		if (!_node.rotation.empty())
-		{
-			_my_node->setRotate(Quaternion(
-				static_cast<float>(_node.rotation[0]),
-				static_cast<float>(_node.rotation[1]),
-				static_cast<float>(_node.rotation[2]),
-				static_cast<float>(_node.rotation[3])));
-		}
-		if (!_node.translation.empty())
-		{
-			_my_node->setTranslate(Vector3(
-				static_cast<float>(_node.translation[0]),
-				static_cast<float>(_node.translation[1]),
-				static_cast<float>(_node.translation[2])));
-		}
 		if (!_node.matrix.empty())
 		{
 			Matrix4 m(_node.matrix.data());
@@ -164,6 +142,31 @@ namespace myEngine
 			_my_node->setScale(s);
 			_my_node->setRotate(r);
 			_my_node->setTranslate(t);
+		}
+		else
+		{
+			if (!_node.scale.empty())
+			{
+				_my_node->setScale(Vector3(
+					static_cast<float>(_node.scale[0]),
+					static_cast<float>(_node.scale[1]),
+					static_cast<float>(_node.scale[2])));
+			}
+			if (!_node.rotation.empty())
+			{
+				_my_node->setRotate(Quaternion(
+					static_cast<float>(_node.rotation[0]),
+					static_cast<float>(_node.rotation[1]),
+					static_cast<float>(_node.rotation[2]),
+					static_cast<float>(_node.rotation[3])));
+			}
+			if (!_node.translation.empty())
+			{
+				_my_node->setTranslate(Vector3(
+					static_cast<float>(_node.translation[0]),
+					static_cast<float>(_node.translation[1]),
+					static_cast<float>(_node.translation[2])));
+			}
 		}
 
 		//mesh node
@@ -198,6 +201,14 @@ namespace myEngine
 						Matrix4 _mat(_data);
 						m_skeleton->m_joint_inverse_mats.push_back(_mat);
 						_data += 16;
+					}
+				}
+				else
+				{
+					for (size_t i = 0; i < m_skeleton->m_joint_idxs.size(); i++)
+					{
+						Matrix4 _mat;
+						m_skeleton->m_joint_inverse_mats.push_back(_mat);
 					}
 				}
 			}
@@ -305,47 +316,38 @@ namespace myEngine
 		return m_textrue_handles[index];
 	}
 
-	const Matrix4* Model::getJointMatrixsData()
+	const Matrix4* Model::getJointMatrixsData(const Node* mesh_node)
 	{
 		m_joint_matrixs.clear();
 		m_joint_matrixs.reserve(Skeleton::MAX_JOINT_NUM);
+
+		if (nullptr == m_skeleton)
+		{
+			return m_joint_matrixs.data();
+		}
+
+		if (nullptr == mesh_node)
+		{
+			return m_joint_matrixs.data();
+		}
+
+		Matrix4 inverseGlobalMatrix;
+		Node* mesh_parent = mesh_node->getParent();
+		if (mesh_parent)
+		{
+			inverseGlobalMatrix = mesh_parent->generateGlobalMatrix();
+		}
 
 		for (size_t i = 0; i < m_skeleton->m_joint_idxs.size(); i++)
 		{
 			int idx = m_skeleton->m_joint_idxs[i];
 			Node* _n = m_node_map[idx];
 
-			Matrix4 _joint_matrix;
-			_joint_matrix.initWithScaleRotateTranslate(_n->getScale(), _n->getRotate(), _n->getTranslate());
+			Matrix4 _joint_matrix = _n->generateGlobalMatrix();
 
-			m_joint_matrixs.push_back(m_skeleton->m_joint_inverse_mats[i] * _joint_matrix);
+			m_joint_matrixs.push_back(m_skeleton->m_joint_inverse_mats[i] * _joint_matrix * inverseGlobalMatrix);
 		}
 		return m_joint_matrixs.data();
-	}
-
-	void Model::_updateNodeTransformToChilren(Node* parent)
-	{
-		std::vector<Node*> children = parent->getChildren();
-		for (Node* child : children)
-		{
-			if (child->getDirty())
-			{
-				const Vector3& _scale_p = parent->getScale();
-				const Quaternion& _rotate_p = parent->getRotate();
-				const Vector3& _translate_p = parent->getTranslate();
-
-				Vector3 _scale = child->getScale();
-				Quaternion _rotate = child->getRotate();
-				Vector3 _translate = child->getTranslate();
-
-				child->setScale(_scale_p * _scale);
-				child->setRotate(_rotate_p * _rotate);
-				child->setTranslate(_rotate_p * (_scale_p * _translate) + _translate_p);
-
-				child->setDirty(false);
-			}
-			_updateNodeTransformToChilren(child);
-		}
 	}
 
 	void Model::draw()
@@ -353,13 +355,6 @@ namespace myEngine
 		Renderer* _renderer = Renderer::getInstance();
 		if (nullptr == _renderer)
 			return;
-
-		int _id = m_gltf_model->defaultScene;
-		const tinygltf::Scene& _scene = m_gltf_model->scenes[_id];
-		for (int n : _scene.nodes)
-		{
-			_updateNodeTransformToChilren(m_node_map[n]);
-		}
 
 		for (const RenderObject* r : m_render_objects)
 		{

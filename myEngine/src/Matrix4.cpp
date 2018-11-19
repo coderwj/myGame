@@ -162,6 +162,11 @@ namespace myEngine
 
 	void Matrix4::inverse()
 	{
+		Vector3 s;
+		Quaternion r;
+		Vector3 t;
+		deCompose(s, r, t);
+		initWithScaleRotateTranslate(Vector3(1 / s.x, 1 / s.y, 1 / s.z), conjugate(r), Vector3(-t.x, -t.y, -t.z));
 		//TODO
 	}
 	

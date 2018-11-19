@@ -7,8 +7,9 @@ $output v_Position, v_UV, v_TBNX, v_TBNY, v_TBNZ, v_Normal
 uniform mat4 u_JointMatrixs[64];
 #endif
 
-uniform mat4 u_VPMatrix;
+uniform mat4 u_ModelMatrix;
 uniform mat4 u_WorldMatrix;
+uniform mat4 u_VPMatrix;
 uniform mat4 u_NormalMatrix;
 
 void main()
@@ -19,11 +20,11 @@ void main()
                  a_weight.y * u_JointMatrixs[int(a_indices.y)] +
                  a_weight.z * u_JointMatrixs[int(a_indices.z)] +
                  a_weight.w * u_JointMatrixs[int(a_indices.w)];
-  mat4 worldMatrix = u_WorldMatrix * skinMat;
-  mat4 normalMatrix = u_NormalMatrix * skinMat;
+  mat4 worldMatrix = u_WorldMatrix * u_ModelMatrix * skinMat;
+  mat4 normalMatrix = u_WorldMatrix * u_NormalMatrix * skinMat;
 #else // !HAS_SKIN
-  mat4 worldMatrix = u_WorldMatrix;
-  mat4 normalMatrix = u_NormalMatrix;
+  mat4 worldMatrix = u_WorldMatrix * u_ModelMatrix;
+  mat4 normalMatrix = u_WorldMatrix * u_NormalMatrix;
 #endif
 
   vec4 pos = mul(worldMatrix, vec4(a_position, 1.0));

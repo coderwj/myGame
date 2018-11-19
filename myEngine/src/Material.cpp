@@ -139,12 +139,8 @@ namespace myEngine
 		if (nullptr == _camera)
 			return;
 
-		Matrix4 _mat_model;
-		if (!m_hasSkin)
-		{
-			_mat_model.initWithScaleRotateTranslate(_node->getScale(), _node->getRotate(), _node->getTranslate());
-		}
-		const Matrix4& _mat_world = _mat_model * _model->getWorldMatrix();
+		const Matrix4& _mat_model = _node->generateGlobalMatrix();
+		const Matrix4& _mat_world = _model->getWorldMatrix();
 
 
 		std::vector<std::string> _uniform_names = m_shader->getAllUniformNames();
@@ -201,9 +197,13 @@ namespace myEngine
 				{
 					m_shader->setUniform(*it, static_cast<const void*>(&_mat_world));
 				}
+				else if ((*it).compare("u_ModelMatrix") == 0)
+				{
+					m_shader->setUniform(*it, static_cast<const void*>(&_mat_model));
+				}
 				else if ((*it).compare("u_NormalMatrix") == 0)
 				{
-					m_shader->setUniform(*it, static_cast<const void*>(&_mat_world));
+					m_shader->setUniform(*it, static_cast<const void*>(&_mat_model));
 				}
 				else if ((*it).compare("u_Camera") == 0)
 				{
@@ -247,7 +247,7 @@ namespace myEngine
 				}
 				else if ((*it).compare("u_JointMatrixs") == 0)
 				{
-					const void* _data = static_cast<const void*>(_model->getJointMatrixsData());
+					const void* _data = static_cast<const void*>(_model->getJointMatrixsData(_node));
 					m_shader->setUniform(*it, _data, Skeleton::MAX_JOINT_NUM);
 				}
 				else

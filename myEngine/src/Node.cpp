@@ -27,7 +27,7 @@ namespace myEngine
 		return m_translate;
 	}
 
-	const Node* Node::getParent() const
+	Node* Node::getParent() const
 	{
 		return m_parent;
 	}
@@ -67,6 +67,26 @@ namespace myEngine
 		m_scale = Vector3::ONE;
 		m_rotate = Quaternion::IDENTITY;
 		m_translate = Vector3::ZERO;
+	}
+
+	const Matrix4& Node::generateGlobalMatrix()
+	{
+		if (m_dirty)
+		{
+			Matrix4 localMatrix;
+			localMatrix.initWithScaleRotateTranslate(m_scale, m_rotate, m_translate);
+			if (m_parent)
+			{
+				const Matrix4& parentMatrix = m_parent->generateGlobalMatrix();
+				m_globalMatrix = localMatrix * parentMatrix;
+			}
+			else
+			{
+				m_globalMatrix = localMatrix;
+			}
+			m_dirty = false;
+		}
+		return m_globalMatrix;
 	}
 
 }

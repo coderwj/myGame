@@ -4,7 +4,7 @@
     <name>model_1</name>
     <path>CesiumMilkTruck/CesiumMilkTruck.gltf</path>
     <material>pbr_gltf</material>
-    <scale>1.0</scale>
+    <scale>0.2</scale>
     <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
@@ -13,9 +13,9 @@
   </model>
   <model id="2">
     <name>model_2</name>
-    <path>water_bottle/WaterBottle.gltf</path>
+    <path>Monster/Monster.gltf</path>
     <material>pbr_gltf</material>
-    <scale>2.0</scale>
+    <scale>0.01</scale>
     <rotateTheta>0</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
@@ -26,7 +26,7 @@
     <name>model_3</name>
     <path>pony_cartoon/scene.gltf</path>
     <material>pbr_gltf</material>
-    <scale>0.004</scale>
+    <scale>0.002</scale>
     <rotateTheta>30</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>

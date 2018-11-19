@@ -26,7 +26,7 @@ namespace myEngine
 	{
 	public:
 		Skeleton()
-		:m_root_idx(0)
+		:m_root_idx(-1)
 		{
 
 		}
@@ -49,7 +49,7 @@ namespace myEngine
 
 		bgfx::TextureHandle getTextureHandle(int index);
 
-		const Matrix4* getJointMatrixsData();
+		const Matrix4* getJointMatrixsData(const Node* mesh_node);
 
 		const Matrix4& getModelMatrix();
 		const Matrix4& getWorldMatrix();
