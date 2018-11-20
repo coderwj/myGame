@@ -49,7 +49,7 @@ namespace myEngine
 
 		bgfx::TextureHandle getTextureHandle(int index);
 
-		const Matrix4* getJointMatrixsData(const Node* mesh_node);
+		const Matrix4* getJointMatrixsData(Node* mesh_node);
 
 		const Matrix4& getModelMatrix();
 		const Matrix4& getWorldMatrix();

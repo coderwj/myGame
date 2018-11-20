@@ -318,7 +318,7 @@ namespace myEngine
 		return m_textrue_handles[index];
 	}
 
-	const Matrix4* Model::getJointMatrixsData(const Node* mesh_node)
+	const Matrix4* Model::getJointMatrixsData(Node* mesh_node)
 	{
 		m_joint_matrixs.clear();
 		m_joint_matrixs.reserve(Skeleton::MAX_JOINT_NUM);
@@ -334,11 +334,8 @@ namespace myEngine
 		}
 
 		Matrix4 inverseGlobalMatrix;
-		Node* mesh_parent = mesh_node->getParent();
-		if (mesh_parent)
-		{
-			inverseGlobalMatrix = mesh_parent->generateGlobalMatrix();
-		}
+		inverseGlobalMatrix = mesh_node->generateGlobalMatrix();
+		inverseGlobalMatrix.inverse();
 
 		for (size_t i = 0; i < m_skeleton->m_joint_idxs.size(); i++)
 		{
