@@ -35,6 +35,8 @@ namespace myEngine
 
 		void setHasTangent(bool v) { m_hasTangent = v; }
 
+		void setUseIBL(bool v) { m_useIBL = v; }
+
 	private:
 		std::string _getVertexShaderDefines();
 		std::string _getFragmentShaderDefines();
@@ -65,6 +67,7 @@ namespace myEngine
 		bool m_hasSkin;
 		bool m_hasUv;
 		bool m_hasTangent;
+		bool m_useIBL;
 	};
 }
 

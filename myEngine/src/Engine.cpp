@@ -3,6 +3,13 @@
 #include "Camera.h"
 #include "Renderer.h"
 #include "Model.h"
+#include "stb_image.h"
+#include "config.h"
+#include "StringDef.h"
+
+#include <cassert>
+
+#define CUBE_FACE_NUM 6
 
 namespace myEngine
 {
@@ -12,6 +19,9 @@ namespace myEngine
 	:m_maincCamera(nullptr)
 	,m_renderer(nullptr)
 	{
+		m_skyboxTextureCube = BGFX_INVALID_HANDLE;
+		m_diffuseEnvTextureCube = BGFX_INVALID_HANDLE;
+		m_specularEnvTextureCube = BGFX_INVALID_HANDLE;
 		onCreate();
 	}
 
@@ -75,6 +85,26 @@ namespace myEngine
             m_maincCamera->setPosition(Vector3(0.f, 0.f, 1.f));
             m_maincCamera->SetFocusPos(Vector3(0.f, 0.f, 0.f));
         }
+
+		std::vector<std::string> diffuseTextures;
+		std::vector<std::string> specularTextures;
+		for (int i = 0; i < CUBE_FACE_NUM; i++)
+		{
+			char buff[64];
+			myEngine::sprintf(buff, 64, "dif_env_teuxture_%d", i);
+			const std::string& difName = Config::GetConfigStr(buff);
+			diffuseTextures.push_back(Config::game_res_path + difName);
+
+			myEngine::sprintf(buff, 64, "spe_env_teuxture_%d", i);
+			const std::string& speName = Config::GetConfigStr(buff);
+			specularTextures.push_back(Config::game_res_path + speName);
+		}
+		m_diffuseEnvTextureCube = loadCubemap(diffuseTextures);
+		m_specularEnvTextureCube = loadCubemap(specularTextures);
+
+		const std::string& brdfLUTName = Config::GetConfigStr("brdfLUT_texture");
+		m_brdfLUTTexture = loadTexture(Config::game_res_path + brdfLUTName);
+		
 		return true;
 	}
 	
@@ -129,6 +159,66 @@ namespace myEngine
 		{
 			return nullptr;
 		}
+	}
+
+	bgfx::TextureHandle Engine::loadCubemap(const std::vector<std::string>& faces)
+	{
+		assert(faces.size() == CUBE_FACE_NUM);
+		int width, height, component;
+		unsigned char* imageData[CUBE_FACE_NUM];
+		for (size_t i = 0; i < CUBE_FACE_NUM; i++)
+		{
+			imageData[i] = stbi_load(faces[i].c_str(), &width, &height, &component, STBI_default);
+		}
+
+		bgfx::TextureFormat::Enum _format;
+		if (component == 3)
+			_format = bgfx::TextureFormat::RGB8;
+		else if (component == 4)
+			_format = bgfx::TextureFormat::RGBA8;
+		else
+			_format = bgfx::TextureFormat::Count;
+
+		bgfx::TextureHandle _th = bgfx::createTextureCube(static_cast<size_t>(width), false, 1, _format, 0, nullptr);
+
+		for (size_t i = 0; i < CUBE_FACE_NUM; i++)
+		{
+			uint32_t _size = static_cast<uint32_t>(width * height * component);
+			const bgfx::Memory* _data = bgfx::makeRef(imageData[i], _size);
+			bgfx::updateTextureCube(_th, 1, i, 0, 0, 0, width, height, _data);
+		}
+
+		return _th;
+	}
+
+	bgfx::TextureHandle Engine::loadTexture(std::string path)
+	{
+		int width, height, component;
+		unsigned char* imageData = stbi_load(path.c_str(), &width, &height, &component, STBI_default);
+
+		uint32_t _size = static_cast<uint32_t>(width * height * component);
+		const bgfx::Memory* _data = bgfx::makeRef(imageData, _size);
+
+		bgfx::TextureFormat::Enum _format;
+		if (component == 3)
+			_format = bgfx::TextureFormat::RGB8;
+		else if (component == 4)
+			_format = bgfx::TextureFormat::RGBA8;
+		else
+			_format = bgfx::TextureFormat::Count;
+
+		unsigned long long _flags = 0;
+		//_flags |= BGFX_TEXTURE_SRGB;
+
+		bgfx::TextureHandle _th = bgfx::createTexture2D(static_cast<uint16_t>(width),
+			static_cast<uint16_t>(height),
+			false,
+			1,
+			_format,
+			_flags,
+			_data);
+
+		return _th;
 	}
 
 }

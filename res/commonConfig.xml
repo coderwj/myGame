@@ -4,4 +4,20 @@
   <skybox_name v="2/darkcity_"/>
   <skybox_type v=".png"/>
   <skybox_scale v="50"/>
+
+  <brdfLUT_texture v="textures/brdfLUT.png"/>
+
+  <dif_env_teuxture_0 v="textures/diffuse_right_0.jpg"/>
+  <dif_env_teuxture_1 v="textures/diffuse_left_0.jpg"/>
+  <dif_env_teuxture_2 v="textures/diffuse_top_0.jpg"/>
+  <dif_env_teuxture_3 v="textures/diffuse_bottom_0.jpg"/>
+  <dif_env_teuxture_4 v="textures/diffuse_front_0.jpg"/>
+  <dif_env_teuxture_5 v="textures/diffuse_back_0.jpg"/>
+
+  <spe_env_teuxture_0 v="textures/specular_right_0.jpg"/>
+  <spe_env_teuxture_1 v="textures/specular_left_0.jpg"/>
+  <spe_env_teuxture_2 v="textures/specular_top_0.jpg"/>
+  <spe_env_teuxture_3 v="textures/specular_bottom_0.jpg"/>
+  <spe_env_teuxture_4 v="textures/specular_front_0.jpg"/>
+  <spe_env_teuxture_5 v="textures/specular_back_0.jpg"/>
 </commonconfig>

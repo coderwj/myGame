@@ -96,12 +96,15 @@ namespace myEngine
 			else
 				_format = bgfx::TextureFormat::Count;
 
+			unsigned long long _flags = 0;
+			//_flags |= BGFX_TEXTURE_SRGB;
+
 			bgfx::TextureHandle _th = bgfx::createTexture2D(static_cast<uint16_t>(_img.width),
 															static_cast<uint16_t>(_img.height),
 															false,
 															1,
 															_format,
-															0,
+															_flags,
 															_data);
 			_img.image.clear();
 			_img.image.reserve(0);

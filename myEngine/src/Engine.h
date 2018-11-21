@@ -4,6 +4,8 @@
 #include <vector>
 #include <unordered_map>
 
+#include "bgfx/bgfx.h"
+
 namespace myEngine
 {
 	class Camera;
@@ -35,6 +37,12 @@ namespace myEngine
 		void destroyModelById(int id);
 		Model* getModelById(int id);
 
+		static bgfx::TextureHandle loadCubemap(const std::vector<std::string>& faces);
+		static bgfx::TextureHandle loadTexture(std::string path);
+
+		bgfx::TextureHandle getSpecularEnvTextureHandle() { return m_specularEnvTextureCube; }
+		bgfx::TextureHandle getDiffuseEnvTextureHandle() { return m_diffuseEnvTextureCube; }
+		bgfx::TextureHandle getBrdfLUTTexture() { return m_brdfLUTTexture; }
 	private:
 		static Engine* e;
 
@@ -46,6 +54,11 @@ namespace myEngine
 		Renderer* m_renderer;
 
 		std::unordered_map<int, Model*> m_model_map;
+
+		bgfx::TextureHandle m_skyboxTextureCube;
+		bgfx::TextureHandle m_specularEnvTextureCube;
+		bgfx::TextureHandle m_diffuseEnvTextureCube;
+		bgfx::TextureHandle m_brdfLUTTexture;
 
 	};
 

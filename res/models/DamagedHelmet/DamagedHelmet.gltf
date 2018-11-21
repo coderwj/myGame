@@ -136,6 +136,9 @@
                 "metallicRoughnessTexture" : {
                     "index" : 1
                 }
+            },
+            "extras" : {
+                "useibl" : 1
             }
         }
     ],

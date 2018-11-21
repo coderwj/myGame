@@ -25,6 +25,7 @@ namespace myEngine
 	,m_hasSkin(false)
 	,m_hasUv(false)
 	,m_hasTangent(false)
+	,m_useIBL(false)
 	{
 		m_baseColorFactor.insert(m_baseColorFactor.end(), 4, 1.f);
 	}
@@ -124,6 +125,16 @@ namespace myEngine
 			}
 		}
 
+		tinygltf::Value extraValues = material_info.extras;
+		if (extraValues.Size() > 0)
+		{
+			tinygltf::Value useIBLValue = extraValues.Get("useibl");
+			if (useIBLValue.IsInt() && useIBLValue.Get<int>() == 1)
+			{
+				setUseIBL(true);
+			}
+		}
+
 	}
 
 	void Material::bindUniforms(Model* _model, Node* _node)
@@ -133,6 +144,10 @@ namespace myEngine
 		if (nullptr == _node)
 			return;
 		if (nullptr == m_shader)
+			return;
+
+		Engine * _engine = Engine::getInstance();
+		if (nullptr == _engine)
 			return;
 
 		myEngine::Camera* _camera = myEngine::Engine::getInstance()->getMaincCamera();
@@ -171,6 +186,21 @@ namespace myEngine
 				else if (s.compare("u_NormalSampler") == 0)
 				{
 					texture_id = m_normalTextureID;
+				}
+				else if (s.compare("u_DiffuseEnvSampler") == 0)
+				{
+					bgfx::TextureHandle _th = _engine->getDiffuseEnvTextureHandle();
+					m_shader->setTexture(_stage, _info.name, _th);
+				}
+				else if (s.compare("u_SpecularEnvSampler") == 0)
+				{
+					bgfx::TextureHandle _th = _engine->getSpecularEnvTextureHandle();
+					m_shader->setTexture(_stage, _info.name, _th);
+				}
+				else if (s.compare("u_brdfLUT") == 0)
+				{
+					bgfx::TextureHandle _th = _engine->getBrdfLUTTexture();
+					m_shader->setTexture(_stage, _info.name, _th);
 				}
 
 				if (texture_id >= 0)
@@ -289,6 +319,8 @@ namespace myEngine
 			result += "HAS_OCCLUSIONMAP;";
 		if (m_metallicRoughnessTextureID != -1)
 			result += "HAS_METALROUGHNESSMAP;";
+		if (m_useIBL)
+			result += "USE_IBL;";
 		return result;
 	}
 
