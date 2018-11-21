@@ -179,13 +179,13 @@ namespace myEngine
 		else
 			_format = bgfx::TextureFormat::Count;
 
-		bgfx::TextureHandle _th = bgfx::createTextureCube(static_cast<size_t>(width), false, 1, _format, 0, nullptr);
+		bgfx::TextureHandle _th = bgfx::createTextureCube(static_cast<uint16_t>(width), false, 1, _format, 0, nullptr);
 
-		for (size_t i = 0; i < CUBE_FACE_NUM; i++)
+		for (uint8_t i = 0; i < CUBE_FACE_NUM; i++)
 		{
 			uint32_t _size = static_cast<uint32_t>(width * height * component);
 			const bgfx::Memory* _data = bgfx::makeRef(imageData[i], _size);
-			bgfx::updateTextureCube(_th, 1, i, 0, 0, 0, width, height, _data);
+			bgfx::updateTextureCube(_th, 1, i, 0, 0, 0, static_cast<uint16_t>(width), static_cast<uint16_t>(height), _data);
 		}
 
 		return _th;
