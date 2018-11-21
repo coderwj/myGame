@@ -26,23 +26,23 @@ namespace myEngine
 		float thetaOver2 = theta * 0.5f;
 		w = cos(thetaOver2);
 		x = sin(thetaOver2);
-		y = 0.0f;
-		z = 0.0f;
+		y = 0.f;
+		z = 0.f;
 	}
 	
 	void Quaternion::setToRotateAboutY(float theta){
 		float thetaOver2 = theta * 0.5f;
 		w = cos(thetaOver2);
-		x = 0.0f;
+		x = 0.f;
 		y = sin(thetaOver2);
-		z = 0.0f;
+		z = 0.f;
 	}
 	
 	void Quaternion::setToRotateAboutZ(float theta){
 		float thetaOver2 = theta * 0.5f;
 		w = cos(thetaOver2);
-		x = 0.0f;
-		y = 0.0f;
+		x = 0.f;
+		y = 0.f;
 		z = sin(thetaOver2);
 	}
 	
@@ -106,11 +106,11 @@ namespace myEngine
 		return *this;
 	}
 	
-	void Quaternion::normalize(){
+	Quaternion& Quaternion::normalize(){
 		float mag = (float)sqrt(w * w + x * x + y * y + z * z);
-		if(mag > 0.0f)
+		if(mag > 0.f)
 		{
-			float oneOverMag = 1.0f / mag;
+			float oneOverMag = 1.f / mag;
 			w *= oneOverMag;
 			x *= oneOverMag;
 			y *= oneOverMag;
@@ -121,20 +121,21 @@ namespace myEngine
 			assert(false);
 			identity();
 		}
+		return *this;
 	}
 	
 	float Quaternion::getRotationAngle() const{
 		float thetaOver2 = safeAcos(w);
-		return thetaOver2 * 2.0f;
+		return thetaOver2 * 2.f;
 	}
 	
 	Vector3 Quaternion::getRotationAxis() const{
-		float sinThetaOver2Sq = 1.0f - w * w;
-		if(sinThetaOver2Sq <= 0.0f)
+		float sinThetaOver2Sq = 1.f - w * w;
+		if(sinThetaOver2Sq <= 0.f)
 		{
-			return Vector3(1.0f, 0.0f, 0.0f);
+			return Vector3(1.f, 0.f, 0.f);
 		}
-		float oneOverSinThetaOver2 = 1.0f / sqrt(sinThetaOver2Sq);
+		float oneOverSinThetaOver2 = 1.f / sqrt(sinThetaOver2Sq);
 	
 		return Vector3(
 			x * oneOverSinThetaOver2,
@@ -184,10 +185,10 @@ namespace myEngine
 		float yz = y * zs;
 		float zz = z * zs;
 
-		mat.m11 = 1.0f - (yy + zz);	mat.m12 = xy + wz;			mat.m13 = xz - wy;			mat.m14 = 0.0f;
-		mat.m21 = xy - wz;			mat.m22 = 1.0f - (xx + zz);	mat.m23 = yz + wx;			mat.m24 = 0.0f;
-		mat.m31 = xz + wy;			mat.m32 = yz - wx;			mat.m33 = 1.0f - (xx + yy);	mat.m34 = 0.0f;
-		mat.m41 = 0.0f;				mat.m42 = 0.0f;				mat.m43 = 0.0f;				mat.m44 = 1.0f;
+		mat.m11 = 1.f - (yy + zz);	mat.m12 = xy + wz;			mat.m13 = xz - wy;			mat.m14 = 0.f;
+		mat.m21 = xy - wz;			mat.m22 = 1.f - (xx + zz);	mat.m23 = yz + wx;			mat.m24 = 0.f;
+		mat.m31 = xz + wy;			mat.m32 = yz - wx;			mat.m33 = 1.f - (xx + yy);	mat.m34 = 0.f;
+		mat.m41 = 0.f;				mat.m42 = 0.f;				mat.m43 = 0.f;				mat.m44 = 1.f;
 	}
 
 	float dotProduct(const Quaternion &a, const Quaternion &b) {
@@ -203,7 +204,7 @@ namespace myEngine
 		float q1x = q1.x;
 		float q1y = q1.y;
 		float q1z = q1.z;
-		if (cosOmega < 0.0f)
+		if (cosOmega < 0.f)
 		{
 			q1w = -q1w;
 			q1x = -q1x;
@@ -211,20 +212,20 @@ namespace myEngine
 			q1z = -q1z;
 			cosOmega = -cosOmega;
 		}
-		assert(cosOmega < 1.1f);
+		assert(cosOmega < 1.0001f);
 		float k0, k1;
 		if (cosOmega > 0.9999f)
 		{
-			k0 = 1.0f - t;
+			k0 = 1.f - t;
 			k1 = t;
 		}
 		else
 		{
-			float sinOmega = sqrt(1.0f - cosOmega * cosOmega);
+			float sinOmega = sqrt(1.f - cosOmega * cosOmega);
 			float omega = atan2(sinOmega, cosOmega);
-			float oneOverSinOmega = 1.0f / sinOmega;
+			float oneOverSinOmega = 1.f / sinOmega;
 
-			k0 = sin((1.0f - t) * omega) * oneOverSinOmega;
+			k0 = sin((1.f - t) * omega) * oneOverSinOmega;
 			k1 = sin(t * omega);
 		}
 		Quaternion res;

@@ -5,6 +5,7 @@
 
 #include <cstring>
 #include <math.h>
+#include <cassert>
 
 namespace myEngine
 {
@@ -144,20 +145,59 @@ namespace myEngine
 		s.y = sqrt(m21 * m21 + m22 * m22 + m23 * m23);
 		s.z = sqrt(m31 * m31 + m32 * m32 + m33 * m33);
 
+		assert(s.x > 0.f && s.y > 0.f && s.z > 0.f);
+
 		Matrix4 rm;
 		rm.m11 = m11 / s.x;		rm.m12 = m12 / s.x;		rm.m13 = m13 / s.x;
 		rm.m21 = m21 / s.y;		rm.m22 = m22 / s.y;		rm.m23 = m23 / s.y;
 		rm.m31 = m31 / s.z;		rm.m32 = m32 / s.z;		rm.m33 = m33 / s.z;
-		
-		// Adapted from: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
-		r.w = sqrt(std::fmaxf(0.f, 1 + rm.m11 + rm.m22 + rm.m33)) / 2;
-		r.x = sqrt(std::fmaxf(0.f, 1 + rm.m11 - rm.m22 - rm.m33)) / 2;
-		r.y = sqrt(std::fmaxf(0.f, 1 - rm.m11 + rm.m22 - rm.m33)) / 2;
-		r.z = sqrt(std::fmaxf(0.f, 1 - rm.m11 - rm.m22 + rm.m33)) / 2;
-		r.x = std::copysignf(r.x, (m32 - m23));
-		r.y = std::copysignf(r.y, (m13 - m31));
-		r.z = std::copysignf(r.z, (m21 - m12));
-		r.normalize();
+
+		rm.toQuaternion(r);
+	}
+
+	void Matrix4::toQuaternion(Quaternion &r) const
+	{
+		float trace = m11 + m22 + m33;
+		float temp = 0.f;
+		if (trace > 0.f)
+		{
+			temp = sqrt(trace + 1.f) * 0.5f;
+			r.w = temp;
+			temp = temp * 0.5f;
+			r.x = (m23 - m32) * temp;
+			r.y = (m31 - m13) * temp;
+			r.z = (m12 - m21) * temp;
+		}
+		else
+		{
+			if (m11 > m22 && m11 > m33)
+			{
+				temp = 2.f * sqrt(1.f + m11 - m22 - m33);
+				assert(temp > 0.f);
+				r.w = (m32 - m23) / temp;
+				r.x = 0.25f * temp;
+				r.y = (m12 + m21) / temp;
+				r.z = (m13 + m31) / temp;
+			}
+			else if (m22 > m33)
+			{
+				temp = 2.f * sqrt(1.0f + m22 - m11 - m33);
+				assert(temp > 0.f);
+				r.w = (m13 - m31) / temp;
+				r.x = (m12 + m21) / temp;
+				r.y = 0.25f * temp;
+				r.z = (m23 + m32) / temp;
+			}
+			else
+			{
+				temp = 2.f * sqrt(1.0f + m33 - m11 - m22);
+				assert(temp > 0.f);
+				r.w = (m21 - m12) / temp;
+				r.x = (m13 + m31) / temp;
+				r.y = (m23 + m32) / temp;
+				r.z = 0.25f * temp;
+			}
+		}
 	}
 
 	void Matrix4::inverse()

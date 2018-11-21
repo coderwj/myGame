@@ -140,7 +140,7 @@ namespace myEngine
 			Vector3 t;
 			m.deCompose(s, r, t);
 			_my_node->setScale(s);
-			_my_node->setRotate(r);
+			_my_node->setRotate(r.normalize());
 			_my_node->setTranslate(t);
 		}
 		else
@@ -158,7 +158,7 @@ namespace myEngine
 					static_cast<float>(_node.rotation[0]),
 					static_cast<float>(_node.rotation[1]),
 					static_cast<float>(_node.rotation[2]),
-					static_cast<float>(_node.rotation[3])));
+					static_cast<float>(_node.rotation[3])).normalize());
 			}
 			if (!_node.translation.empty())
 			{

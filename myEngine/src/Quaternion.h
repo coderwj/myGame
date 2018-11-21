@@ -36,7 +36,7 @@ namespace myEngine
 	
 		Quaternion operator *=(const Quaternion &a);
 	
-		void normalize();
+		Quaternion& normalize();
 	
 		float getRotationAngle() const;
 		Vector3 getRotationAxis() const;
