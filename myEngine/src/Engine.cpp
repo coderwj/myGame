@@ -194,7 +194,7 @@ namespace myEngine
 		else
 			_format = bgfx::TextureFormat::Count;
 
-		bgfx::TextureHandle _th = bgfx::createTextureCube(static_cast<uint16_t>(width[0]), true, 1, _format, 0, nullptr);
+		bgfx::TextureHandle _th = bgfx::createTextureCube(static_cast<uint16_t>(width[0]), MIP_NUM > 1, 1, _format, 0, nullptr);
 
 		for (uint8_t i = 0; i < MIP_NUM; i++)
 		{
