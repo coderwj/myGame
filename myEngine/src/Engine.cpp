@@ -86,32 +86,36 @@ namespace myEngine
             m_maincCamera->SetFocusPos(Vector3(0.f, 0.f, 0.f));
         }
 
-		std::vector<std::string> diffuseTextures;
-		std::vector<std::string> specularTextures;
+		std::string envMapPath = Config::game_res_path + Config::GetConfigStr("envmap_path");
 		char buff[64];
+
+		std::vector<std::string> diffuseTextures;
 		for (int i = 0; i < CUBE_FACE_NUM; i++)
 		{
-			myEngine::sprintf(buff, 64, "dif_env_teuxture_%d", i);
-			const std::string& difName = Config::GetConfigStr(buff);
-			diffuseTextures.push_back(Config::game_res_path + difName);
+			myEngine::sprintf(buff, 64, "cubemap_%d", i);
+			std::string faceStr = Config::GetConfigStr(buff);
+			myEngine::sprintf(buff, 64, "diffuse_%s_0.jpg", faceStr.c_str());
+			diffuseTextures.push_back(envMapPath + buff);
 		}
 		m_diffuseEnvTextureCube = loadCubemap(diffuseTextures);
 
-		for (int j = 0; j < 10; j++)
+
+		std::vector<std::string> specularTextures;
+		const int _mips = ::atoi(Config::GetConfigStr("envmap_specular_mips").c_str());
+		for (int j = 0; j < _mips; j++)
 		{
 			for (int i = 0; i < CUBE_FACE_NUM; i++)
 			{
 				myEngine::sprintf(buff, 64, "cubemap_%d", i);
 				std::string faceStr = Config::GetConfigStr(buff);
-				myEngine::sprintf(buff, 64, "textures/specular_%s_%d.jpg", faceStr.c_str(), j);
-				const std::string& speName(buff);
-				specularTextures.push_back(Config::game_res_path + speName);
+				myEngine::sprintf(buff, 64, "specular_%s_%d.jpg", faceStr.c_str(), j);
+				specularTextures.push_back(envMapPath + buff);
 			}
 		}
 		m_specularEnvTextureCube = loadCubemap(specularTextures);
 
 		const std::string& brdfLUTName = Config::GetConfigStr("brdfLUT_texture");
-		m_brdfLUTTexture = loadTexture(Config::game_res_path + brdfLUTName);
+		m_brdfLUTTexture = loadTexture(envMapPath + brdfLUTName);
 		
 		return true;
 	}
