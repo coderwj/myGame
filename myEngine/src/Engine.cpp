@@ -88,18 +88,26 @@ namespace myEngine
 
 		std::vector<std::string> diffuseTextures;
 		std::vector<std::string> specularTextures;
+		char buff[64];
 		for (int i = 0; i < CUBE_FACE_NUM; i++)
 		{
-			char buff[64];
 			myEngine::sprintf(buff, 64, "dif_env_teuxture_%d", i);
 			const std::string& difName = Config::GetConfigStr(buff);
 			diffuseTextures.push_back(Config::game_res_path + difName);
-
-			myEngine::sprintf(buff, 64, "spe_env_teuxture_%d", i);
-			const std::string& speName = Config::GetConfigStr(buff);
-			specularTextures.push_back(Config::game_res_path + speName);
 		}
 		m_diffuseEnvTextureCube = loadCubemap(diffuseTextures);
+
+		for (int j = 0; j < 10; j++)
+		{
+			for (int i = 0; i < CUBE_FACE_NUM; i++)
+			{
+				myEngine::sprintf(buff, 64, "cubemap_%d", i);
+				std::string faceStr = Config::GetConfigStr(buff);
+				myEngine::sprintf(buff, 64, "textures/specular_%s_%d.jpg", faceStr.c_str(), j);
+				const std::string& speName(buff);
+				specularTextures.push_back(Config::game_res_path + speName);
+			}
+		}
 		m_specularEnvTextureCube = loadCubemap(specularTextures);
 
 		const std::string& brdfLUTName = Config::GetConfigStr("brdfLUT_texture");
@@ -163,12 +171,19 @@ namespace myEngine
 
 	bgfx::TextureHandle Engine::loadCubemap(const std::vector<std::string>& faces)
 	{
-		assert(faces.size() == CUBE_FACE_NUM);
-		int width, height, component;
-		unsigned char* imageData[CUBE_FACE_NUM];
-		for (size_t i = 0; i < CUBE_FACE_NUM; i++)
+		assert(faces.size() % CUBE_FACE_NUM == 0);
+
+		const int MIP_NUM = faces.size() / CUBE_FACE_NUM;
+
+		std::vector<int> width(MIP_NUM);
+		std::vector<int> height(MIP_NUM);
+		int component;
+		std::vector<unsigned char*> imageData;
+		imageData.reserve(faces.size());
+		for (size_t i = 0; i < faces.size(); i++)
 		{
-			imageData[i] = stbi_load(faces[i].c_str(), &width, &height, &component, STBI_default);
+			unsigned char* _data = stbi_load(faces[i].c_str(), &width[i / CUBE_FACE_NUM], &height[i / CUBE_FACE_NUM], &component, STBI_default);
+			imageData.push_back(_data);
 		}
 
 		bgfx::TextureFormat::Enum _format;
@@ -179,13 +194,16 @@ namespace myEngine
 		else
 			_format = bgfx::TextureFormat::Count;
 
-		bgfx::TextureHandle _th = bgfx::createTextureCube(static_cast<uint16_t>(width), false, 1, _format, 0, nullptr);
+		bgfx::TextureHandle _th = bgfx::createTextureCube(static_cast<uint16_t>(width[0]), true, 1, _format, 0, nullptr);
 
-		for (uint8_t i = 0; i < CUBE_FACE_NUM; i++)
+		for (uint8_t i = 0; i < MIP_NUM; i++)
 		{
-			uint32_t _size = static_cast<uint32_t>(width * height * component);
-			const bgfx::Memory* _data = bgfx::makeRef(imageData[i], _size);
-			bgfx::updateTextureCube(_th, 1, i, 0, 0, 0, static_cast<uint16_t>(width), static_cast<uint16_t>(height), _data);
+			for (uint8_t j = 0; j < CUBE_FACE_NUM; j++)
+			{
+				uint32_t _size = static_cast<uint32_t>(width[i] * height[i] * component);
+				const bgfx::Memory* _data = bgfx::makeRef(imageData[i * 6 + j], _size);
+				bgfx::updateTextureCube(_th, 1, j, i, 0, 0, static_cast<uint16_t>(width[i]), static_cast<uint16_t>(height[i]), _data);
+			}
 		}
 
 		return _th;

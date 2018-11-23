@@ -6,6 +6,13 @@
   <skybox_scale v="50"/>
 
   <brdfLUT_texture v="textures/brdfLUT.png"/>
+  <cubemap_0 v="right"/>
+  <cubemap_1 v="left"/>
+  <cubemap_2 v="top"/>
+  <cubemap_3 v="bottom"/>
+  <cubemap_4 v="front"/>
+  <cubemap_5 v="back"/>
+
 
   <dif_env_teuxture_0 v="textures/diffuse_right_0.jpg"/>
   <dif_env_teuxture_1 v="textures/diffuse_left_0.jpg"/>

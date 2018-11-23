@@ -190,23 +190,26 @@ namespace myEngine
 				else if (s.compare("u_DiffuseEnvSampler") == 0)
 				{
 					bgfx::TextureHandle _th = _engine->getDiffuseEnvTextureHandle();
-					m_shader->setTexture(_stage, _info.name, _th);
+					m_shader->setTexture(_stage, s, _th);
+					_stage++;
 				}
 				else if (s.compare("u_SpecularEnvSampler") == 0)
 				{
 					bgfx::TextureHandle _th = _engine->getSpecularEnvTextureHandle();
-					m_shader->setTexture(_stage, _info.name, _th);
+					m_shader->setTexture(_stage, s, _th);
+					_stage++;
 				}
 				else if (s.compare("u_brdfLUT") == 0)
 				{
 					bgfx::TextureHandle _th = _engine->getBrdfLUTTexture();
-					m_shader->setTexture(_stage, _info.name, _th);
+					m_shader->setTexture(_stage, s, _th);
+					_stage++;
 				}
 
 				if (texture_id >= 0)
 				{
 					bgfx::TextureHandle _th = _model->getTextureHandle(texture_id);
-					m_shader->setTexture(_stage, _info.name, _th);
+					m_shader->setTexture(_stage, s, _th);
 					_stage++;
 				}
 				else
