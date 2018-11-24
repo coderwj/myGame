@@ -69,8 +69,6 @@ namespace myEngine
 
 		void _loadAnimations();
 
-		void _updateNodeTransformToChilren(Node* parent);
-
 	private:
 		//tinygltf model
 		tinygltf::Model* m_gltf_model;
