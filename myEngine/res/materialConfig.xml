@@ -12,4 +12,10 @@
     <fragmentshader>diffuse.fs</fragmentshader>
     <varyingdef>diffuse.def</varyingdef>
   </material>
+  <material id="3">
+    <name>whiteblack</name>
+    <vertexshader>whiteblack.vs</vertexshader>
+    <fragmentshader>whiteblack.fs</fragmentshader>
+    <varyingdef>whiteblack.def</varyingdef>
+  </material>
 </materialconfig>

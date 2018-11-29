@@ -458,6 +458,9 @@
                 },
                 "metallicFactor": 0.0
             },
+            "extras" : {
+                "customer" : "whiteblack"
+            },
             "name": "truck"
         },
         {
@@ -469,6 +472,9 @@
                     1.0
                 ],
                 "metallicFactor": 0.0
+            },
+            "extras" : {
+                "customer" : "whiteblack"
             },
             "name": "glass"
         },
@@ -482,6 +488,9 @@
                 ],
                 "metallicFactor": 0.0
             },
+            "extras" : {
+                "customer" : "whiteblack"
+            },
             "name": "window_trim"
         },
         {
@@ -490,6 +499,9 @@
                     "index": 1
                 },
                 "metallicFactor": 0.0
+            },
+            "extras" : {
+                "customer" : "whiteblack"
             },
             "name": "wheels"
         }
