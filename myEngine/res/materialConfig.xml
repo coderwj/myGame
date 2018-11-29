@@ -18,4 +18,10 @@
     <fragmentshader>whiteblack.fs</fragmentshader>
     <varyingdef>whiteblack.def</varyingdef>
   </material>
+  <material id="3">
+    <name>fire</name>
+    <vertexshader>fire.vs</vertexshader>
+    <fragmentshader>fire.fs</fragmentshader>
+    <varyingdef>fire.def</varyingdef>
+  </material>
 </materialconfig>

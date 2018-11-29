@@ -78,7 +78,7 @@ namespace myGame
 		m_cameraOption(nullptr),
 		m_state(nullptr),
 		m_nowTime(0),
-		m_fps(30),
+		m_fps(60),
 		m_windowWidth(0),
 		m_windowHeight(0)
 	{

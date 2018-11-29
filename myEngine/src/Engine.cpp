@@ -18,6 +18,7 @@ namespace myEngine
 	Engine::Engine()
 	:m_maincCamera(nullptr)
 	,m_renderer(nullptr)
+	,m_totalTime(0)
 	{
 		m_skyboxTextureCube = BGFX_INVALID_HANDLE;
 		m_diffuseEnvTextureCube = BGFX_INVALID_HANDLE;
@@ -122,6 +123,7 @@ namespace myEngine
 	
 	void Engine::tick(int delta)
 	{
+		m_totalTime += delta;
 		for (std::pair<int, Model*> _pair : m_model_map)
 		{
 			if (nullptr != _pair.second)

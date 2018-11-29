@@ -43,6 +43,8 @@ namespace myEngine
 		bgfx::TextureHandle getSpecularEnvTextureHandle() { return m_specularEnvTextureCube; }
 		bgfx::TextureHandle getDiffuseEnvTextureHandle() { return m_diffuseEnvTextureCube; }
 		bgfx::TextureHandle getBrdfLUTTexture() { return m_brdfLUTTexture; }
+
+		int getTotalTime() const { return m_totalTime; }
 	private:
 		static Engine* e;
 
@@ -59,6 +61,8 @@ namespace myEngine
 		bgfx::TextureHandle m_specularEnvTextureCube;
 		bgfx::TextureHandle m_diffuseEnvTextureCube;
 		bgfx::TextureHandle m_brdfLUTTexture;
+
+		int m_totalTime;
 
 	};
 

@@ -301,6 +301,12 @@ namespace myEngine
 					const void* _data = static_cast<const void*>(_model->getJointMatrixsData(_node));
 					m_shader->setUniform(s, _data, Skeleton::MAX_JOINT_NUM);
 				}
+				else if (s.compare("u_Time") == 0)
+				{
+					float _time = _engine->getTotalTime() / 1000.f;
+					float _timeVec[4] = { _time, 0.f, 0.f, 0.f };
+					m_shader->setUniform(s, static_cast<const void*>(&_timeVec));
+				}
 				else
 				{
 					std::cout << "Error uniform name!" << std::endl;
