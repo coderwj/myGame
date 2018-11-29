@@ -2583,6 +2583,9 @@
                     "glossinessFactor": 1.0
                 }
             },
+            "extras" : {
+                "customer" : "diffuse"
+            },
             "name": "Cesium_Man-effect"
         }
     ],

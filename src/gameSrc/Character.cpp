@@ -66,32 +66,6 @@ namespace myGame
 	    m_model = new myEngine::Model();
         m_model->load(Config::model_path + model_str);
 		m_model->setScale(m_scale);
-	
-	    string shader_config_path = Config::engine_res_path + "shader/shaderConfig.xml";
-	    tinyxml2::XMLDocument shader_doc;
-	    shader_doc.LoadFile(shader_config_path.c_str());
-	
-	    string vs_name = "", fs_name = "";
-	
-	    tinyxml2::XMLElement* materialElement = shader_doc.FirstChildElement("shaderconfig")->FirstChildElement( "material" );
-	    for (;;materialElement = materialElement->NextSiblingElement("material")) {
-	        if(materialElement == NULL)
-	        {
-	            break;
-	        }
-	        if(material_name == materialElement->FirstChildElement("name")->GetText())
-	        {
-	            vs_name = materialElement->FirstChildElement("vertexshader")->GetText();
-	            fs_name = materialElement->FirstChildElement("fragmentshader")->GetText();
-	            break;
-	        }
-	    }
-	    if(vs_name == "" || fs_name == "")
-	    {
-	        return false;
-	        //assert(true);
-	    }
-		//Model->setShaderName(vs_name, fs_name);
 
 	    return true;
 	}

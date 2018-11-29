@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<materialconfig>
+  <material id="1">
+    <name>pbr_gltf</name>
+    <vertexshader>pbr_gltf.vs</vertexshader>
+    <fragmentshader>pbr_gltf.fs</fragmentshader>
+    <varyingdef>pbr_gltf.def</varyingdef>
+  </material>
+  <material id="2">
+    <name>diffuse</name>
+    <vertexshader>diffuse.vs</vertexshader>
+    <fragmentshader>diffuse.fs</fragmentshader>
+    <varyingdef>diffuse.def</varyingdef>
+  </material>
+</materialconfig>

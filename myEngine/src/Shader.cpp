@@ -4,7 +4,6 @@
 #include <iostream>
 #include <assert.h>
 
-#include "config.h"
 #include "HelperFunc.h"
 
 #include "bgfx/bgfx.h"
@@ -33,19 +32,16 @@ namespace myEngine
 			bgfx::destroy(m_vertex_shader);
 	}
 
-	void Shader::initDynamicShader(const char * vs_name, const char * fs_name, const char * vs_defines, const char * fs_defines)
+	void Shader::init(const char* vs_path, const char* fs_path, const char* varying_path, const char* vs_defines, const char* fs_defines)
 	{
-		string varying_path = Config::shader_src_path + "pbr_gltf_varying.def.sc";
-		string vs_path = Config::shader_src_path + vs_name + ".sc";
-		const bgfx::Memory* _vs_men = shaderc::compileShader(shaderc::ST_VERTEX, vs_path.c_str(), vs_defines, varying_path.c_str());
+		const bgfx::Memory* _vs_men = shaderc::compileShader(shaderc::ST_VERTEX, vs_path, vs_defines, varying_path);
 		m_vertex_shader = bgfx::createShader(_vs_men);
 		if (!bgfx::isValid(m_vertex_shader))
 		{
 			std::cout << "Error while compiling vertex shader: " << vs_path << std::endl;
 			return;
 		}
-		string fs_path = Config::shader_src_path + fs_name + ".sc";
-		const bgfx::Memory* _fs_men = shaderc::compileShader(shaderc::ST_FRAGMENT, fs_path.c_str(), fs_defines, varying_path.c_str());
+		const bgfx::Memory* _fs_men = shaderc::compileShader(shaderc::ST_FRAGMENT, fs_path, fs_defines, varying_path);
 		m_fragment_shader = bgfx::createShader(_fs_men);
 		if (!bgfx::isValid(m_fragment_shader))
 		{

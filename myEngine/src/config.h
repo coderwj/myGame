@@ -27,6 +27,8 @@ namespace myEngine
 		static bool GetIsShaderTest();
 	
 		static const string& GetConfigStr(const string& key);
+
+		static void getShaderPathByMaterialName(std::string material, std::string& vs_path, std::string& fs_path, std::string& varying_path);
 	};
 }
 

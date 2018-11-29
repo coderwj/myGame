@@ -66,4 +66,24 @@ namespace myEngine
 		}
 		return INVALID_STR;
 	}
+
+	void Config::getShaderPathByMaterialName(std::string material, std::string& vs_path, std::string& fs_path, std::string& varying_path)
+	{
+		std::string shader_config_path = Config::engine_res_path + "materialConfig.xml";
+		tinyxml2::XMLDocument shader_doc;
+		shader_doc.LoadFile(shader_config_path.c_str());
+
+		tinyxml2::XMLElement* materialElement = shader_doc.FirstChildElement("materialconfig")->FirstChildElement("material");
+		for (; materialElement != NULL; materialElement = materialElement->NextSiblingElement("material"))
+		{
+			if (material == materialElement->FirstChildElement("name")->GetText())
+			{
+				vs_path = Config::shader_src_path + materialElement->FirstChildElement("vertexshader")->GetText();
+				fs_path = Config::shader_src_path + materialElement->FirstChildElement("fragmentshader")->GetText();
+				varying_path = Config::shader_src_path + materialElement->FirstChildElement("varyingdef")->GetText();
+				return;
+			}
+		}
+		assert(false);
+	}
 }

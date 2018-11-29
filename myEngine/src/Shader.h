@@ -16,7 +16,7 @@ namespace myEngine
 		Shader();
 		~Shader();
 
-		void	initDynamicShader(const char* vs_name, const char* fs_name, const char * vs_defines, const char * fs_defines);
+		void	init(const char* vs_path, const char* fs_path, const char* varying_path, const char* vs_defines, const char* fs_defines);
 
 		void    setUniform(const std::string &name, const void* values) const;
 		void    setUniform(const std::string &name, const void* values, unsigned int count) const;

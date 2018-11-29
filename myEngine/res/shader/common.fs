@@ -1,8 +1,10 @@
-#version 330
-in vec2 ftexcoord;
+$input v_texcoord0
 
-layout(location = 0) out vec4 FragColor;
-uniform sampler2D texture_diffuse1;
+#include "bgfx_shader.sh"
+#include "shaderlib.sh"
+
+SAMPLER2D(s_texColor, 0);
+
 void main() {
-	FragColor = texture(texture_diffuse1, ftexcoord);
+	gl_FragColor = texture2D(s_texColor, v_texcoord0.xy);
 }

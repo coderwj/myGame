@@ -158,7 +158,7 @@ namespace myEngine
 	{
 		const tinygltf::Material& _material = model.materials[primitive.material];
 		m_material->initParams(_material, model);
-		m_material->setProgram("pbr_gltf_vs", "pbr_gltf_fs");
+		m_material->createShaderProgram();
 	}
 	
 	void RenderObject::init(Model* modelPtr, Node* nodePtr, const tinygltf::Primitive& primitive, const tinygltf::Model& model)

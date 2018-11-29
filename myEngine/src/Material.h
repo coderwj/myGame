@@ -20,7 +20,7 @@ namespace myEngine
 		Material();
 		~Material();
 
-		void setProgram(const char* vs_name, const char* fs_name);
+		void createShaderProgram();
 		const Shader* getProgram();
 
 		void setUniform(const char* name, const void* values);
@@ -68,6 +68,8 @@ namespace myEngine
 		bool m_hasUv;
 		bool m_hasTangent;
 		bool m_useIBL;
+
+		std::string m_customerMaterialName;
 	};
 }
 

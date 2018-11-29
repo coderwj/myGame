@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "Node.h"
+#include "config.h"
 
 namespace myEngine
 {
@@ -36,14 +37,23 @@ namespace myEngine
 			delete m_shader;
 	}
 
-	void Material::setProgram(const char* vs_name, const char* fs_name)
+	void Material::createShaderProgram()
 	{
+		std::string material_name = "pbr_gltf";
+		if (!m_customerMaterialName.empty())
+		{
+			material_name = m_customerMaterialName;
+		}
+		std::string vs_path, fs_path, varying_path;
+		Config::getShaderPathByMaterialName(material_name, vs_path, fs_path, varying_path);
+
+		const std::string& vs_defines = _getVertexShaderDefines();
+		const std::string& fs_defines = _getFragmentShaderDefines();
+
 		if (m_shader != NULL)
 			return;
 		m_shader = new Shader();
-		const std::string& vs_defines = _getVertexShaderDefines();
-		const std::string& fs_defines = _getFragmentShaderDefines();
-		m_shader->initDynamicShader(vs_name, fs_name, vs_defines.c_str(), fs_defines.c_str());
+		m_shader->init(vs_path.c_str(), fs_path.c_str(), varying_path.c_str(), vs_defines.c_str(), fs_defines.c_str());
 	}
 
 	const Shader* Material::getProgram()
@@ -133,6 +143,14 @@ namespace myEngine
 			{
 				setUseIBL(true);
 			}
+
+			tinygltf::Value customerMaterialValue = extraValues.Get("customer");
+			if (customerMaterialValue.IsString() && customerMaterialValue.Get<std::string>() != "")
+			{
+				const std::string& _material = customerMaterialValue.Get<std::string>();
+				m_customerMaterialName = _material;
+			}
+
 		}
 
 	}
