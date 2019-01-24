@@ -1,3 +1,4 @@
 cd ../build/ios
-cmake ../../ -G Xcode -DIOS=true
+cmake ../../src/platform/ios/ -G Xcode
+open .
 cd ../../scriptAndTools

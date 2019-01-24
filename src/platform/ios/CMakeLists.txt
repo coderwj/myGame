@@ -66,7 +66,10 @@ set(RESOURCES
   ../../../res/commonConfig.xml
   ../../../res/luafiles
   ../../../res/models
+  ../../../res/skybox
+  ../../../res/textures
   ../../../myEngine/res/shader
+  ../../../myEngine/res/materialConfig.xml
 )
 
 add_executable(
