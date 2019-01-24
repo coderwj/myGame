@@ -134,8 +134,15 @@ namespace myGame
 		lua_tinker::dofile(m_state, luafile.c_str());
 		lua_tinker::call<void>(m_state, "LuaGameMgr", "InitGame");
 
-	    m_mainCharacter = Character::Create("model_5");
-	    m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
+//        m_mainCharacter = Character::Create("model_5");
+//        m_mainCharacter->setPosition(Vector3(20.0f, 1.0f, 10.0f));
+        
+        Character* c1 = Character::Create("model_3");
+        m_characters.push_back(c1);
+        Character* c2 = Character::Create("model_5");
+        m_characters.push_back(c2);
+        Character* c3 = Character::Create("model_6");
+        m_characters.push_back(c3);
 
 		m_cameraOption = new CameraOption();
 		m_cameraOption->setCamera(pEngine->getMaincCamera());

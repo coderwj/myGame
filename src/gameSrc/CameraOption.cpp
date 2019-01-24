@@ -8,7 +8,7 @@ using namespace myEngine;
 namespace myGame
 {
 	const float SPEED = 2.f;
-	const float ROTATE_SPEED = 0.0045f;
+	const float ROTATE_SPEED = 0.002f;
 	const float SENSITIVTY = 0.1f;
 	
 	CameraOption::CameraOption()
@@ -76,7 +76,7 @@ namespace myGame
 	{
 		if (nullptr == m_camera)
 			return;
-		m_camera->setPosition(Vector3(16.f, 16.f, 12.f));
+		m_camera->setPosition(Vector3(0.f, 4.f, 6.f));
 		m_camera->SetFocusPos(Vector3(0.f, 0.f, 0.f));
 	}
 }

@@ -26,9 +26,7 @@
 
 - (void)layoutSubviews
 {
-    uint32_t frameW = (uint32_t)(self.contentScaleFactor * self.frame.size.width);
-    uint32_t frameH = (uint32_t)(self.contentScaleFactor * self.frame.size.height);
-//    s_ctx->m_eventQueue.postSizeEvent(s_defaultWindow, frameW, frameH);
+   
 }
 
 - (void)start

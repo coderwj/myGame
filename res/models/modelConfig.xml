@@ -26,12 +26,12 @@
     <name>model_3</name>
     <path>pony_cartoon/scene.gltf</path>
     <material>pbr_gltf</material>
-    <scale>0.002</scale>
-    <rotateTheta>30</rotateTheta>
+    <scale>0.006</scale>
+    <rotateTheta>20</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
-    <position x="4" y="0" z="0"/>
+    <position x="2" y="0" z="0"/>
   </model>
   <model id="4">
     <name>model_4</name>
@@ -59,12 +59,12 @@
     <name>model_6</name>
     <path>DamagedHelmet/DamagedHelmet.gltf</path>
     <material>pbr_gltf</material>
-    <scale>0.4</scale>
-    <rotateTheta>0</rotateTheta>
+    <scale>2.0</scale>
+    <rotateTheta>75</rotateTheta>
     <rotateX>0.0</rotateX>
     <rotateY>1.0</rotateY>
     <rotateZ>0.0</rotateZ>
-    <position x="0" y="0" z="2"/>
+    <position x="-2.3" y="0.5" z="0"/>
   </model>
   <model id="7">
     <name>scene_1</name>
