@@ -1,7 +1,6 @@
 #include "CameraOption.h"
 
 #include "Camera.h"
-#include "gamescene.h"
 #include "Character.h"
 
 using namespace myEngine;
