@@ -8,6 +8,12 @@ project(myEngine)
 
 if(WIN32)
 	add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31)
+elseif(APPLE)
+	if(IOS)
+
+	else()
+		add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31)
+	endif()
 endif()
 
 add_subdirectory(lib/tinyxml2)

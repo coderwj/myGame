@@ -182,7 +182,7 @@ namespace myEngine
 		for (const std::string& s : _uniform_names)
 		{
 			bgfx::UniformInfo _info = m_shader->getUniformInfo(s);
-			if (_info.type == bgfx::UniformType::Int1) // Texture
+			if (_info.type == bgfx::UniformType::Sampler) // Texture
 			{
 				int texture_id = -1;
 				if (s.compare("u_BaseColorSampler") == 0)
