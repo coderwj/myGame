@@ -138,7 +138,7 @@ int __stdcall WinMain(_In_ HINSTANCE h, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	//SetCurrentDirectory(name);
 
 	HINSTANCE hInstance = GetModuleHandle(NULL);
-	char appName[] = "myGameWin32";
+	char appName[] = "myEditor";
 
 	WNDCLASS cs = { 0 };
 	cs.cbClsExtra = 0;
@@ -159,7 +159,7 @@ int __stdcall WinMain(_In_ HINSTANCE h, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	int windowTop = (screenHeight - g_window_height) / 2;
 
 	//create window.
-	HWND hWnd = CreateWindow(appName, "myGame", WS_OVERLAPPEDWINDOW, windowLeft, windowTop, g_window_width, g_window_height, NULL, NULL, hInstance, NULL);
+	HWND hWnd = CreateWindow(appName, "myEditor", WS_OVERLAPPEDWINDOW, windowLeft, windowTop, g_window_width, g_window_height, NULL, NULL, hInstance, NULL);
 
 	winSetHwnd(hWnd);
 

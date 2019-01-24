@@ -150,7 +150,7 @@ namespace myGame
 
 		ImGui::SetNextWindowPos(ImVec2::ImVec2(0.f, 0.f), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowSize(ImVec2::ImVec2(400.f, 720.f), ImGuiCond_FirstUseEver);
-		ImGui::Begin("Editor", NULL, ImGuiWindowFlags_MenuBar);
+		ImGui::Begin("Basic", NULL, ImGuiWindowFlags_MenuBar);
 
 		if (ImGui::BeginMenuBar())
 		{
@@ -164,7 +164,7 @@ namespace myGame
 			ImGui::EndMenuBar();
 		}
 
-		ImGui::Begin("Editor", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+		ImGui::Begin("Basic", NULL, ImGuiWindowFlags_AlwaysAutoResize);
 
 		ImGui::Text("FPS:  %d.", static_cast<int>(1000.f / m_deltaTime + 0.5f));
 		ImGui::Separator();
