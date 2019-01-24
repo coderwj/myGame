@@ -17,18 +17,15 @@ namespace myEngine
 	{
 	public:
 		static Engine * getInstance();
-
 		static void destroyInstance();
 
 		void onCreate();
 		void onDestroy();
-
 		void onResize(int width, int height);
 	
 		bool init();
 		void tick(int delta);
 		void render();
-
 
 		myEngine::Camera* getMaincCamera() const { return m_maincCamera; }
 		void setMaincCamera(myEngine::Camera* val) { m_maincCamera = val; }
@@ -37,23 +34,25 @@ namespace myEngine
 		void destroyModelById(int id);
 		Model* getModelById(int id);
 
-		static bgfx::TextureHandle loadCubemap(const std::vector<std::string>& faces);
-		static bgfx::TextureHandle loadTexture(std::string path);
-
 		bgfx::TextureHandle getSpecularEnvTextureHandle() { return m_specularEnvTextureCube; }
 		bgfx::TextureHandle getDiffuseEnvTextureHandle() { return m_diffuseEnvTextureCube; }
 		bgfx::TextureHandle getBrdfLUTTexture() { return m_brdfLUTTexture; }
 
 		int getTotalTime() const { return m_totalTime; }
 	private:
-		static Engine* e;
-
 		Engine();
 		~Engine();
 
-		Camera* m_maincCamera;
+		void _initTextures();
+
+		static bgfx::TextureHandle _loadCubemap(const std::vector<std::string>& faces);
+		static bgfx::TextureHandle _loadTexture(std::string path);
+
+	private:
+		static Engine* e;
 
 		Renderer* m_renderer;
+		Camera* m_maincCamera;
 
 		std::unordered_map<int, Model*> m_model_map;
 

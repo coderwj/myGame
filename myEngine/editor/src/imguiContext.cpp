@@ -18,9 +18,6 @@
 #include "fs_imgui_image.bin.h"
 
 #include "roboto_regular.ttf.h"
-#include "robotomono_regular.ttf.h"
-#include "icons_kenney.ttf.h"
-#include "icons_font_awesome.ttf.h"
 
 static const bgfx::EmbeddedShader s_embeddedShaders[] =
 {
@@ -28,28 +25,13 @@ static const bgfx::EmbeddedShader s_embeddedShaders[] =
 	BGFX_EMBEDDED_SHADER(fs_ocornut_imgui),
 	BGFX_EMBEDDED_SHADER(vs_imgui_image),
 	BGFX_EMBEDDED_SHADER(fs_imgui_image),
-
 	BGFX_EMBEDDED_SHADER_END()
-};
-
-struct FontRangeMerge
-{
-	const void* data;
-	size_t      size;
-	ImWchar     ranges[3];
-};
-
-static FontRangeMerge s_fontRangeMerge[] =
-{
-	{ s_iconsKenneyTtf,      sizeof(s_iconsKenneyTtf),      { 0xe900, 0xe9e3, 0 } },
-	{ s_iconsFontAwesomeTtf, sizeof(s_iconsFontAwesomeTtf), { 0xf000, 0xf2e0, 0 } },
 };
 
 bool checkAvailTransientBuffers(uint32_t _numVertices, const bgfx::VertexDecl& _decl, uint32_t _numIndices)
 {
 	return _numVertices == bgfx::getAvailTransientVertexBuffer(_numVertices, _decl)
-		&& (0 == _numIndices || _numIndices == bgfx::getAvailTransientIndexBuffer(_numIndices))
-		;
+		&& (0 == _numIndices || _numIndices == bgfx::getAvailTransientIndexBuffer(_numIndices));
 }
 
 static void* memAlloc(size_t _size, void* _userData);
@@ -156,15 +138,10 @@ struct OcornutImguiContext
 		}
 	}
 
-	void create(float _fontSize, bx::AllocatorI* _allocator)
+	void create(float _fontSize)
 	{
-		m_allocator = _allocator;
-
-		if (NULL == _allocator)
-		{
-			static bx::DefaultAllocator allocator;
-			m_allocator = &allocator;
-		}
+		static bx::DefaultAllocator allocator;
+		m_allocator = &allocator;
 
 		m_viewId = 255;
 		m_lastScroll = 0;
@@ -208,31 +185,11 @@ struct OcornutImguiContext
 		uint8_t* data;
 		int32_t width;
 		int32_t height;
-		{
-			ImFontConfig config;
-			config.FontDataOwnedByAtlas = false;
-			config.MergeMode = false;
-//			config.MergeGlyphCenterV = true;
 
-			const ImWchar* ranges = io.Fonts->GetGlyphRangesCyrillic();
-			m_font[0] = io.Fonts->AddFontFromMemoryTTF( (void*)s_robotoRegularTtf,     sizeof(s_robotoRegularTtf),     _fontSize,      &config, ranges);
-			m_font[1] = io.Fonts->AddFontFromMemoryTTF( (void*)s_robotoMonoRegularTtf, sizeof(s_robotoMonoRegularTtf), _fontSize-3.0f, &config, ranges);
-
-			config.MergeMode = true;
-			config.DstFont   = m_font[0];
-
-			for (uint32_t ii = 0; ii < BX_COUNTOF(s_fontRangeMerge); ++ii)
-			{
-				const FontRangeMerge& frm = s_fontRangeMerge[ii];
-
-				io.Fonts->AddFontFromMemoryTTF( (void*)frm.data
-						, (int)frm.size
-						, _fontSize-3.0f
-						, &config
-						, frm.ranges
-						);
-			}
-		}
+		ImFontConfig config;
+		config.MergeMode = false;
+		const ImWchar* ranges = io.Fonts->GetGlyphRangesCyrillic();
+		config.DstFont = io.Fonts->AddFontFromMemoryTTF( (void*)s_robotoRegularTtf,     sizeof(s_robotoRegularTtf),     _fontSize,      &config, ranges);
 
 		io.Fonts->GetTexDataAsRGBA32(&data, &width, &height);
 
@@ -245,13 +202,10 @@ struct OcornutImguiContext
 			, 0
 			, bgfx::copy(data, width*height*4)
 			);
-
-		//ImGui::InitDockContext();
 	}
 
 	void destroy()
 	{
-		//ImGui::ShutdownDockContext();
 		ImGui::DestroyContext(m_imgui);
 
 		bgfx::destroy(s_tex);
@@ -266,9 +220,9 @@ struct OcornutImguiContext
 
 	void setupStyle(bool _dark)
 	{
-		// Doug Binks' darl color scheme
-		// https://gist.github.com/dougbinks/8089b4bbaccaaf6fa204236978d165a9
 		ImGuiStyle& style = ImGui::GetStyle();
+		style.WindowRounding = 0.0f;
+		style.WindowBorderSize = 0.0f;
 		if (_dark)
 		{
 			ImGui::StyleColorsDark(&style);
@@ -277,9 +231,6 @@ struct OcornutImguiContext
 		{
 			ImGui::StyleColorsLight(&style);
 		}
-
-		style.FrameRounding    = 4.0f;
-		style.WindowBorderSize = 0.0f;
 	}
 
 	void beginFrame(
@@ -317,8 +268,6 @@ struct OcornutImguiContext
 		m_lastScroll = _scroll;
 
 		ImGui::NewFrame();
-
-		// ImGuizmo::BeginFrame();
 	}
 
 	void endFrame()
@@ -335,7 +284,6 @@ struct OcornutImguiContext
 	bgfx::TextureHandle m_texture;
 	bgfx::UniformHandle s_tex;
 	bgfx::UniformHandle u_imageLodEnabled;
-	ImFont* m_font[2];
 	int64_t m_last;
 	int32_t m_lastScroll;
 	bgfx::ViewId m_viewId;
@@ -355,9 +303,9 @@ static void memFree(void* _ptr, void* _userData)
 	BX_FREE(s_ctx.m_allocator, _ptr);
 }
 
-void imguiCreate(float _fontSize, bx::AllocatorI* _allocator)
+void imguiCreate(float _fontSize)
 {
-	s_ctx.create(_fontSize, _allocator);
+	s_ctx.create(_fontSize);
 }
 
 void imguiDestroy()

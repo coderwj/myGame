@@ -90,11 +90,6 @@ namespace myGame
 
 	void GameClient::onDestroy()
 	{
-		if (m_mainCharacter)
-		{
-			delete(m_mainCharacter);
-			m_mainCharacter = nullptr;
-		}
 		if (m_cameraOption)
 		{
 			delete(m_cameraOption);
@@ -125,9 +120,7 @@ namespace myGame
 		assert(nullptr != pEngine);
 		pEngine->init();
 
-		imguiCreate(20, NULL);
-	
-		//m_mainCharacter = Character::Create("scene_1");
+		imguiCreate(20);
 
 		m_cameraOption = new CameraOption();
 		m_cameraOption->setCamera(pEngine->getMaincCamera());
@@ -252,8 +245,6 @@ namespace myGame
 		Engine* pEngine = Engine::getInstance();
 		if (pEngine)
 			pEngine->tick(delta);
-		if (m_mainCharacter)
-			m_mainCharacter->tick(delta);
 		for (std::pair<std::string, Character*> c : m_characters)
 		{
 			if (c.second)
