@@ -148,8 +148,8 @@ namespace myGame
 		if (pEngine)
 			pEngine->render();
 
-		ImGui::SetNextWindowPos(ImVec2::ImVec2(0.f, 0.f), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2::ImVec2(400.f, 720.f), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowPos(ImVec2(0.f, 0.f), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(400.f, 720.f), ImGuiCond_FirstUseEver);
 		ImGui::Begin("Basic", NULL, ImGuiWindowFlags_MenuBar);
 
 		if (ImGui::BeginMenuBar())
