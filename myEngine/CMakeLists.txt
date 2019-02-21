@@ -16,6 +16,7 @@ elseif(APPLE)
 	endif()
 endif()
 
+add_subdirectory(lib/freetype-2.9.1)
 add_subdirectory(lib/tinyxml2)
 add_subdirectory(lib/imgui)
 add_subdirectory(lib/bgfx.cmake)
@@ -23,6 +24,7 @@ add_subdirectory(lib/bgfx.cmake)
 include_directories(./lib/tinyxml2)
 include_directories(./lib/imgui)
 include_directories(./lib/bgfx.cmake/brtshaderc)
+#include_directories(./lib/freetype-2.9.1/include)
 #include_directories(./lib/bgfx.cmake/bgfx/include)
 #include_directories(./lib/bgfx.cmake/bx/include)
 #include_directories(./lib/bgfx.cmake/bimg/include)
@@ -34,8 +36,14 @@ add_library(myEngine STATIC ${HEAD_ENGINE} ${SRC_ENGINE})
 #SET_TARGET_PROPERTIES(myEngine PROPERTIES LINKER_LANGUAGE CPP)
 
 target_link_libraries(myEngine
+	freetype
 	tinyxml2
 	imgui
 	bgfx
 	brtshaderc)
-add_dependencies(myEngine imgui tinyxml2 bgfx brtshaderc)
+add_dependencies(myEngine
+	freetype
+	tinyxml2
+	imgui
+	bgfx
+	brtshaderc)
