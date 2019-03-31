@@ -34,10 +34,41 @@ endif()
 add_subdirectory(../ myEngine.out)
 
 
-FILE(GLOB SRC_EDITOR "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+
+if(WIN32)
+
+FILE(GLOB SRC_EDITOR ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/win32/*.cpp)
 FILE(GLOB_RECURSE HEAD_EDITOR ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h )
 
 add_executable(Editor WIN32 ${SRC_EDITOR} ${HEAD_EDITOR})
+
+else()
+
+FILE(GLOB SRC_EDITOR ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp  ${CMAKE_CURRENT_SOURCE_DIR}/src/mac/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/mac/*.mm ${CMAKE_CURRENT_SOURCE_DIR}/src/mac/*.m)
+FILE(GLOB_RECURSE HEAD_EDITOR ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h )
+
+add_executable(
+    Editor
+    MACOSX_BUNDLE
+    ${SRC_EDITOR}
+    ${HEAD_EDITOR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mac/Base.lproj/MainMenu.xib
+)
+set_source_files_properties(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mac/Base.lproj/MainMenu.xib
+    PROPERTIES
+    MACOSX_PACKAGE_LOCATION
+    Resources
+)
+set_target_properties(
+    Editor
+    PROPERTIES
+    MACOSX_BUNDLE_INFO_PLIST
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mac/Info.plist
+)
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework AppKit")
+
+endif()
 
 target_link_libraries(Editor myEngine tinyxml2)
 
