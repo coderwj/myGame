@@ -1,5 +1,5 @@
 
-$input a_position, a_color, a_normal, a_tangent, a_texcoord0, a_indices, a_weight
+$input a_position, a_normal, a_tangent, a_texcoord0, a_indices, a_weight
 $output v_Position, v_UV, v_TBNX, v_TBNY, v_TBNZ, v_Normal, v_Color
 
 #include "common.sh"
@@ -35,5 +35,5 @@ void main()
 #endif
 
   gl_Position = mul(u_VPMatrix, pos);
-  
+
 }
