@@ -13,6 +13,7 @@
 #include "GameClient.h"
 #include "bgfx/platform.h"
 
+int g_width = 1280, g_height = 720;
 
 @interface MyOpenGLView : NSOpenGLView
 {
@@ -96,22 +97,51 @@
 -(void)keyDown:(NSEvent *)event
 {
     //ImGui_ImplOSX_HandleEvent(event, self);
+    myGame::GameClient* client = myGame::GameClient::getInstance();
+    if (nullptr == client)
+        return;
+    
+    NSString* str = [event characters];
+    int len = (int)[str length];
+    for (int i = 0; i < len; i++)
+    {
+        int c = [str characterAtIndex:i];
+        client->handleCharInput(c);
+    }
 }
 -(void)flagsChanged:(NSEvent *)event
 {
-    //ImGui_ImplOSX_HandleEvent(event, self);
 }
 -(void)mouseDown:(NSEvent *)event
 {
-    //ImGui_ImplOSX_HandleEvent(event, self);
+    NSPoint pos = [event locationInWindow];
+    pos.y = g_height - pos.y;
+    myGame::GameClient* client = myGame::GameClient::getInstance();
+    if (nullptr != client)
+        client->handleTouchBegin(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
 -(void)mouseUp:(NSEvent *)event
 {
-    //ImGui_ImplOSX_HandleEvent(event, self);
+    NSPoint pos = [event locationInWindow];
+    pos.y = g_height - pos.y;
+    myGame::GameClient* client = myGame::GameClient::getInstance();
+    if (nullptr != client)
+        client->handleTouchEnd(static_cast<int>(pos.x), static_cast<int>(pos.y));
+}
+-(void)mouseMoved:(NSEvent *)event
+{
+    NSPoint pos = [event locationInWindow];
+    pos.y = g_height - pos.y;
+    myGame::GameClient* client = myGame::GameClient::getInstance();
+    if (nullptr != client)
+        client->handleTouchMove(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
 -(void)scrollWheel:(NSEvent *)event
 {
-    //ImGui_ImplOSX_HandleEvent(event, self);
+    double wheel_dy = [event deltaY];
+    myGame::GameClient* client = myGame::GameClient::getInstance();
+    if (nullptr != client)
+        client->handleMouseWheel(false, wheel_dy, 0, 0);
 }
 
 @end
@@ -134,7 +164,7 @@
     if (_window != nil)
         return (_window);
     
-    NSRect viewRect = NSMakeRect(100.0, 100.0, 100.0 + 1280.0, 100 + 720.0);
+    NSRect viewRect = NSMakeRect(100.0, 100.0, 100.0 + g_width, 100 + g_height);
     _window = [[NSWindow alloc] initWithContentRect:viewRect styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable|NSWindowStyleMaskClosable backing:NSBackingStoreBuffered defer:YES];
     [_window setTitle:@"Editor"];
     [_window setOpaque:YES];
@@ -194,7 +224,8 @@ inline void osxSetNSWindow(void* _window, void* _nsgl)
     NSOpenGLPixelFormatAttribute attrs[] =
     {
         NSOpenGLPFADoubleBuffer,
-        NSOpenGLPFADepthSize, 32,
+        NSOpenGLPFADepthSize,
+        32,
         0
     };
     
@@ -212,7 +243,7 @@ inline void osxSetNSWindow(void* _window, void* _nsgl)
     
     myGame::GameClient* client = myGame::GameClient::getInstance();
     client->init();
-    client->onResize(1280, 720);
+    client->onResize(g_width, g_height);
     
 }
 
