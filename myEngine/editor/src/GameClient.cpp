@@ -226,6 +226,12 @@ namespace myGame
 		ImGui::End();
 
 		ImGui::End();
+        
+        ImGui::SetNextWindowPos(ImVec2(400.f, 0.f), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(400.f, 720.f), ImGuiCond_FirstUseEver);
+        float pos[2] = {0.f, 0.f};
+        ImGui::InputFloat2("Position", pos);
+        
 		ImGui::Render();
 
 		imguiEndFrame();
