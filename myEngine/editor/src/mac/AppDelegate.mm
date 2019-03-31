@@ -89,7 +89,6 @@
     animationTimer = nil;
 }
 
-// Forward Mouse/Keyboard events to dear imgui OSX back-end. It returns true when imgui is expecting to use the event.
 -(void)keyUp:(NSEvent *)event
 {
     //ImGui_ImplOSX_HandleEvent(event, self);
@@ -201,17 +200,14 @@ inline void osxSetNSWindow(void* _window, void* _nsgl)
     
     NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
     MyOpenGLView* view = [[MyOpenGLView alloc] initWithFrame:self.window.frame pixelFormat:format];
+    [format release];
     format = nil;
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
-    if (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6)
-        [view setWantsBestResolutionOpenGLSurface:YES];
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
     [self.window setContentView:view];
     
     if ([view openGLContext] == nil)
         NSLog(@"No OpenGL Context!");
     
-    osxSetNSWindow(self.window, [view openGLContext]);
+    osxSetNSWindow(self.window, nullptr);
     
     
     myGame::GameClient* client = myGame::GameClient::getInstance();

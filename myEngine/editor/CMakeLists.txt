@@ -28,7 +28,8 @@ if(WIN32)
 	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MD /D NDEBUG /Zi /EHsc")
 else()
 	set(CMAKE_CXX_STANDARD 14) #set use C++14
-	set(CMAKE_CXX_FLAGS "-ObjC++ --std=c++14" )
+	# set(CMAKE_CXX_FLAGS "-ObjC++ --std=c++14" )
+    set(CMAKE_CXX_FLAGS "--std=c++14" )
 endif()
 
 add_subdirectory(../ myEngine.out)
