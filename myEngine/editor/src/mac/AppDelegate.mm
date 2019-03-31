@@ -128,7 +128,8 @@ int g_width = 1280, g_height = 720;
     if (nullptr != client)
         client->handleTouchEnd(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
--(void)mouseMoved:(NSEvent *)event
+
+-(void)mouseDragged:(NSEvent *)event
 {
     NSPoint pos = [event locationInWindow];
     pos.y = g_height - pos.y;
@@ -136,6 +137,7 @@ int g_width = 1280, g_height = 720;
     if (nullptr != client)
         client->handleTouchMove(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
+
 -(void)scrollWheel:(NSEvent *)event
 {
     double wheel_dy = [event deltaY];
