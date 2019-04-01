@@ -53,10 +53,8 @@ add_executable(
     MACOSX_BUNDLE
     ${SRC_EDITOR}
     ${HEAD_EDITOR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/mac/Base.lproj/MainMenu.xib
 )
 set_source_files_properties(
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/mac/Base.lproj/MainMenu.xib
     PROPERTIES
     MACOSX_PACKAGE_LOCATION
     Resources

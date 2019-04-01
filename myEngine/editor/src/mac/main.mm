@@ -7,8 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "AppDelegate.h"
 
 
 int main(int argc, const char * argv[]) {
+    @autoreleasepool
+    {
+        NSApp = [NSApplication sharedApplication];
+        EditorAppDelegate* delegate = [[EditorAppDelegate alloc] init];
+        [[NSApplication sharedApplication] setDelegate:delegate];
+        [NSApp run];
+    }
     return NSApplicationMain(argc, argv);
 }

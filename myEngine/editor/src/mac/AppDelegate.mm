@@ -8,12 +8,10 @@
 
 #import "AppDelegate.h"
 
-#include <assert.h>
-
 #include "GameClient.h"
 #include "bgfx/platform.h"
 
-int g_width = 1280, g_height = 720;
+int g_width = 640, g_height = 360;
 
 @interface MyOpenGLView : NSOpenGLView
 {
@@ -63,7 +61,7 @@ int g_width = 1280, g_height = 720;
     [self updateAndDrawDemoView];
 }
 
--(BOOL)acceptsFirstResponder
+-(BOOL)acceptsFirstRes1ponder
 {
     return (YES);
 }
@@ -149,15 +147,7 @@ int g_width = 1280, g_height = 720;
 @end
 
 
-
-
-@interface AppDelegate ()
-
-@property (nonatomic, readonly) NSWindow* window;
-
-@end
-
-@implementation AppDelegate
+@implementation EditorAppDelegate
 
 @synthesize window = _window;
 
