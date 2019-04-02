@@ -11,7 +11,7 @@
 #include "GameClient.h"
 #include "bgfx/platform.h"
 
-int g_width = 640, g_height = 360;
+int g_width = 1280, g_height = 720;
 
 @interface MyOpenGLView : NSOpenGLView
 {
@@ -26,39 +26,29 @@ int g_width = 640, g_height = 360;
     [self setNeedsDisplay:YES];
 }
 
--(void)prepareOpenGL
-{
-    [super prepareOpenGL];
-    
-#ifndef DEBUG
-    GLint swapInterval = 1;
-    [[self openGLContext] setValues:&swapInterval forParameter:NSOpenGLCPSwapInterval];
-    if (swapInterval == 0)
-        NSLog(@"Error: Cannot set swap interval.");
-#endif
-}
-
--(void)updateAndDrawDemoView
-{
-    myGame::GameClient* client = myGame::GameClient::getInstance();
-    client->tick();
-    
-    // Present
-    [[self openGLContext] flushBuffer];
-    
-    if (!animationTimer)
-        animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.017 target:self selector:@selector(animationTimerFired:) userInfo:nil repeats:YES];
-}
-
 -(void)reshape
 {
     [[self openGLContext] update];
-    [self updateAndDrawDemoView];
+    CGSize size = [[self superview] bounds].size;
+    g_width = size.width;
+    g_height = size.height;
+    myGame::GameClient* client = myGame::GameClient::getInstance();
+    if(nullptr != client)
+    {
+        client->onResize(g_width, g_height);
+    }
 }
 
 -(void)drawRect:(NSRect)bounds
 {
-    [self updateAndDrawDemoView];
+    myGame::GameClient* client = myGame::GameClient::getInstance();
+    if(nullptr != client)
+    {
+        client->tick();
+    }
+
+    if (!animationTimer)
+        animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.017 target:self selector:@selector(animationTimerFired:) userInfo:nil repeats:YES];
 }
 
 -(BOOL)acceptsFirstRes1ponder
@@ -156,7 +146,7 @@ int g_width = 640, g_height = 360;
     if (_window != nil)
         return (_window);
     
-    NSRect viewRect = NSMakeRect(100.0, 100.0, 100.0 + g_width, 100 + g_height);
+    NSRect viewRect = NSMakeRect(0, 0, g_width, g_height);
     _window = [[NSWindow alloc] initWithContentRect:viewRect styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable|NSWindowStyleMaskClosable backing:NSBackingStoreBuffered defer:YES];
     [_window setTitle:@"Editor"];
     [_window setOpaque:YES];
@@ -212,31 +202,31 @@ inline void osxSetNSWindow(void* _window, void* _nsgl)
     // Menu
     [self setupMenu];
     
-    
-    NSOpenGLPixelFormatAttribute attrs[] =
-    {
-        NSOpenGLPFADoubleBuffer,
-        NSOpenGLPFADepthSize,
-        32,
-        0
+    NSOpenGLPixelFormatAttribute attributes[] = {
+        NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core,
+        NSOpenGLPFAColorSize,     32,
+        NSOpenGLPFAAlphaSize,     8,
+        NSOpenGLPFADepthSize,     24,
+        NSOpenGLPFAStencilSize,   8,
+        NSOpenGLPFADoubleBuffer,  true,
+        NSOpenGLPFAAccelerated,   true,
+        NSOpenGLPFANoRecovery,    true,
+        0,                        0,
     };
-    
-    NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
-    MyOpenGLView* view = [[MyOpenGLView alloc] initWithFrame:self.window.frame pixelFormat:format];
-    [format release];
-    format = nil;
+    NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
+    MyOpenGLView* view = [[MyOpenGLView alloc] initWithFrame:self.window.frame pixelFormat:pixelFormat];
+    [pixelFormat release];
     [self.window setContentView:view];
     
     if ([view openGLContext] == nil)
         NSLog(@"No OpenGL Context!");
     
-    osxSetNSWindow(self.window, nullptr);
+    osxSetNSWindow(self.window, [view openGLContext]);
     
     
     myGame::GameClient* client = myGame::GameClient::getInstance();
     client->init();
     client->onResize(g_width, g_height);
-    
 }
 
 
