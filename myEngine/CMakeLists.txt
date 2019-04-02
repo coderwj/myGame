@@ -12,7 +12,7 @@ elseif(APPLE)
 	if(IOS)
 
 	else()
-		add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31)
+		add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31 -DBGFX_CONFIG_MULTITHREADED=0)
 	endif()
 endif()
 
