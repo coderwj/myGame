@@ -51,7 +51,7 @@ int g_width = 1280, g_height = 720;
         animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.017 target:self selector:@selector(animationTimerFired:) userInfo:nil repeats:YES];
 }
 
--(BOOL)acceptsFirstRes1ponder
+-(BOOL)acceptsFirstResponder
 {
     return (YES);
 }
@@ -94,7 +94,7 @@ int g_width = 1280, g_height = 720;
     for (int i = 0; i < len; i++)
     {
         int c = [str characterAtIndex:i];
-        client->handleCharInput(c);
+        client->handleKeyDown(c);
     }
 }
 -(void)flagsChanged:(NSEvent *)event

@@ -263,12 +263,16 @@ namespace myGame
 
 	void GameClient::handleCharInput(int key)
 	{
-
+        
 	}
 
 	void GameClient::handleKeyDown(int key)
 	{
-
+        if (ImGui::GetIO().WantCaptureKeyboard)
+        {
+            ImGui::GetIO().AddInputCharacter(key);
+            return;
+        }
 	}
 
 	void GameClient::handleKeyUp(int key)
