@@ -21,6 +21,7 @@ namespace myGame
 {
 	class Character;
 	class CameraOption;
+    class MyImguiContext;
 	
 	class GameClient{
 
@@ -38,9 +39,9 @@ namespace myGame
 		void					handleKeyDown			(int key);
 		void					handleKeyUp				(int key);
 		void					handleMouseWheel		(bool wheel_down, int scroll_delta, int x, int y);
-		void					handleTouchBegin		(int x, int y);
-		void					handleTouchMove			(int x, int y);
-		void					handleTouchEnd			(int x, int y);
+		void					handleMouseDown		    (int x, int y);
+		void					handleMouseDragged		(int x, int y);
+		void					handleMouseUp			(int x, int y);
 
 		Character*				getMainCharacter		() const { return m_mainCharacter; }
 		//float					getDeltaTime			() const { return m_deltaTime; }
@@ -81,6 +82,8 @@ namespace myGame
 
 		int					m_windowWidth;
 		int					m_windowHeight;
+        
+        MyImguiContext*     m_imguiContext;
 	};
 }
 

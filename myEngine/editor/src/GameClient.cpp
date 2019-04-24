@@ -8,17 +8,16 @@
 #include <sstream>
 #include <assert.h>
 
+#include "imguiContext.h"
 #include "Character.h"
 #include "CameraOption.h"
-#include "Config.h"
+#include "config.h"
 
 //#include "luaClientPort.h"
 #include "tinyxml2.h"
 
 #include "Engine.h"
 #include "HelperFunc.h"
-
-#include "imguiContext.h"
 
 
 #ifdef WIN32
@@ -73,15 +72,17 @@ namespace myGame
 		}
 	}
 
-	GameClient::GameClient() :
-		m_mainCharacter(nullptr),
-		m_cameraOption(nullptr),
-		m_state(nullptr),
-		m_nowTime(0),
-		m_fps(60),
-		m_windowWidth(0),
-		m_windowHeight(0)
-	{
+	GameClient::GameClient()
+    :m_mainCharacter(nullptr)
+    ,m_cameraOption(nullptr)
+    ,m_state(nullptr)
+    ,m_nowTime(0)
+    ,m_fps(60)
+    ,m_windowWidth(0)
+    ,m_windowHeight(0)
+    ,m_imguiContext(nullptr)
+    {
+        
 	}
 
 	GameClient::~GameClient()
@@ -106,7 +107,12 @@ namespace myGame
 		}
 		m_characters.clear();
 
-		imguiDestroy();
+		if(nullptr != m_imguiContext)
+        {
+            m_imguiContext->destroy();
+            delete m_imguiContext;
+            m_imguiContext = nullptr;
+        }
 	}
 	
 	
@@ -117,10 +123,19 @@ namespace myGame
 
 		//init Engine.
 		Engine* pEngine = Engine::getInstance();
-		assert(nullptr != pEngine);
-		pEngine->init();
+        if (pEngine == nullptr)
+        {
+            return false;
+        }
 
-		imguiCreate(20);
+		pEngine->init();
+        
+        m_imguiContext = new MyImguiContext();
+        m_imguiContext->create();
+        
+        ImGuiIO& io = ImGui::GetIO();
+        io.DeltaTime = 1.0f / m_fps;
+        io.IniFilename = NULL;
 
 		m_cameraOption = new CameraOption();
 		m_cameraOption->setCamera(pEngine->getMaincCamera());
@@ -142,11 +157,14 @@ namespace myGame
 
 		_tick(static_cast<int>(m_deltaTime));
 
-		imguiBeginFrame(s_mouseState.m_mx, s_mouseState.m_my, s_mouseState.m_button, s_mouseState.m_mz, m_windowWidth, m_windowHeight);
-
 		Engine* pEngine = Engine::getInstance();
 		if (pEngine)
 			pEngine->render();
+        
+        if(m_imguiContext != nullptr)
+        {
+            m_imguiContext->beginFrame();
+        }
 
 		ImGui::SetNextWindowPos(ImVec2(0.f, 0.f), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowSize(ImVec2(400.f, 720.f), ImGuiCond_FirstUseEver);
@@ -231,10 +249,11 @@ namespace myGame
         ImGui::SetNextWindowSize(ImVec2(400.f, 720.f), ImGuiCond_FirstUseEver);
         float pos[2] = {0.f, 0.f};
         ImGui::InputFloat2("Position", pos);
-        
-		ImGui::Render();
 
-		imguiEndFrame();
+        if(m_imguiContext != nullptr)
+        {
+            m_imguiContext->endFrame();
+        }
 
 		//end tick, get time.
 		long long runTime = HelperFunc::GetCurrentTimeMs() - m_nowTime;
@@ -268,10 +287,10 @@ namespace myGame
 
 	void GameClient::handleKeyDown(int key)
 	{
-        if (ImGui::GetIO().WantCaptureKeyboard)
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.WantCaptureKeyboard)
         {
-            ImGui::GetIO().AddInputCharacter(key);
-            return;
+            io.AddInputCharacter(key);
         }
 	}
 
@@ -283,21 +302,28 @@ namespace myGame
 	void GameClient::handleMouseWheel(bool wheel_down, int scroll_delta, int x, int y)
 	{
 		if (nullptr != m_cameraOption)
-			m_cameraOption->processMouseScroll(scroll_delta);
+        {
+           m_cameraOption->processMouseScroll(scroll_delta);
+        }
+        if (nullptr != m_imguiContext)
+        {
+            m_imguiContext->handleMouseWheel(scroll_delta);
+        }
 	}
 
-	void GameClient::handleTouchBegin(int x, int y)
+	void GameClient::handleMouseDown(int x, int y)
 	{
+        if(nullptr != m_imguiContext)
+        {
+            m_imguiContext->handleMouseDown(x, y);
+        }
 		m_touchBeginPosX = x;
 		m_touchBeginPosY = y;
 		m_touchPosX = x;
 		m_touchPosY = y;
-		s_mouseState.m_mx = m_touchPosX;
-		s_mouseState.m_my = m_touchPosY;
-		s_mouseState.m_button = 1;
 	}
 
-	void GameClient::handleTouchMove(int x, int y)
+	void GameClient::handleMouseDragged(int x, int y)
 	{
 		if (nullptr == m_cameraOption)
 			return;
@@ -305,8 +331,10 @@ namespace myGame
 		{
 			m_touchPosX = x;
 			m_touchPosY = y;
-			s_mouseState.m_mx = m_touchPosX;
-			s_mouseState.m_my = m_touchPosY;
+            if (nullptr != m_imguiContext)
+            {
+                m_imguiContext->handleMouseDragged(x, y);
+            }
 			return;
 		}
 		int dx = x - m_touchPosX;
@@ -319,13 +347,15 @@ namespace myGame
 		s_mouseState.m_my = m_touchPosY;
 	}
 
-	void GameClient::handleTouchEnd(int x, int y)
+	void GameClient::handleMouseUp(int x, int y)
 	{
+        if (nullptr != m_imguiContext)
+        {
+            m_imguiContext->handleMouseUp(x, y);
+        }
 		m_touchPosX = x;
 		m_touchPosY = y;
-		s_mouseState.m_mx = m_touchPosX;
-		s_mouseState.m_my = m_touchPosY;
-		s_mouseState.m_button = 0;
+    
 	}
 
 	void GameClient::onResize(int width, int height)
@@ -339,6 +369,10 @@ namespace myGame
 		{
 			pEngine->onResize(width, height);
 		}
+        if (nullptr != m_imguiContext)
+        {
+            m_imguiContext->onResize(width, height);
+        }
 	}
 
 	int GameClient::getFps() const

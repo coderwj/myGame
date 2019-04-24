@@ -106,7 +106,7 @@ int g_width = 1280, g_height = 720;
     pos.y = g_height - pos.y;
     myGame::GameClient* client = myGame::GameClient::getInstance();
     if (nullptr != client)
-        client->handleTouchBegin(static_cast<int>(pos.x), static_cast<int>(pos.y));
+        client->handleMouseDown(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
 -(void)mouseUp:(NSEvent *)event
 {
@@ -114,7 +114,7 @@ int g_width = 1280, g_height = 720;
     pos.y = g_height - pos.y;
     myGame::GameClient* client = myGame::GameClient::getInstance();
     if (nullptr != client)
-        client->handleTouchEnd(static_cast<int>(pos.x), static_cast<int>(pos.y));
+        client->handleMouseUp(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
 
 -(void)mouseDragged:(NSEvent *)event
@@ -123,7 +123,7 @@ int g_width = 1280, g_height = 720;
     pos.y = g_height - pos.y;
     myGame::GameClient* client = myGame::GameClient::getInstance();
     if (nullptr != client)
-        client->handleTouchMove(static_cast<int>(pos.x), static_cast<int>(pos.y));
+        client->handleMouseDragged(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
 
 -(void)scrollWheel:(NSEvent *)event
@@ -147,7 +147,7 @@ int g_width = 1280, g_height = 720;
         return (_window);
     
     NSRect viewRect = NSMakeRect(0, 0, g_width, g_height);
-    _window = [[NSWindow alloc] initWithContentRect:viewRect styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable|NSWindowStyleMaskClosable backing:NSBackingStoreBuffered defer:YES];
+    _window = [[NSWindow alloc] initWithContentRect:viewRect styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable|NSWindowStyleMaskClosable|NSWindowStyleMaskFullSizeContentView backing:NSBackingStoreBuffered defer:YES];
     [_window setTitle:@"Editor"];
     [_window setOpaque:YES];
     [_window makeKeyAndOrderFront:NSApp];
