@@ -81,6 +81,17 @@ int g_width = 1280, g_height = 720;
 -(void)keyUp:(NSEvent *)event
 {
     //ImGui_ImplOSX_HandleEvent(event, self);
+    myGame::GameClient* client = myGame::GameClient::getInstance();
+    if (nullptr == client)
+        return;
+    
+    NSString* str = [event characters];
+    int len = (int)[str length];
+    for (int i = 0; i < len; i++)
+    {
+        int c = [str characterAtIndex:i];
+        client->handleKeyUp(c);
+    }
 }
 -(void)keyDown:(NSEvent *)event
 {
@@ -147,7 +158,19 @@ int g_width = 1280, g_height = 720;
         return (_window);
     
     NSRect viewRect = NSMakeRect(0, 0, g_width, g_height);
-    _window = [[NSWindow alloc] initWithContentRect:viewRect styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable|NSWindowStyleMaskClosable|NSWindowStyleMaskFullSizeContentView backing:NSBackingStoreBuffered defer:YES];
+    
+    NSWindowStyleMask mask = NSWindowStyleMaskTitled|
+                             NSWindowStyleMaskMiniaturizable|
+                             NSWindowStyleMaskResizable|
+                             NSWindowStyleMaskClosable|
+                             NSWindowStyleMaskFullSizeContentView;
+    
+    
+    _window = [[NSWindow alloc] initWithContentRect:viewRect
+                                styleMask:mask
+                                backing:NSBackingStoreBuffered
+                                defer:YES];
+    
     [_window setTitle:@"Editor"];
     [_window setOpaque:YES];
     [_window makeKeyAndOrderFront:NSApp];

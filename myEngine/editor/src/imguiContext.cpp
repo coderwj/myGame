@@ -98,6 +98,13 @@ namespace myGame {
                                           , 0
                                           , bgfx::copy(data, width*height*4)
                                           );
+        
+        
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.KeyMap[ImGuiKey_Space] = ' ';
+        io.KeyMap[ImGuiKey_Delete] = 127;
+        io.KeyMap[ImGuiKey_Backspace] = 127;
+
     }
     
     

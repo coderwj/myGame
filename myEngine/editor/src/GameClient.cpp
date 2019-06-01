@@ -291,12 +291,14 @@ namespace myGame
         if (io.WantCaptureKeyboard)
         {
             io.AddInputCharacter(key);
+            io.KeysDown[key] = true;
         }
 	}
 
 	void GameClient::handleKeyUp(int key)
 	{
-
+        ImGuiIO& io = ImGui::GetIO();
+        io.KeysDown[key] = false;
 	}
 
 	void GameClient::handleMouseWheel(bool wheel_down, int scroll_delta, int x, int y)
