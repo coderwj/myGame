@@ -16,10 +16,10 @@ namespace myEngine
 		identity();
 	}
 	Quaternion::Quaternion(float _x, float _y, float _z, float _w)
-	:x(_x)
+	:w(_w)
+    ,x(_x)
 	,y(_y)
 	,z(_z)
-	,w(_w)
 	{
 	}
 	void Quaternion::setToRotateAboutX(float theta){

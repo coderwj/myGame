@@ -115,7 +115,7 @@ namespace myGame
         }
 	}
 	
-	
+    
 	bool GameClient::init(){
 
 		//init client config.
@@ -136,6 +136,23 @@ namespace myGame
         ImGuiIO& io = ImGui::GetIO();
         io.DeltaTime = 1.0f / m_fps;
         io.IniFilename = NULL;
+        
+        io.BackendPlatformName = "imgui_impl_osx";
+        // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
+        const int offset_for_function_keys = 256 - 0xF700;
+        io.KeyMap[ImGuiKey_Tab]         = '\t';
+        io.KeyMap[ImGuiKey_LeftArrow]   = 0xF700 + offset_for_function_keys;
+        io.KeyMap[ImGuiKey_RightArrow]  = 0xF701 + offset_for_function_keys;
+        io.KeyMap[ImGuiKey_UpArrow]     = 0xF702 + offset_for_function_keys;
+        io.KeyMap[ImGuiKey_DownArrow]   = 0xF703 + offset_for_function_keys;
+        io.KeyMap[ImGuiKey_Delete]      = 0xF728 + offset_for_function_keys;
+        io.KeyMap[ImGuiKey_Backspace]   = 127;
+        io.KeyMap[ImGuiKey_Space]       = 32;
+        io.KeyMap[ImGuiKey_Enter]       = 13;
+        io.KeyMap[ImGuiKey_Escape]      = 27;
+        io.KeyMap[ImGuiKey_A]           = 'A';
+        io.KeyMap[ImGuiKey_C]           = 'C';
+        io.KeyMap[ImGuiKey_V]           = 'V';
 
 		m_cameraOption = new CameraOption();
 		m_cameraOption->setCamera(pEngine->getMaincCamera());
@@ -247,8 +264,10 @@ namespace myGame
         
         ImGui::SetNextWindowPos(ImVec2(400.f, 0.f), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(400.f, 720.f), ImGuiCond_FirstUseEver);
-        float pos[2] = {0.f, 0.f};
+        static float pos[2] = {0.f, 0.f};
         ImGui::InputFloat2("Position", pos);
+        static float alpha = 0.f;
+        ImGui::InputFloat("Alpha", &alpha);
 
         if(m_imguiContext != nullptr)
         {

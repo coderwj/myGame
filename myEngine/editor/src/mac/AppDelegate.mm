@@ -28,6 +28,7 @@ int g_width = 1280, g_height = 720;
 
 -(void)reshape
 {
+    [super reshape];
     [[self openGLContext] update];
     CGSize size = [[self superview] bounds].size;
     g_width = size.width;

@@ -16,8 +16,8 @@ namespace myEngine
 	Engine*  Engine::e = nullptr;
 
 	Engine::Engine()
-	:m_maincCamera(nullptr)
-	,m_renderer(nullptr)
+	:m_renderer(nullptr)
+	,m_maincCamera(nullptr)
 	,m_totalTime(0)
 	{
 		m_skyboxTextureCube = BGFX_INVALID_HANDLE;

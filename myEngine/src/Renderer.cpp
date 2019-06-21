@@ -3,7 +3,7 @@
 #include "RenderObject.h"
 #include "Camera.h"
 #include "Engine.h"
-#include "Config.h"
+#include "config.h"
 #include "HelperFunc.h"
 
 #include "bgfx/bgfx.h"

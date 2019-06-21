@@ -1,4 +1,4 @@
-#include "Config.h"
+#include "config.h"
 #include "tinyxml2.h"
 #include <assert.h>
 
