@@ -13,94 +13,94 @@
 
 namespace tinygltf
 {
-	class Model;
+    class Model;
 }
 
 namespace myEngine
 {
-	class Node;
-	class RenderObject;
-	class Animation;
+    class Node;
+    class RenderObject;
+    class Animation;
 
-	class Skeleton
-	{
-	public:
-		Skeleton()
-		:m_root_idx(-1)
-		{
+    class Skeleton
+    {
+    public:
+        Skeleton()
+        :m_root_idx(-1)
+        {
 
-		}
-		~Skeleton() { }
-		int m_root_idx;
-		std::vector<int> m_joint_idxs;
-		std::vector<Matrix4> m_joint_inverse_mats;
-		static int MAX_JOINT_NUM;
-	};
+        }
+        ~Skeleton() { }
+        int m_root_idx;
+        std::vector<int> m_joint_idxs;
+        std::vector<Matrix4> m_joint_inverse_mats;
+        static int MAX_JOINT_NUM;
+    };
 
-	class Model
-	{
-	public:	
-		Model();
-		~Model();
+    class Model
+    {
+    public: 
+        Model();
+        ~Model();
 
-		void load(const std::string &path);
-		void tick(int delta);
-		void draw();
+        void load(const std::string &path);
+        void tick(int delta);
+        void draw();
 
-		bgfx::TextureHandle getTextureHandle(int index);
+        bgfx::TextureHandle getTextureHandle(int index);
 
-		const Matrix4* getJointMatrixsData(Node* mesh_node);
+        const Matrix4* getJointMatrixsData(Node* mesh_node);
 
-		const Matrix4& getModelMatrix();
-		const Matrix4& getWorldMatrix();
+        const Matrix4& getModelMatrix();
+        const Matrix4& getWorldMatrix();
 
-		void setModelMatrix(const Matrix4& w);
-		void setWorldMatrix(const Matrix4& w);
+        void setModelMatrix(const Matrix4& w);
+        void setWorldMatrix(const Matrix4& w);
 
-		bool getVisible() const { return m_visible; }
-		void setVisible(bool val) { m_visible = val; }
-	
-	private:
+        bool getVisible() const { return m_visible; }
+        void setVisible(bool val) { m_visible = val; }
+    
+    private:
 
-		void _loadTextures();
+        void _loadTextures();
 
-		void _loadNodes();
-		void _loadNodeRecursive(int node_id, Node* parent);
+        void _loadNodes();
+        void _loadNodeRecursive(int node_id, Node* parent);
 
-		void _loadAnimations();
+        void _loadAnimations();
 
-	private:
-		//tinygltf model
-		tinygltf::Model* m_gltf_model;
+    private:
+        //tinygltf model
+        tinygltf::Model* m_gltf_model;
 
-		//texture handles
-		std::vector<bgfx::TextureHandle> m_textrue_handles;
+        //texture handles
+        std::vector<bgfx::TextureHandle> m_textrue_handles;
 
-		//render objects
-		std::vector<RenderObject*> m_render_objects;
+        //render objects
+        std::vector<RenderObject*> m_render_objects;
 
-		//animations
-		std::vector<Animation*> m_animations;
+        //animations
+        std::vector<Animation*> m_animations;
 
-		//joint matrix
-		std::vector<Matrix4> m_joint_matrixs;
+        //joint matrix
+        std::vector<Matrix4> m_joint_matrixs;
 
-		//node tree
-		std::vector<int> m_roots;
-		std::vector<Node*> m_nodes;
-		std::unordered_map<int, Node*> m_node_map; //k: gltf file node idx, v: Node* in m_nodes vector.
-		
-		//model matrix
-		Matrix4 m_model_matrix;
+        //node tree
+        std::vector<int> m_roots;
+        std::vector<Node*> m_nodes;
+        std::unordered_map<int, Node*> m_node_map; //k: gltf file node idx, v: Node* in m_nodes vector.
+        
+        //model matrix
+        Matrix4 m_model_matrix;
 
-		//world matrix
-		Matrix4 m_world_matrix;
+        //world matrix
+        Matrix4 m_world_matrix;
 
-		//skeleton
-		Skeleton* m_skeleton;
+        //skeleton
+        Skeleton* m_skeleton;
 
-		bool m_visible;
-	};
+        bool m_visible;
+    };
 }
 
 #endif //__MODEL_H__

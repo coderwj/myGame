@@ -5,36 +5,36 @@
 
 namespace myEngine
 {
-	class RenderObject;
-	
-	class Renderer
-	{
-	public:
-		static Renderer* getInstance();
+    class RenderObject;
+    
+    class Renderer
+    {
+    public:
+        static Renderer* getInstance();
 
-		static void destroyInstance();
-	
-		bool init();
-	
-		void render();
+        static void destroyInstance();
+    
+        bool init();
+    
+        void render();
 
-		void setViewPort(int width, int height);
+        void setViewPort(int width, int height);
 
-		void clearDepth() const;
-		void clearColor() const;
-		void clear() const;
+        void clearDepth() const;
+        void clearColor() const;
+        void clear() const;
 
-		void pushRenderObject(const RenderObject* v);
+        void pushRenderObject(const RenderObject* v);
 
-	private:
+    private:
 
-		Renderer();
-		~Renderer();
+        Renderer();
+        ~Renderer();
 
-		static Renderer* r;
-		std::vector<const RenderObject*> m_RenderObjects;
+        static Renderer* r;
+        std::vector<const RenderObject*> m_RenderObjects;
 
-		int m_viewport_width;
-		int m_viewport_height;
-	};
+        int m_viewport_width;
+        int m_viewport_height;
+    };
 }

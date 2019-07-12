@@ -8,6 +8,6 @@ uniform sampler2D texture_diffuse1;
 uniform vec3 fogcolor; //(r, g, b)
 
 void main() {
-	FragColor = texture(texture_diffuse1, ftexcoord);
-	FragColor = vec4(mix(FragColor.rgb, fogcolor, fogIntensity), FragColor.a);
+    FragColor = texture(texture_diffuse1, ftexcoord);
+    FragColor = vec4(mix(FragColor.rgb, fogcolor, fogIntensity), FragColor.a);
 }
