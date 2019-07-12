@@ -7,13 +7,13 @@ message("--->Cmake myEngine--->")
 project(myEngine)
 
 if(WIN32)
-	add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31)
+    add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31)
 elseif(APPLE)
-	if(IOS)
+    if(IOS)
 
-	else()
-		add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31 -DBGFX_CONFIG_MULTITHREADED=0)
-	endif()
+    else()
+        add_definitions(-DBGFX_CONFIG_RENDERER_OPENGL=31 -DBGFX_CONFIG_MULTITHREADED=0)
+    endif()
 endif()
 
 add_subdirectory(lib/freetype-2.9.1)
@@ -21,29 +21,33 @@ add_subdirectory(lib/tinyxml2)
 add_subdirectory(lib/imgui)
 add_subdirectory(lib/bgfx.cmake)
 
-include_directories(./lib/tinyxml2)
-include_directories(./lib/imgui)
-include_directories(./lib/bgfx.cmake/brtshaderc)
-#include_directories(./lib/freetype-2.9.1/include)
-#include_directories(./lib/bgfx.cmake/bgfx/include)
-#include_directories(./lib/bgfx.cmake/bx/include)
-#include_directories(./lib/bgfx.cmake/bimg/include)
+set(INC_DIRS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/base
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/math
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/renderer
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/anim
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/ui
+    )
 
-FILE(GLOB SRC_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
-FILE(GLOB_RECURSE HEAD_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h ${CMAKE_CURRENT_SOURCE_DIR}/src/*.inl)
+
+file(GLOB SRC_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*/*.c ${CMAKE_CURRENT_SOURCE_DIR}/src/*/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*/*.cc)
+file(GLOB HEAD_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/src/*/*.h ${CMAKE_CURRENT_SOURCE_DIR}/src/*/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.inl)
 
 add_library(myEngine STATIC ${HEAD_ENGINE} ${SRC_ENGINE})
-#SET_TARGET_PROPERTIES(myEngine PROPERTIES LINKER_LANGUAGE CPP)
+
+target_include_directories(myEngine PUBLIC ${INC_DIRS})
 
 target_link_libraries(myEngine
-	freetype
-	tinyxml2
-	imgui
-	bgfx
-	brtshaderc)
+    freetype
+    tinyxml2
+    imgui
+    bgfx
+    brtshaderc)
 add_dependencies(myEngine
-	freetype
-	tinyxml2
-	imgui
-	bgfx
-	brtshaderc)
+    freetype
+    tinyxml2
+    imgui
+    bgfx
+    brtshaderc)

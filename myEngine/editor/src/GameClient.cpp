@@ -234,7 +234,7 @@ namespace myGame
 		modelNames.push_back("model_5");
 		modelNames.push_back("model_6");
 		modelNames.push_back("scene_1");
-		static bool showModel[7] = {false, false, false, false, false, true, false};
+		static bool showModel[7] = {false, false, false, false, false, false, false};
 		for (size_t i = 0; i < 7; i++)
 		{
 			ImGui::Checkbox(modelNames[i].c_str(), &(showModel[i]));
